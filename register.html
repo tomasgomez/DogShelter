@@ -1,43 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="resources/css/style.css">
-    <link rel="stylesheet" type="text/css" href="vendors/css/ionicons.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/ionicons.min.css">
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet" type="text/css">
     <title>Register</title>
 </head>
 <body class="body">
 <div class="all-bg">
-		<nav>
-			<div class="row">
-				<ul class="main-nav black">
-					<li><a href="index.html">Home</a></li>
-          <li><a href="products.html">Products</a></li>
-          <li><a href="services.html">Services</a></li>
-          <li><a href="contact.html">Contact</a></li>
-          <li><a href="login.html">Sign In</a></li>
-          <li><a href="orders.html"><i class="ion-ios-cart icon-big"></i></a></li>
-          <li><a href="myaccount.html"><i class="ion-person icon-big"></i></a></li>
-				</ul>
-			</div>
-		</nav>
-	</div>
-  <div class="row">
-		<div class="form-container">
-			<div class="form-container-header">
-				<h1>Register</h1>
-				<hr class="hr-small">
-			</div>
-  		<div class="form-inputs">
-        <input type="text" name="customer[first_name]" id="FirstName" class="input-full" placeholder="First Name" autocapitalize="words" autofocus="">
-        <input type="text" name="customer[last_name]" id="LastName" class="input-full" placeholder="Last Name" autocapitalize="words">
-        <input type="phone" name="customer[phone]" id="Phone" class="input-full" placeholder="Phone" autocorrect="off" autocapitalize="off">
-        <input type="email" name="customer[email]" id="Email" class="input-full" placeholder="Email" autocorrect="off" autocapitalize="off">
-        <input type="password" name="customer[password]" id="CreatePassword" class="input-full" placeholder="Password">
-        <p><input type="submit" value="Create" class="btn btn--full"></p>
-        <p><a href="index.html">Return to Store</a></p>
-      </div>
+    <nav>
+        <div class="row">
+            <ul class="main-nav black">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="login.html">Sign In</a></li>
+                <li><a href="orders.html"><i class="ion-ios-cart icon-big"></i></a></li>
+                <!--<li><a href="myaccount.html"><i class="ion-person icon-big"></i></a></li>-->
+            </ul>
+        </div>
+    </nav>
+</div>
+<div class="row">
+    <div class="form-container">
+        <div class="form-container-header">
+            <h1>Register</h1>
+            <hr class="hr-small">
+        </div>
+        <div class="form-inputs">
+            <input type="text" name="customer[first_name]" id="FirstName" class="input-full" placeholder="First Name"
+                   autofocus="">
+            <input type="text" name="customer[last_name]" id="LastName" class="input-full" placeholder="Last Name">
+            <input type="text" name="customer[phone]" id="Phone" class="input-full" placeholder="Phone">
+            <input type="email" name="customer[email]" id="Email" class="input-full" placeholder="Email">
+            <input type="password" name="customer[password]" id="CreatePassword" class="input-full"
+                   placeholder="Password">
+            <p><input type="submit" value="Create" class="btn btn--full"></p>
+            <p><a href="index.html">Return to Store</a></p>
+        </div>
     </div>
-  </div>
+</div>
 </body>
 </html>
