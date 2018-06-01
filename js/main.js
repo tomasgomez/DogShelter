@@ -171,8 +171,81 @@ $(document).ready(() => {
     };
 
     /* INITIALIZING DATABASE */
-    db = new ydn.db.Storage('dogshelter', schema);
-    db.getSchema(function (schema) {
-        console.log(schema);
+    let db = new ydn.db.Storage('dogshelter', schema);
+    //addProduct('prod1', 'foto', 'este é um produto legal', 5.2, 10, 0);
+    //getProduct(10);
+    //removeProduct(5);
+    getProduct(18);
+    updateProduct({
+        id: 18,
+        name: 'prodU',
+        photo: 'fotoU',
+        description: 'descU',
+        retailPrice: 5.3,
+        inventoryQty: 11,
+        qtySold: 1
     });
+    getProduct(18);
+
+    /* USEFUL FUNCTIONS */
+    function addProduct(name, photo, desc, rPrice, iQty, sQty) {
+        db.put('product', {
+            name: name,
+            photo: photo,
+            description: desc,
+            retailPrice: rPrice,
+            inventoryQty: iQty,
+            qtySold: sQty
+        }).then((key) => {
+            console.log(key);
+        }, (e) => {
+            console.error(e.stack);
+        });
+    }
+
+    function updateProduct(value) {
+        // let iter = new ydn.db.KeyIterator('product', new ydn.db.KeyRange.only(id));
+        // let req = db.open(function (icursor) {
+        //     let product = icursor.getValue();
+        //     product.description = 'updated';
+        //     icursor.put(product).then(function (key) {
+        //         console.log('product ' + key + ' got health boost');
+        //     }, function (e) {
+        //         console.log('deu ruim 1');
+        //         throw e;
+        //     });
+        // }, iter, 'readwrite');
+        // req.then(function () {
+        //     console.log('committed');
+        // }, function (e) {
+        //     console.log('deu ruim 2');
+        //     throw e;
+        // });
+
+        // db.get('product', id).then((record) => {
+        //     record.description = 'updated';
+        //     db.put('product', record);
+        // }, (e) => {
+        //     console.log(e.message);
+        // });
+
+        db.put('product', value);
+    }
+
+    function getProduct(id) {
+        db.get('product', id).then((record) => {
+            console.log(record);
+            return record;
+        }, (e) => {
+            console.log(e.message);
+        });
+    }
+
+    function removeProduct(id) {
+        db.remove('product', id).then((n) => {
+            console.log(n.toString() + " records deleted with given id #" + id.toString());
+        }, (e) => {
+            console.log(e.message);
+        });
+    }
 });
