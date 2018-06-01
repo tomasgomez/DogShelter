@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="css/ionicons.min.css">
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet" type="text/css">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="js/calendar7.js"></script>
+
     <title>DogShelter</title>
 </head>
 
@@ -23,149 +27,45 @@
         </div>
     </nav>
 </div>
-<div class="service" style="padding-top:20px;">
-    <div class="service-panel">
-        <div class="service-name">
-            <h1 style="text-align:center;font-weight:bold;">Dog Grooming</h1>
+<div class="new-row">
+    <div class="service">
+        <div class="service-panel">
+            <div class="service-name">
+                <h1>Dog Grooming</h1>
+                <hr class="hr-small-brown">
+            </div>
+
+            <div class="service-description">
+                <img src="img/dog_grooming.png">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                    eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                 <p> To schedule an appointment for this service, select a free time slot (green slots) in the next calendar.
+                Then click in "book".</p>
+            </div>
+
+            <hr class="hr-big-white">
+
+            <div class="service-name">
+                <h1>Make an appointment</h1>
+                <hr class="hr-small-brown">
+            </div>
         </div>
 
-        <div class="service-description clearfix">
-            <img src="img/dog_grooming.png">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <div class="service-calendar">
+            <input class="calendar7 form-control" style="color: black;">
         </div>
-        <p> To schedule an appointment for this service, select a free time slot (green slots) in the next calendar.
-            Then click in "book".</p>
-    </div>
-
-    <div class="service-calendar">
-        <table style="width:100%">
-            <tr>
-                <th><</th>
-                <th>Sun<br>1</th>
-                <th>Mon<br>2</th>
-                <th>Tue<br>3</th>
-                <th>Wed<br>4</th>
-                <th>Thu<br>5</th>
-                <th>Fri<br>6</th>
-                <th>Sat<br>7</th>
-                <th>></th>
-            </tr>
-            <tr>
-                <td>8am-9am</td>
-                <td class="free-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="free-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="free-slot"></td>
-                <td class="reserved-slot"></td>
-                <td>8am-9am</td>
-            </tr>
-            <tr>
-                <td>9am-10am</td>
-                <td class="reserved-slot"></td>
-                <td class="free-slot"></td>
-                <td class="free-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="free-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="reserved-slot"></td>
-                <td>9am-10am</td>
-            </tr>
-            <tr>
-                <td>10am-11am</td>
-                <td class="reserved-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="free-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="free-slot"></td>
-                <td>10am-11am</td>
-            </tr>
-            <tr>
-                <td>11am-12pm</td>
-                <td class="free-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="free-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="free-slot"></td>
-                <td class="free-slot"></td>
-                <td class="reserved-slot"></td>
-                <td>11am-12pm</td>
-            </tr>
-            <tr>
-                <td>1pm-2pm</td>
-                <td class="reserved-slot"></td>
-                <td class="free-slot"></td>
-                <td class="free-slot"></td>
-                <td class="free-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="reserved-slot"></td>
-                <td>1pm-2pm</td>
-            </tr>
-            <tr>
-                <td>2pm-3pm</td>
-                <td class="reserved-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="free-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="free-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="free-slot"></td>
-                <td>2pm-3pm</td>
-            </tr>
-            <tr>
-                <td>4pm-5pm</td>
-                <td class="free-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="free-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="free-slot"></td>
-                <td class="reserved-slot"></td>
-                <td>4pm-5pm</td>
-            </tr>
-            <tr>
-                <td>5pm-6pm</td>
-                <td class="reserved-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="free-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="free-slot"></td>
-                <td>5pm-6pm</td>
-            </tr>
-            <tr>
-                <td>7pm-8pm</td>
-                <td class="reserved-slot"></td>
-                <td class="free-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="free-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="reserved-slot"></td>
-                <td>7pm-8pm</td>
-            </tr>
-            <tr>
-                <td>8pm-9pm</td>
-                <td class="reserved-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="free-slot"></td>
-                <td class="free-slot"></td>
-                <td class="free-slot"></td>
-                <td class="reserved-slot"></td>
-                <td class="reserved-slot"></td>
-                <td>8pm-9pm</td>
-            </tr>
-        </table>
+        
+         <hr class="hr-small-brown">
         <div class="service-book">
-            <input type="submit" class="btn btn-full" value="Book" style="display:block;margin:auto;">
+            <input type="submit" class="btn btn-full" value="Book">
         </div>
     </div>
 </div>
 </body>
+<script>
+        jQuery('.calendar7').Calendar7({
+            allowTimeStart: '6:00',
+            allowTimeEnd: '20:00'
+        })
+    </script>
 </html>
