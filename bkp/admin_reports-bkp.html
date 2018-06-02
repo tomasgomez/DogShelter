@@ -1,33 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Admin Dashboard</title>
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="css/admin_style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
 <nav id="sidebar">
     <div class="sidebar-header">
         <h3>Dog Shelter</h3>
     </div>
 
+
     <ul class="list-unstyled components">
-        <li>
-            <a href="#" onclick="changePage('admin_profile.html')">
-                <span class="glyphicon glyphicon-user"></span>Profile</a>
-        </li>
-        <li>
-            <a href="#" onclick="changePage('admin_user_roles.html')">
-                <span class="glyphicon glyphicon-wrench"></span>User Roles</a>
-        </li>
-        <li>
-            <a href="#" onclick="changePage('admin_products.html')">
-                <span class="glyphicon glyphicon-gift"></span>Products</a>
-        </li>
-        <li>
-            <a href="#" onclick="changePage('admin_services.html')">
-                <span class="glyphicon glyphicon-calendar"></span>Services</a>
-        </li>
-        <li class="active">
-            <a href="#" onclick="changePage('admin_reports.html')">
-                <span class="glyphicon glyphicon-equalizer"></span>Reports</a>
-        </li>
-        <li>
-            <a href="#" onclick="changePage('admin_logout.html')">
-                <span class="glyphicon glyphicon-log-out"></span>Sign Out</a>
-        </li>
+
+        <li><a href="admin_profile.html"><span class="glyphicon glyphicon-user"></span>Profile</a></li>
+        <li><a href="admin_user_roles.html"><span class="glyphicon glyphicon-wrench"></span>User Roles</a></li>
+        <li><a href="admin_products.html"><span class="glyphicon glyphicon-gift"></span>Products</a></li>
+        <li><a href="admin_services.html"><span class="glyphicon glyphicon-calendar"></span>Services</a></li>
+        <li class="active"><a href="admin_reports.html"><span class="glyphicon glyphicon-equalizer"></span>Reports</a></li>
+        <li><a href="admin_reports.html"><span class="glyphicon glyphicon-log-out"></span>Sign Out</a></li>
     </ul>
 </nav>
 <div class="main">
@@ -52,13 +50,13 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="#">
-                            <div class="panel-body blue">
-                                <span class="pull-left">View Details</span>
-                                <span class="glyphicon glyphicon-circle-arrow-right pull-right"></span>
-                            </div>
-                        </a>
-                    </div>
+                    <a href="#">
+                        <div class="panel-body blue">
+                            <span class="pull-left">View Details</span>
+                            <span class="glyphicon glyphicon-circle-arrow-right pull-right"></span>
+                        </div>
+                    </a>
+                    </div>    
                 </div>
 
                 <div class="col-lg-3 col-md-6">
@@ -80,7 +78,7 @@
                                 <span class="glyphicon glyphicon-circle-arrow-right pull-right"></span>
                             </div>
                         </a>
-                    </div>
+                    </div>    
                 </div>
 
                 <div class="col-lg-3 col-md-6">
@@ -96,13 +94,13 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="#">
-                            <div class="panel-body orange">
-                                <span class="pull-left">View Details</span>
-                                <span class="glyphicon glyphicon-circle-arrow-right pull-right"></span>
-                            </div>
-                        </a>
-                    </div>
+                    <a href="#">
+                        <div class="panel-body orange">
+                            <span class="pull-left">View Details</span>
+                            <span class="glyphicon glyphicon-circle-arrow-right pull-right"></span>
+                        </div>
+                    </a>
+                    </div>    
                 </div>
 
                 <div class="col-lg-3 col-md-6">
@@ -118,15 +116,32 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="#">
-                            <div class="panel-body ruby">
-                                <span class="pull-left">View Details</span>
-                                <span class="glyphicon glyphicon-circle-arrow-right pull-right"></span>
-                            </div>
-                        </a>
-                    </div>
+                    <a href="#">
+                        <div class="panel-body ruby">
+                            <span class="pull-left">View Details</span>
+                            <span class="glyphicon glyphicon-circle-arrow-right pull-right"></span>
+                        </div>
+                    </a>
+                    </div>    
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="js/jquery-3.3.1.min.js"><\/script>')</script>
+<script src="js/bootstrap.min.js"></script>
+
+<!-- Icons -->
+<script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+<script>
+    feather.replace()
+</script>
+</body>
+</html>

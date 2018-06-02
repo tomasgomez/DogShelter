@@ -2,49 +2,84 @@
 <html>
 
 <head>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/ionicons.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/admin_style.css">
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet" type="text/css">
-    <title>DogShelter</title>
+    <title>Dog Shelter</title>
 </head>
 
-<body>
-    <div class="home-bg">
+<body id="bodyContent">
+    <div class="home-bg" id="fullPage">
         <nav>
-            <div class="row">
-                <ul class="main-nav">
+            <div class="row" id="navRow">
+                <ul class="main-nav" id="navList">
                     <li>
-                        <a href="index.html">Home</a>
+                        <a href='#' onclick="changePage('home.html')">Home</a>
                     </li>
                     <li>
-                        <a href="products.html">Products</a>
+                        <a href='#' onclick="changePage('products.html')">Products</a>
                     </li>
                     <li>
-                        <a href="services.html">Services</a>
+                        <a href='#' onclick="changePage('services.html')">Services</a>
                     </li>
                     <li>
-                        <a href="contact.html">Contact</a>
+                        <a href='#' onclick="changePage('contact.html')">Contact</a>
                     </li>
                     <li>
-                        <a href="login.html">Sign In</a>
+                        <a href='#' onclick="changePage('login.html')">Sign In</a>
                     </li>
                     <li>
-                        <a href="orders.html">
-                            <i class="ion-ios-cart icon-white"></i>
+                        <a href='#' onclick="changePage('orders.html')">
+                            <i id="cartIcon" class="ion-ios-cart icon-white"></i>
                         </a>
                     </li>
                     <!--<li><a href="myaccount.html"><i class="ion-person icon-white"></i></a></li>-->
                 </ul>
             </div>
         </nav>
-        <div class="hero-text-box">
-            <h4>Me and my dog,</h4>
-            <h1>we belong together.</h1>
-            <a class="btn btn-full" href="products.html">See products</a>
+        <div id="test">
+            <div class="hero-text-box">
+                <h4>Me and my dog,</h4>
+                <h1>we belong together.</h1>
+                <a class="btn btn-full" href="#" onclick="changePage('products.html')">See products</a>
+            </div>
         </div>
     </div>
 
-    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/ydn.db-i-core-e-cur-dev.js"></script>
+    <script src="js/calendar7.js"></script>
+    <script src="js/db.js"></script>
+    <script>
+        function changePage(dest) {
+            console.log("Received request to change to page: '" + dest + "'.")
+            if (dest.search("admin_") === 0) {
+                console.log("aqui...");
+                $("#bodyContent").load(dest, () => {
+                    console.log("Change made...");
+                    showProducts();
+                });
+            } else {
+                $("#test").load(dest, () => {
+                    console.log("Change made...")
+                });
+                if (dest !== 'home.html') {
+                    $("#navRow").attr("class", "new-row");
+                    $("#navList").attr("class", "main-nav black");
+                    $("#fullPage").attr("class", "all-bg");
+                    $("#cartIcon").attr("class", "ion-ios-cart icon-big")
+                } else {
+                    $("#navRow").attr("class", "row");
+                    $("#navList").attr("class", "main-nav");
+                    $("#fullPage").attr("class", "home-bg");
+                    $("#cartIcon").attr("class", "ion-ios-cart icon-white")
+                }
+            }
+        }
+    </script>
 </body>
 
 </html>

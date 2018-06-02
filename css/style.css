@@ -1,5 +1,7 @@
 /* --------------------------------------------------------------- */
+
 /* BASIC SETUP */
+
 /* --------------------------------------------------------------- */
 
 * {
@@ -20,8 +22,11 @@ body {
 }
 
 /* --------------------------------------------------------------- */
+
 /* REUSEABLE */
+
 /* --------------------------------------------------------------- */
+
 a {
     color: inherit;
     text-decoration: none;
@@ -53,7 +58,9 @@ h4 {
 }
 
 /* --------------------------------------------------------------- */
+
 /* REUSEABLE */
+
 /* --------------------------------------------------------------- */
 
 .new-row {
@@ -86,7 +93,9 @@ h3.main-title {
 }
 
 /* --------------------------------------------------------------- */
+
 /* HEADER */
+
 /* --------------------------------------------------------------- */
 
 .home-bg {
@@ -146,12 +155,15 @@ h3.main-title {
     text-align: center;
 }
 
-.hero-text-box h1, h4 {
+.hero-text-box h1,
+h4 {
     color: #fff;
 }
 
 /* --------------------------------------------------------------- */
+
 /* BUTTONS */
+
 /* --------------------------------------------------------------- */
 
 .btn:link,
@@ -203,7 +215,9 @@ input[type="submit"] {
 }
 
 /* --------------------------------------------------------------- */
+
 /* COLLECTION */
+
 /* --------------------------------------------------------------- */
 
 .collections,
@@ -226,7 +240,9 @@ input[type="submit"] {
 }
 
 /* --------------------------------------------------------------- */
+
 /* PRODUCTS */
+
 /* --------------------------------------------------------------- */
 
 .product-header {
@@ -235,7 +251,6 @@ input[type="submit"] {
     text-align: center;
 }
 
-
 .products,
 .services {
     margin-bottom: 15px;
@@ -243,7 +258,7 @@ input[type="submit"] {
 
 a.link-to-prod {
     text-decoration: none;
-    color: #fff;  
+    color: #fff;
 }
 
 a.link-to-prod:hover {
@@ -259,11 +274,10 @@ a.link-to-prod:hover {
     color: white;
     padding: 10px;
     margin-bottom: 15px;
-    -webkit-box-shadow: 7px 8px 20px -3px rgba(0,0,0,0.34);
-    -moz-box-shadow: 7px 8px 20px -3px rgba(0,0,0,0.34);
-    box-shadow: 7px 8px 20px -3px rgba(0,0,0,0.34);
+    -webkit-box-shadow: 7px 8px 20px -3px rgba(0, 0, 0, 0.34);
+    -moz-box-shadow: 7px 8px 20px -3px rgba(0, 0, 0, 0.34);
+    box-shadow: 7px 8px 20px -3px rgba(0, 0, 0, 0.34);
     display: inline-block
-
 }
 
 .product-price,
@@ -276,8 +290,8 @@ a.link-to-prod:hover {
     width: 100%;
     height: auto;
     margin-left: auto;
-	margin-right: auto;
-	display: block;
+    margin-right: auto;
+    display: block;
     padding-bottom: 10px;
     padding-top: 20px;
     overflow: hidden;
@@ -287,24 +301,26 @@ a.link-to-prod:hover {
 }
 
 .image:hover {
-  transform: scale(1);
-  opacity: 1;
+    transform: scale(1);
+    opacity: 1;
 }
 
-
 /* --------------------------------------------------------------- */
+
 /* PRODUCT */
+
 /* --------------------------------------------------------------- */
 
-.product-name{
+.product-name {
     margin-bottom: 20px;
     text-align: center;
 }
 
-.product-image img{
+.product-image img {
     width: 80%;
     height: 80%;
 }
+
 .product-view {
     margin-bottom: 15px;
     margin-top: 50px;
@@ -315,12 +331,14 @@ a.link-to-prod:hover {
     float: right;
 }
 
-.product-description p{
+.product-description p {
     margin-bottom: 5px;
 }
 
 /* --------------------------------------------------------------- */
+
 /* SERVICES */
+
 /* --------------------------------------------------------------- */
 
 .service-header {
@@ -329,9 +347,10 @@ a.link-to-prod:hover {
     text-align: center;
 }
 
-
 /* --------------------------------------------------------------- */
+
 /* SERVICE */
+
 /* --------------------------------------------------------------- */
 
 .service {
@@ -343,7 +362,8 @@ a.link-to-prod:hover {
 .service-book {
     text-align: center;
 }
-.service-name h1{
+
+.service-name h1 {
     color: #fff;
 }
 
@@ -363,7 +383,9 @@ a.link-to-prod:hover {
 }
 
 /* --------------------------------------------------------------- */
+
 /* CONTACT */
+
 /* --------------------------------------------------------------- */
 
 .form-container-header.contact-header {
@@ -397,19 +419,23 @@ textarea {
     font-style: italic;
 }
 
-::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+::-webkit-input-placeholder {
+    /* Chrome/Opera/Safari */
     color: #BFA473;
 }
 
-::-moz-placeholder { /* Firefox 19+ */
+::-moz-placeholder {
+    /* Firefox 19+ */
     color: #BFA473;
 }
 
-:-ms-input-placeholder { /* IE 10+ */
+:-ms-input-placeholder {
+    /* IE 10+ */
     color: #BFA473;
 }
 
-:-moz-placeholder { /* Firefox 18- */
+:-moz-placeholder {
+    /* Firefox 18- */
     color: #BFA473;
 }
 
@@ -426,8 +452,11 @@ input[type=checkbox] {
 }
 
 /* --------------------------------------------------------------- */
+
 /* ICONS */
+
 /* --------------------------------------------------------------- */
+
 .icon-big {
     font-size: 130%;
 }
@@ -437,7 +466,9 @@ input[type=checkbox] {
 }
 
 /* --------------------------------------------------------------- */
+
 /* BIBI CSS */
+
 /* --------------------------------------------------------------- */
 
 section h1 {
@@ -480,19 +511,18 @@ section h1 {
 
 .hr-big-white {
     border-width: 20px;
-    width: auto;    
+    width: auto;
     margin-left: -10px;
     margin-right: -10px;
     border-color: #fff;
     border-style: solid;
 }
 
-
-
 /* --------------------------------------------------------------- */
+
 /* CALENDAR CSS */
-/* --------------------------------------------------------------- */
 
+/* --------------------------------------------------------------- */
 
 .calendar-7 {
     position: absolute;
@@ -517,9 +547,13 @@ section h1 {
     margin-bottom: 8px
 }
 
-.calendar-7 .days .calendar-7-day:hover, .calendar-7 .days .calendar-7-day.active { background-color: #2874c6 }
+.calendar-7 .days .calendar-7-day:hover,
+.calendar-7 .days .calendar-7-day.active {
+    background-color: #2874c6
+}
 
-.calendar-7 .hours, .calendar-7 .minutes {
+.calendar-7 .hours,
+.calendar-7 .minutes {
     background-color: white;
     width: 360px;
     height: 162px;
@@ -532,7 +566,8 @@ section h1 {
     height: 81px
 }
 
-.calendar-7 .calendar-7-hour, .calendar-7 .calendar-7-minute {
+.calendar-7 .calendar-7-hour,
+.calendar-7 .calendar-7-minute {
     float: left;
     display: inline-block;
     box-sizing: border-box;
@@ -544,13 +579,17 @@ section h1 {
     cursor: pointer
 }
 
-.calendar-7 .calendar-7-hour:hover, .calendar-7 .calendar-7-minute:hover, .calendar-7 .calendar-7-hour.active, .calendar-7 .active.calendar-7-minute {
+.calendar-7 .calendar-7-hour:hover,
+.calendar-7 .calendar-7-minute:hover,
+.calendar-7 .calendar-7-hour.active,
+.calendar-7 .active.calendar-7-minute {
     background-color: #53a2f6;
     color: white;
     border-radius: 3px
 }
 
-.calendar-7 .calendar-7-hour.disabled, .calendar-7 .disabled.calendar-7-minute {
+.calendar-7 .calendar-7-hour.disabled,
+.calendar-7 .disabled.calendar-7-minute {
     color: #333;
     background-color: #eee;
     cursor: not-allowed
