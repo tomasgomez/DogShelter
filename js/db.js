@@ -171,81 +171,102 @@ $(document).ready(() => {
     };
 
     /* INITIALIZING DATABASE */
-    let db = new ydn.db.Storage('dogshelter', schema);
-    //addProduct('prod1', 'foto', 'este é um produto legal', 5.2, 10, 0);
-    //getProduct(10);
-    //removeProduct(5);
-    getProduct(18);
-    updateProduct({
-        id: 18,
-        name: 'prodU',
-        photo: 'fotoU',
-        description: 'descU',
-        retailPrice: 5.3,
-        inventoryQty: 11,
-        qtySold: 1
-    });
-    getProduct(18);
-
-    /* USEFUL FUNCTIONS */
-    function addProduct(name, photo, desc, rPrice, iQty, sQty) {
-        db.put('product', {
-            name: name,
-            photo: photo,
-            description: desc,
-            retailPrice: rPrice,
-            inventoryQty: iQty,
-            qtySold: sQty
-        }).then((key) => {
-            console.log(key);
-        }, (e) => {
-            console.error(e.stack);
-        });
-    }
-
-    function updateProduct(value) {
-        // let iter = new ydn.db.KeyIterator('product', new ydn.db.KeyRange.only(id));
-        // let req = db.open(function (icursor) {
-        //     let product = icursor.getValue();
-        //     product.description = 'updated';
-        //     icursor.put(product).then(function (key) {
-        //         console.log('product ' + key + ' got health boost');
-        //     }, function (e) {
-        //         console.log('deu ruim 1');
-        //         throw e;
-        //     });
-        // }, iter, 'readwrite');
-        // req.then(function () {
-        //     console.log('committed');
-        // }, function (e) {
-        //     console.log('deu ruim 2');
-        //     throw e;
-        // });
-
-        // db.get('product', id).then((record) => {
-        //     record.description = 'updated';
-        //     db.put('product', record);
-        // }, (e) => {
-        //     console.log(e.message);
-        // });
-
-        db.put('product', value);
-    }
-
-    function getProduct(id) {
-        db.get('product', id).then((record) => {
-            console.log(record);
-            return record;
-        }, (e) => {
-            console.log(e.message);
-        });
-    }
-
-    function removeProduct(id) {
-        db.remove('product', id).then((n) => {
-            console.log(n.toString() + " records deleted with given id #" + id.toString());
-        }, (e) => {
-            console.log(e.message);
-        });
-    }
+    db = new ydn.db.Storage('dogshelter', schema);
+    console.log("Database initialized.");
 });
+
+/* USEFUL FUNCTIONS */
+function addProduct() {
+    let name = $("#addProductInputName").val();
+    let photo = $("#addProductInputPhoto").val();
+    let desc = $("#addProductInputDescription").val();
+    let rPrice = $("#addProductInputRetailPrice").val();
+    let iQty = $("#addProductInputInventoryQuantity").val();
+    let sQty = 0;
+
+    $("#addProductInputName").val("");
+    $("#addProductInputPhoto").val("");
+    $("#addProductInputDescription").val("");
+    $("#addProductInputRetailPrice").val("");
+    $("#addProductInputInventoryQuantity").val("");
+
+    db.put('product', {
+        name: name,
+        photo: photo,
+        description: desc,
+        retailPrice: rPrice,
+        inventoryQty: iQty,
+        qtySold: sQty
+    }).then((key) => {
+        console.log("Success adding product of id #" + key);
+    }, (e) => {
+        console.error(e.stack);
+    });
+
+    showProducts();
+}
+
+function showProducts() {
+    let output = "";
+
+    let iter = new ydn.db.ValueIterator('product');
+    db.open((cursor) => {
+        let v = cursor.getValue();
+        output += "<li class='list-group-item' id='product-" + v.id + "'>";
+        output += v.name;
+        output += "<a onclick='removeProduct(" + v.id + ")' href='#'><span class='mini glyphicon red glyphicon-remove'></span></a>";
+        output += "<a onclick='editProduct(" + v.id + ")' href='#'><span class='mini glyphicon glyphicon-wrench'></span></a>";
+        output += "</li>";
+    }, iter, 'readonly').then(() => {
+        //console.log("final res=" + output);
+        $("#productList").html(output);
+    });
+}
+
+function removeProduct(id) {
+    db.remove('product', id).then((n) => {
+        console.log(n.toString() + " records deleted with given id #" + id.toString());
+        showProducts();
+    }, (e) => {
+        console.log(e.message);
+    });
+}
+
+function editProduct(id) {
+    $("#editProductForm").modal();
+
+    db.get('product', id).then((record) => {
+        //console.log("aquiii " + JSON.stringify(record));
+        $("#editProductInputID").val(record.id);
+        $("#editProductInputName").val(record.name);
+        $("#editProductInputPhoto").attr("curphoto", record.photo);
+        $("#editProductInputDescription").val(record.description);
+        $("#editProductInputRetailPrice").val(record.retailPrice);
+        $("#editProductInputInventoryQuantity").val(record.inventoryQty);
+        $("#editProductInputQuantitySold").val(record.qtySold);
+    });
+}
+
+function saveProductChanges() {
+    console.log("Saving product changes...")
+    photo = $("#editProductInputPhoto").val();
+    if (photo === "") {
+        photo = $("#editProductInputPhoto").attr("curphoto");
+    }
+
+    db.put('product', {
+        id: parseInt($("#editProductInputID").val()),
+        name: $("#editProductInputName").val(),
+        photo: photo,
+        description: $("#editProductInputDescription").val(),
+        retailPrice: $("#editProductInputRetailPrice").val(),
+        inventoryQty: $("#editProductInputInventoryQuantity").val(),
+        qtySold: $("#editProductInputQuantitySold").val()
+    }).then((key) => {
+        console.log("Success editting product of id #" + key);
+        $("#editProductForm").modal('toggle');
+        showProducts();
+    }, (e) => {
+        console.error(e.stack);
+    });
+}

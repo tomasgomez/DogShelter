@@ -1,44 +1,68 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="css/ionicons.min.css">
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet" type="text/css">
     <title>LogIn</title>
 </head>
+
 <body>
-<div class="all-bg">
-    <nav>
-        <div class="row">
-            <ul class="main-nav black">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="products.html">Products</a></li>
-                <li><a href="services.html">Services</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="login.html">Sign In</a></li>
-                <li><a href="orders.html"><i class="ion-ios-cart icon-big"></i></a></li>
-                <!--<li><a href="myaccount.html"><i class="ion-person icon-big"></i></a></li>-->
-            </ul>
-        </div>
-    </nav>
-</div>
-<div class="row">
-    <div class="form-container">
-        <div class="form-container-header">
-            <h1>Login</h1>
-            <hr class="hr-small">
-        </div>
-        <div class="form-inputs">
-            <input type="email" name="customer[email]" id="CustomerEmail" class="input-full" placeholder="Email"
-                   autofocus="">
-            <input type="password" value="" name="customer[password]" id="CustomerPassword" class="input-full"
-                   placeholder="Password">
-            <p><input type="submit" class="btn btn-full" value="Sign In"></p>
-            <p><a href="register.html" id="customer_register_link">Create Account</a></p>
-            <p><a href="index.html">Return to Store</a></p>
-            <p><a id="RecoverPassword">Forgot your password?</a></p>
+    <div class="all-bg">
+        <nav>
+            <div class="row">
+                <ul class="main-nav black">
+                    <li>
+                        <a href="index.html">Home</a>
+                    </li>
+                    <li>
+                        <a href="products.html">Products</a>
+                    </li>
+                    <li>
+                        <a href="services.html">Services</a>
+                    </li>
+                    <li>
+                        <a href="contact.html">Contact</a>
+                    </li>
+                    <li>
+                        <a href="login.html">Sign In</a>
+                    </li>
+                    <li>
+                        <a href="orders.html">
+                            <i class="ion-ios-cart icon-big"></i>
+                        </a>
+                    </li>
+                    <!--<li><a href="myaccount.html"><i class="ion-person icon-big"></i></a></li>-->
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <div class="row">
+        <a href="admin_profile.html">Admin Profile</a>
+        <div class="form-container">
+            <div class="form-container-header">
+                <h1>Login</h1>
+                <hr class="hr-small">
+            </div>
+            <div class="form-inputs">
+                <input type="email" name="customer[email]" id="CustomerEmail" class="input-full" placeholder="Email" autofocus="">
+                <input type="password" value="" name="customer[password]" id="CustomerPassword" class="input-full" placeholder="Password">
+                <p>
+                    <input type="submit" class="btn btn-full" value="Sign In">
+                </p>
+                <p>
+                    <a href="register.html" id="customer_register_link">Create Account</a>
+                </p>
+                <p>
+                    <a href="index.html">Return to Store</a>
+                </p>
+                <p>
+                    <a id="RecoverPassword">Forgot your password?</a>
+                </p>
+            </div>
         </div>
     </div>
-</div>
 </body>
+
 </html>
