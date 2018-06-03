@@ -6,7 +6,14 @@ function changePage(dest) {
         console.log("aqui...");
         $("#bodyContent").load(dest, () => {
             console.log("Change made...");
-            showProducts();
+
+            if (dest === "admin_products.html") {
+                showProducts();
+            } else if (dest === "admin_user_roles.html") {
+                showUsers();
+            } else if (dest === "admin_profile.html") {
+                showAdminProfile();
+            }
         });
     } else {
         $("#test").load(dest, () => {
@@ -58,7 +65,6 @@ function checkLoggedUser() {
 
 function userHomepage() {
     let role = sessionStorage.getItem("userRole");
-    console.log("Got role = " + role);
     if (role === 'client') {
         changePage("client_profile.html");
     } else {

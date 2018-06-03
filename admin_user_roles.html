@@ -39,71 +39,51 @@
         <div class="main-panel">
             <ul class="list-group">
                 <li class="list-group-item active">List of Users</li>
-                <li class="list-group-item">Liam Jackson
-                    <a href="deleteaction">
-                        <span class="mini glyphicon red glyphicon-remove"></span>
-                    </a>
-                    <a href="editaction">
-                        <span class="mini glyphicon glyphicon-wrench"></span>
-                    </a>
-                </li>
-                <li class="list-group-item">Phil Corby
-                    <a href="deleteaction">
-                        <span class="mini glyphicon red glyphicon-remove"></span>
-                    </a>
-                    <a href="editaction">
-                        <span class="mini glyphicon glyphicon-wrench"></span>
-                    </a>
-                </li>
-                <li class="list-group-item">Ben Gordon
-                    <a href="deleteaction">
-                        <span class="mini glyphicon red glyphicon-remove"></span>
-                    </a>
-                    <a href="editaction">
-                        <span class="mini glyphicon glyphicon-wrench"></span>
-                    </a>
-                </li>
-                <li class="list-group-item">Jeff O'Conor
-                    <a href="deleteaction">
-                        <span class="mini glyphicon red glyphicon-remove"></span>
-                    </a>
-                    <a href="editaction">
-                        <span class="mini glyphicon glyphicon-wrench"></span>
-                    </a>
-                </li>
-                <li class="list-group-item">Winston McCal
-                    <a href="deleteaction">
-                        <span class="mini glyphicon red glyphicon-remove"></span>
-                    </a>
-                    <a href="editaction">
-                        <span class="mini glyphicon glyphicon-wrench"></span>
-                    </a>
-                </li>
-                <li class="list-group-item">James Elijah
-                    <a href="deleteaction">
-                        <span class="mini glyphicon red glyphicon-remove"></span>
-                    </a>
-                    <a href="editaction">
-                        <span class="mini glyphicon glyphicon-wrench"></span>
-                    </a>
-                </li>
-                <li class="list-group-item">Kurt Johansen
-                    <a href="deleteaction">
-                        <span class="mini glyphicon red glyphicon-remove"></span>
-                    </a>
-                    <a href="editaction">
-                        <span class="mini glyphicon glyphicon-wrench"></span>
-                    </a>
-                </li>
-                <li class="list-group-item">Jacob William
-                    <a href="deleteaction">
-                        <span class="mini glyphicon red glyphicon-remove"></span>
-                    </a>
-                    <a href="editaction">
-                        <span class="mini glyphicon glyphicon-wrench"></span>
-                    </a>
-                </li>
+                <div id="userList">
+                    <!-- Filled with JavaScript -->
+                </div>
             </ul>
+        </div>
+
+        <!-- Edit Product Form (Modal) -->
+        <div class="modal fade" id="editUserRoleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h5 class="modal-title">Edit User Role</h5>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editUserRoleForm">
+                            <div class="form-group">
+                                <label for="editUserRoleInputID">ID</label>
+                                <input type="number" name="ID" class="form-control" id="editUserRoleInputID" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="editUserRoleInputName">Name</label>
+                                <input type="text" name="name" class="form-control" id="editUserRoleInputName" autocomplete='name' readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="editUserRoleInputEmail">Email</label>
+                                <input type="text" name="email" class="form-control-file" id="editUserRoleInputEmail" autocomplete='email' readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="editUserRoleInputUserRole">Choose a user role</label>
+                                <br>
+                                <input type="radio" name="user-role" value="administrator" required> Administrator
+                                <br>
+                                <input type="radio" name="user-role" value="client"> Client
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" onclick="saveUserRoleChanges()">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

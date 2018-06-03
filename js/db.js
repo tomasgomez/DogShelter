@@ -8,8 +8,7 @@ let user_store_schema = {
   name: "user",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [
-    {
+  indexes: [{
       keyPath: "name"
     },
     {
@@ -38,8 +37,7 @@ let user_store_schema = {
  */
 let delivery_address_store_schema = {
   name: "delivery-address",
-  indexes: [
-    {
+  indexes: [{
       keyPath: "postalCode"
     },
     {
@@ -60,8 +58,7 @@ let delivery_address_store_schema = {
  */
 let pet_store_schema = {
   name: "pet",
-  indexes: [
-    {
+  indexes: [{
       keyPath: "name"
     },
     {
@@ -82,11 +79,9 @@ let pet_store_schema = {
  */
 let order_store_schema = {
   name: "order",
-  indexes: [
-    {
-      keyPath: "creditCardNo"
-    }
-  ]
+  indexes: [{
+    keyPath: "creditCardNo"
+  }]
 };
 
 /* Table 'Order Service Line'
@@ -94,8 +89,7 @@ let order_store_schema = {
 let order_service_line_store_schema = {
   name: "order-service-line",
   keyPath: ["orderId", "serviceID"],
-  indexes: [
-    {
+  indexes: [{
       keyPath: "salePrice"
     },
     {
@@ -112,8 +106,7 @@ let order_service_line_store_schema = {
 let order_product_line_store_schema = {
   name: "order-product-line",
   keyPath: ["orderId", "productID"],
-  indexes: [
-    {
+  indexes: [{
       keyPath: "salePrice"
     },
     {
@@ -128,8 +121,7 @@ let service_store_schema = {
   name: "service",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [
-    {
+  indexes: [{
       keyPath: "name"
     },
     {
@@ -151,8 +143,7 @@ let product_store_schema = {
   name: "product",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [
-    {
+  indexes: [{
       keyPath: "name"
     },
     {
@@ -279,7 +270,7 @@ function removeProduct(id) {
   db.remove("product", id).then(
     n => {
       console.log(
-        n.toString() + " records deleted with given id #" + id.toString()
+        n.toString() + " products deleted with given id #" + id.toString()
       );
       showProducts();
     },
@@ -362,7 +353,6 @@ function addUser() {
 
         //Log user in automatically
         sessionStorage.setItem("userEmail", email);
-        sessionStorage.setItem("userPassword", password);
         sessionStorage.setItem("userRole", "client");
         changePage("client_profile.html");
       },
@@ -403,7 +393,6 @@ function userLogin() {
       if (success) {
         console.log(JSON.stringify(userInfo));
         sessionStorage.setItem("userEmail", userEmail);
-        sessionStorage.setItem("userPassword", userPassword);
         sessionStorage.setItem("userRole", userInfo.role);
         if (userInfo.role === "client") {
           changePage("client_profile.html");
@@ -412,7 +401,100 @@ function userLogin() {
         }
       }
     },
-    function(e) {
+    function (e) {
+      console.error("A wild error appears = " + e);
+    }
+  );
+}
+
+function showUsers() {
+  let output = "";
+
+  let iter = new ydn.db.ValueIterator("user");
+  db
+    .open(
+      cursor => {
+        let v = cursor.getValue();
+        output += "<li class='list-group-item' id='user-" + v.id + "'>";
+        output += v.name;
+        output +=
+          "<a onclick='removeUser(" +
+          v.id +
+          ")' href='#'><span class='mini glyphicon red glyphicon-remove'></span></a>";
+        output +=
+          "<a onclick='editUserRole(" +
+          v.id +
+          ")' href='#'><span class='mini glyphicon glyphicon-wrench'></span></a>";
+        output += "</li>";
+      },
+      iter,
+      "readonly"
+    )
+    .then(() => {
+      $("#userList").html(output);
+    });
+}
+
+function editUserRole(id) {
+  $("#editUserRoleModal").modal();
+
+  db.get("user", id).then(record => {
+    $("#editUserRoleInputID").val(record.id);
+    $("#editUserRoleInputName").val(record.name);
+    $("#editUserRoleInputEmail").val(record.email);
+  });
+}
+
+function saveUserRoleChanges() {
+  console.log("Saving user role changes...");
+
+  let id = parseInt($("#editUserRoleInputID").val());
+  let role = $('input[name=user-role]:checked', '#editUserRoleForm').val();
+  role = (role === 'administrator' ? 'admin' : 'client');
+
+  let iter = new ydn.db.ValueIterator('user', ydn.db.KeyRange.only(id));
+  db.open((cursor) => {
+    let user = cursor.getValue();
+    console.log("Found this user with id #" + id + " = " + JSON.stringify(user));
+    user.role = role;
+    cursor.update(user).done((e) => {
+      console.log("Successful editting user #" + id);
+    });
+  }, iter, 'readwrite').then(function () {
+    console.log("Finished editting user roles");
+    $("#editUserRoleModal").modal("toggle");
+  });
+}
+
+function removeUser(id) {
+  db.remove("user", id).then(
+    n => {
+      console.log(
+        n.toString() + " users deleted with given id #" + id.toString()
+      );
+      showUsers();
+    },
+    e => {
+      console.log(e.message);
+    }
+  );
+}
+
+function showAdminProfile() {
+  let userEmail = sessionStorage.getItem("userEmail");
+  // Search for user email in client_table
+  let key_range = ydn.db.KeyRange.only(userEmail);
+  db.values("user", "email", key_range).then(
+    record => {
+      if (record.length > 0) {
+        // console.log("Found this user profile = " + JSON.stringify(record[0]));
+        // TODO - Change photo
+        $("#admin-name").html(record[0].name);
+        $("#admin-phone").html(record[0].phone);
+        $("#admin-email").html(record[0].email);
+      }
+    },
+    function (e) {
       console.error("A wild error appears = " + e);
     }
   );
