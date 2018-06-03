@@ -10,7 +10,7 @@
     <title>Dog Shelter</title>
 </head>
 
-<body id="bodyContent">
+<body id="bodyContent" onload="checkLoggedUser()">
     <div class="home-bg" id="fullPage">
         <nav>
             <div class="row" id="navRow">
@@ -27,15 +27,22 @@
                     <li>
                         <a href='#' onclick="changePage('contact.html')">Contact</a>
                     </li>
-                    <li>
+                    <li id="loginOption">
                         <a href='#' onclick="changePage('login.html')">Sign In</a>
+                    </li>
+                    <li id="logoutOption">
+                        <a href='#' onclick="userLogout()">Sign Out</a>
                     </li>
                     <li>
                         <a href='#' onclick="changePage('orders.html')">
-                            <i id="cartIcon" class="ion-ios-cart icon-white"></i>
+                            <i id="cartIcon" class="ion-ios-cart icon-big"></i>
                         </a>
                     </li>
-                    <!--<li><a href="myaccount.html"><i class="ion-person icon-white"></i></a></li>-->
+                    <li id="userHomepage">
+                        <a href="#" onclick="userHomepage()">
+                            <i id="userHomeIcon" class="ion-person icon-white"></i>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -53,33 +60,7 @@
     <script src="js/ydn.db-i-core-e-cur-dev.js"></script>
     <script src="js/calendar7.js"></script>
     <script src="js/db.js"></script>
-    <script>
-        function changePage(dest) {
-            console.log("Received request to change to page: '" + dest + "'.")
-            if (dest.search("admin_") === 0) {
-                console.log("aqui...");
-                $("#bodyContent").load(dest, () => {
-                    console.log("Change made...");
-                    showProducts();
-                });
-            } else {
-                $("#test").load(dest, () => {
-                    console.log("Change made...")
-                });
-                if (dest !== 'home.html') {
-                    $("#navRow").attr("class", "new-row");
-                    $("#navList").attr("class", "main-nav black");
-                    $("#fullPage").attr("class", "all-bg");
-                    $("#cartIcon").attr("class", "ion-ios-cart icon-big")
-                } else {
-                    $("#navRow").attr("class", "row");
-                    $("#navList").attr("class", "main-nav");
-                    $("#fullPage").attr("class", "home-bg");
-                    $("#cartIcon").attr("class", "ion-ios-cart icon-white")
-                }
-            }
-        }
-    </script>
+    <script src="js/main.js"></script>
 </body>
 
 </html>

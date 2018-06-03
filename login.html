@@ -1,22 +1,23 @@
 <div class="row">
-    <a href="#" onclick="changePage('admin_profile.html')">Admin Profile</a>
     <div class="form-container">
         <div class="form-container-header">
             <h1>Login</h1>
             <hr class="hr-small">
         </div>
-        <div class="form-inputs">
-            <input type="email" name="customer[email]" id="CustomerEmail" class="input-full" placeholder="Email" autofocus="">
-            <input type="password" value="" name="customer[password]" id="CustomerPassword" class="input-full" placeholder="Password">
+        <form>
+            <input type="email" name="customer[email]" id="loginInputEmail" autocomplete="email" class="input-full" placeholder="Email"
+                autofocus="">
+            <input type="password" value="" name="customer[password]" id="loginInputPassword" autocomplete="current-password" class="input-full"
+                placeholder="Password">
             <p>
-                <input type="submit" class="btn btn-full" value="Sign In">
+                <button type="button" class="btn btn-full" onclick="userLogin()">Sign in</button>
             </p>
             <p>
-                <a href="#" id="customer_register_link" onclick="changePage('register.html')">Create Account</a>
+                <a href="# " id="customer_register_link " onclick="changePage('register.html')">Create Account</a>
             </p>
             <p>
-                <a href="#" onclick="changePage('home.html')">Return to Store</a>
+                <a href="# " onclick="changePage('home.html')">Return to Store</a>
             </p>
-        </div>
+        </form>
     </div>
 </div>

@@ -14,15 +14,22 @@
                 <li>
                     <a href='#' onclick="changePage('contact.html')">Contact</a>
                 </li>
-                <li>
+                <li id="loginOption">
                     <a href='#' onclick="changePage('login.html')">Sign In</a>
+                </li>
+                <li id="logoutOption" style="display: none;">
+                    <a href='#' onclick="userLogout()">Sign Out</a>
                 </li>
                 <li>
                     <a href='#' onclick="changePage('orders.html')">
                         <i id="cartIcon" class="ion-ios-cart icon-white"></i>
                     </a>
                 </li>
-                <!--<li><a href="myaccount.html"><i class="ion-person icon-white"></i></a></li>-->
+                <li id="userHomepage" style="display: none;">
+                    <a href="#" onclick="userHomepage()">
+                        <i id="userHomeIcon" class="ion-person icon-white"></i>
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>

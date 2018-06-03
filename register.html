@@ -4,18 +4,23 @@
             <h1>Register</h1>
             <hr class="hr-small">
         </div>
-        <div class="form-inputs">
-            <input type="text" name="customer[first_name]" id="FirstName" class="input-full" placeholder="First Name" autofocus="">
-            <input type="text" name="customer[last_name]" id="LastName" class="input-full" placeholder="Last Name">
-            <input type="text" name="customer[phone]" id="Phone" class="input-full" placeholder="Phone">
-            <input type="email" name="customer[email]" id="Email" class="input-full" placeholder="Email">
-            <input type="password" name="customer[password]" id="CreatePassword" class="input-full" placeholder="Password">
+        <form>
+            <input type="text" name="customer[first_name]" id="registerInputFirstName" class="input-full" autocomplete='given-name' placeholder="First Name"
+                autofocus="" required>
+            <input type="text" name="customer[last_name]" id="registerInputLastName" class="input-full" autocomplete='family-name' placeholder="Last Name"
+                required>
+            <input type="text" name="customer[phone]" id="registerInputPhone" class="input-full" autocomplete='tel' placeholder="Phone"
+                required>
+            <input type="email" name="customer[email]" id="registerInputEmail" class="input-full" autocomplete='email' placeholder="Email"
+                required>
+            <input type="password" name="customer[password]" id="registerInputPassword" class="input-full" autocomplete='new-password'
+                placeholder="Password" required>
             <p>
-                <input type="submit" value="Create" class="btn btn--full">
+                <button type="button" class="btn btn--full" onclick="addUser()">Create</button>
             </p>
             <p>
                 <a href="#" onclick="changePage('home.html')">Return to Store</a>
             </p>
-        </div>
+        </form>
     </div>
 </div>
