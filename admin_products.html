@@ -66,7 +66,10 @@
                             </div>
                             <div class="form-group">
                                 <label for="addProductInputPhoto">Photo</label>
-                                <input type="file" name="photo" class="form-control-file" id="addProductInputPhoto" accept=".jpg, .jpeg, .png" required>
+                                <br>
+                                <img src="img/no_image.png" alt="product photo" class="img-thumbnail" id="addProductImgThumb" style="height:80px">
+                                <input type="file" name="photo" id="addProductInputPhoto" accept="image/*" style="display:none" onchange="handleFiles(this.files, 'addProductImgThumb')">
+                                <button id="addProductPhotoSelect" class="btn btn-md">Choose photo</button>
                             </div>
                             <div class="form-group">
                                 <label for="addProductInputDescription">Description</label>
@@ -104,7 +107,7 @@
                         <h5 class="modal-title">Edit Product</h5>
                     </div>
                     <div class="modal-body">
-                        <form>
+                        <form onsubmit="return false;">
                             <div class="form-group">
                                 <label for="editProductInputID">ID</label>
                                 <input type="number" name="ID" class="form-control" id="editProductInputID" readonly>
@@ -115,7 +118,10 @@
                             </div>
                             <div class="form-group">
                                 <label for="editProductInputPhoto">Photo</label>
-                                <input type="file" name="photo" class="form-control-file" id="editProductInputPhoto" curphoto="">
+                                <br>
+                                <img src="img/no_image.png" alt="product photo" class="img-thumbnail" id="editProductImgThumb" style="height:80px">
+                                <input type="file" name="photo" id="editProductInputPhoto" accept="image/*" style="display:none" onchange="handleFiles(this.files, 'editProductImgThumb')">
+                                <button id="editProductPhotoSelect" class="btn btn-md">Change photo</button>
                             </div>
                             <div class="form-group">
                                 <label for="editProductInputDescription">Description</label>

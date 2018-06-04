@@ -189,7 +189,7 @@ db.addEventListener("ready", event => {
     db.put("user", {
       name: "admin",
       phone: "+55 (16) 25851253",
-      photo: "teste",
+      photo: "img/unknown_person.jpg",
       email: "admin",
       password: "admin",
       role: "admin"
@@ -205,14 +205,14 @@ db.addEventListener("ready", event => {
 /* USEFUL FUNCTIONS */
 function addProduct() {
   let name = $("#addProductInputName").val();
-  let photo = $("#addProductInputPhoto").val();
+  let photo = $("#addProductImgThumb").attr("src");
   let desc = $("#addProductInputDescription").val();
   let rPrice = $("#addProductInputRetailPrice").val();
   let iQty = $("#addProductInputInventoryQuantity").val();
   let sQty = 0;
 
   $("#addProductInputName").val("");
-  $("#addProductInputPhoto").val("");
+  $("#addProductImgThumb").attr("src", "img/no_image.png");
   $("#addProductInputDescription").val("");
   $("#addProductInputRetailPrice").val("");
   $("#addProductInputInventoryQuantity").val("");
@@ -286,7 +286,7 @@ function editProduct(id) {
   db.get("product", id).then(record => {
     $("#editProductInputID").val(record.id);
     $("#editProductInputName").val(record.name);
-    $("#editProductInputPhoto").attr("curphoto", record.photo);
+    $("#editProductImgThumb").attr("src", record.photo);
     $("#editProductInputDescription").val(record.description);
     $("#editProductInputRetailPrice").val(record.retailPrice);
     $("#editProductInputInventoryQuantity").val(record.inventoryQty);
@@ -296,16 +296,12 @@ function editProduct(id) {
 
 function saveProductChanges() {
   console.log("Saving product changes...");
-  photo = $("#editProductInputPhoto").val();
-  if (photo === "") {
-    photo = $("#editProductInputPhoto").attr("curphoto");
-  }
 
   db
     .put("product", {
       id: parseInt($("#editProductInputID").val()),
       name: $("#editProductInputName").val(),
-      photo: photo,
+      photo: $("#editProductImgThumb").attr("src"),
       description: $("#editProductInputDescription").val(),
       retailPrice: $("#editProductInputRetailPrice").val(),
       inventoryQty: $("#editProductInputInventoryQuantity").val(),
@@ -324,13 +320,14 @@ function saveProductChanges() {
 }
 
 function addUser() {
+  let photo = $("#registerImgThumb").attr("src");
   let fName = $("#registerInputFirstName").val();
   let lName = $("#registerInputLastName").val();
   let phone = $("#registerInputPhone").val();
-  let photo = "TODO";
   let email = $("#registerInputEmail").val();
   let password = $("#registerInputPassword").val();
 
+  $("#registerImgThumb").attr("src", "img/unknown_person.jpg");
   $("#registerInputFirstName").val("");
   $("#registerInputLastName").val("");
   $("#registerInputPhone").val("");
@@ -446,8 +443,6 @@ function editUserRole(id) {
 }
 
 function saveUserRoleChanges() {
-  console.log("Saving user role changes...");
-
   let id = parseInt($("#editUserRoleInputID").val());
   let role = $('input[name=user-role]:checked', '#editUserRoleForm').val();
   role = (role === 'administrator' ? 'admin' : 'client');
@@ -455,13 +450,11 @@ function saveUserRoleChanges() {
   let iter = new ydn.db.ValueIterator('user', ydn.db.KeyRange.only(id));
   db.open((cursor) => {
     let user = cursor.getValue();
-    console.log("Found this user with id #" + id + " = " + JSON.stringify(user));
     user.role = role;
     cursor.update(user).done((e) => {
       console.log("Successful editting user #" + id);
     });
   }, iter, 'readwrite').then(function () {
-    console.log("Finished editting user roles");
     $("#editUserRoleModal").modal("toggle");
   });
 }
@@ -487,8 +480,7 @@ function showAdminProfile() {
   db.values("user", "email", key_range).then(
     record => {
       if (record.length > 0) {
-        // console.log("Found this user profile = " + JSON.stringify(record[0]));
-        // TODO - Change photo
+        $("#admin-photo").attr("src", record[0].photo);
         $("#admin-name").html(record[0].name);
         $("#admin-phone").html(record[0].phone);
         $("#admin-email").html(record[0].email);

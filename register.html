@@ -5,6 +5,9 @@
             <hr class="hr-small">
         </div>
         <form>
+            <img src="img/unknown_person.jpg" alt="user photo" class="img-thumbnail mx-auto" id="registerImgThumb" style="height:100px">
+            <input type="file" name="customer[photo]" id="registerPhotoElem" accept="image/*" style="display:none" onchange="handleFiles(this.files, 'registerImgThumb')">
+            <button id="registerPhotoSelect" class="btn btn-md">Change photo</button>
             <input type="text" name="customer[first_name]" id="registerInputFirstName" class="input-full" autocomplete='given-name' placeholder="First Name"
                 autofocus="" required>
             <input type="text" name="customer[last_name]" id="registerInputLastName" class="input-full" autocomplete='family-name' placeholder="Last Name"

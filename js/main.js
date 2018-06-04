@@ -3,12 +3,13 @@ function changePage(dest) {
 
     // Change page aspect
     if (dest.search("admin_") === 0) {
-        console.log("aqui...");
         $("#bodyContent").load(dest, () => {
             console.log("Change made...");
 
             if (dest === "admin_products.html") {
                 showProducts();
+                initializePhotoPicker("addProductPhotoSelect", "addProductInputPhoto");
+                initializePhotoPicker("editProductPhotoSelect", "editProductInputPhoto");
             } else if (dest === "admin_user_roles.html") {
                 showUsers();
             } else if (dest === "admin_profile.html") {
@@ -18,6 +19,10 @@ function changePage(dest) {
     } else {
         $("#test").load(dest, () => {
             console.log("Change made...");
+
+            if (dest === "register.html") {
+                initializePhotoPicker("registerPhotoSelect", "registerPhotoElem");
+            }
         });
         if (dest !== 'home.html') {
             $("#navRow").attr("class", "new-row");
@@ -50,7 +55,6 @@ function changePage(dest) {
 
 function checkLoggedUser() {
     let res = sessionStorage.getItem("userEmail");
-    console.log("saved user email = " + res);
     // Check if there's a logged user
     if (res !== null) {
         $("#loginOption").hide();
@@ -79,5 +83,41 @@ function userLogout() {
         changePage('admin_logout.html');
     } else {
         changePage('home.html');
+    }
+}
+
+function initializePhotoPicker(fileSelectID, fileElemID) {
+    // console.log("initializePhotoPicker() called");
+    let photoSelect = document.getElementById(fileSelectID),
+        photoElem = document.getElementById(fileElemID);
+
+    photoSelect.addEventListener("click", function (e) {
+        if (photoElem) {
+            photoElem.click();
+        }
+    }, false);
+}
+
+function handleFiles(files, imgID) {
+    // console.log("Files length = " + files.length);
+    for (let i = 0; i < files.length; i++) {
+        let file = files[i];
+
+        if (!file.type.startsWith('image/')) {
+            continue
+        }
+
+        var img = document.getElementById(imgID);
+        img.classList.add("obj");
+        img.file = file;
+        // console.log(img);
+
+        var reader = new FileReader();
+        reader.onload = (function (aImg) {
+            return function (e) {
+                aImg.src = e.target.result;
+            };
+        })(img);
+        reader.readAsDataURL(file);
     }
 }
