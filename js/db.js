@@ -204,6 +204,7 @@ db.addEventListener("ready", event => {
   let is_updated = event.getVersion() != event.getOldVersion();
   if (isNaN(event.getOldVersion())) {
     console.log("new database created");
+    // Insert a default admin user
     db.put("user", {
       name: "admin",
       phone: "+55 (16) 25851253",
@@ -221,6 +222,7 @@ db.addEventListener("ready", event => {
 });
 
 /* USEFUL FUNCTIONS */
+//-------- Manipulate the PRODUCT store
 function addProduct() {
   let name = $("#addProductInputName").val();
   let photo = $("#addProductImgThumb").attr("src");
@@ -247,9 +249,6 @@ function addProduct() {
     .then(
       key => {
         console.log("Success adding product of id #" + key);
-      },
-      e => {
-        console.error(e.stack);
       }
     );
 
@@ -273,7 +272,7 @@ function showProducts() {
         output +=
           "<a onclick='editProduct(" +
           v.id +
-          ")' href='#'><span class='mini glyphicons glyphicons-pencil'></span></a>";
+          ")' href='#'><span class='mini glyphicon glyphicon-pencil'></span></a>";
         output += "</li>";
       },
       iter,
@@ -291,9 +290,6 @@ function removeProduct(id) {
         n.toString() + " products deleted with given id #" + id.toString()
       );
       showProducts();
-    },
-    e => {
-      console.log(e.message);
     }
   );
 }
@@ -313,8 +309,6 @@ function editProduct(id) {
 }
 
 function saveProductChanges() {
-  console.log("Saving product changes...");
-
   db
     .put("product", {
       id: parseInt($("#editProductInputID").val()),
@@ -330,13 +324,11 @@ function saveProductChanges() {
         console.log("Success editting product of id #" + key);
         $("#editProductForm").modal("toggle");
         showProducts();
-      },
-      e => {
-        console.error(e.stack);
       }
     );
 }
 
+//-------- Manipulate the USER store
 function addUser() {
   let photo = $("#registerImgThumb").attr("src");
   let fName = $("#registerInputFirstName").val();
@@ -376,7 +368,6 @@ function addUser() {
         alert(
           "The given email is already being used! Please choose another one."
         );
-        // console.error(e.stack);
       }
     );
 }
@@ -407,7 +398,6 @@ function userLogin() {
       }
 
       if (success) {
-        console.log(JSON.stringify(userInfo));
         sessionStorage.setItem("userEmail", userEmail);
         sessionStorage.setItem("userID", userInfo.id);
         sessionStorage.setItem("userRole", userInfo.role);
@@ -417,9 +407,6 @@ function userLogin() {
           changePage("admin_profile.html");
         }
       }
-    },
-    function (e) {
-      console.error("A wild error appears = " + e);
     }
   );
 }
@@ -441,7 +428,7 @@ function showUsers() {
         output +=
           "<a onclick='editUserRole(" +
           v.id +
-          ")' href='#'><span class='mini glyphicons glyphicons-pencil'></span></a>";
+          ")' href='#'><span class='mini glyphicon glyphicon-pencil'></span></a>";
         output += "</li>";
       },
       iter,
@@ -486,9 +473,6 @@ function removeUser(id) {
         n.toString() + " users deleted with given id #" + id.toString()
       );
       showUsers();
-    },
-    e => {
-      console.log(e.message);
     }
   );
 }
@@ -505,9 +489,6 @@ function showAdminProfile() {
         $("#admin-phone").html(record[0].phone);
         $("#admin-email").html(record[0].email);
       }
-    },
-    function (e) {
-      console.error("A wild error appears = " + e);
     }
   );
 }
@@ -531,13 +512,11 @@ function showClientProfile() {
         $("#client-profile-phone").html(record[0].phone);
         $("#client-profile-email").html(record[0].email);
       }
-    },
-    function (e) {
-      console.error("A wild error appears (client) = " + e);
     }
   );
 }
 
+//-------- Manipulate the PET store
 function addPet() {
   let name = $("#addPetInputName").val();
   let photo = $("#addPetImgThumb").attr("src");
@@ -547,7 +526,7 @@ function addPet() {
 
   $("#addPetInputName").val("");
   $("#addPetImgThumb").attr("src", "img/no_image.png");
-  $("#addPetInputBred").val("");
+  $("#addPetInputBreed").val("");
   $("#addPetInputAge").val("");
 
   db
@@ -561,9 +540,6 @@ function addPet() {
     .then(
       key => {
         console.log("Success adding pet of id #" + key);
-      },
-      e => {
-        console.error(e.stack);
       }
     );
 
@@ -605,9 +581,6 @@ function removePet(id) {
         n.toString() + " pets deleted with given id #" + id.toString()
       );
       showPets();
-    },
-    e => {
-      console.log(e.message);
     }
   );
 }
@@ -625,8 +598,6 @@ function editPet(id) {
 }
 
 function savePetChanges() {
-  console.log("Saving pet changes...");
-  console.log("pet id = " + parseInt($("#editPetInputID").html()));
   db
     .put("pet", {
       id: parseInt($("#editPetInputID").html()),
@@ -641,9 +612,6 @@ function savePetChanges() {
         console.log("Success editting pet of id #" + key);
         $("#editPetForm").modal("toggle");
         showPets();
-      },
-      e => {
-        console.error(e.stack);
       }
     );
 }

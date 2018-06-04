@@ -4,8 +4,6 @@ function changePage(dest) {
     // Change page aspect
     if (dest.search("admin_") === 0) {
         $("#bodyContent").load(dest, () => {
-            console.log("Change made...");
-
             if (dest === "admin_products.html") {
                 showProducts();
                 initializePhotoPicker("addProductPhotoSelect", "addProductInputPhoto");
@@ -18,8 +16,6 @@ function changePage(dest) {
         });
     } else {
         $("#test").load(dest, () => {
-            console.log("Change made...");
-
             if (dest === "register.html") {
                 initializePhotoPicker("registerPhotoSelect", "registerPhotoElem");
             } else if (dest === "client_profile.html") {
@@ -43,7 +39,6 @@ function changePage(dest) {
         }
     }
 
-    console.log("calling push state...");
     if (dest !== 'admin_logout.html') {
         history.pushState({
             foo: dest
@@ -91,7 +86,6 @@ function userLogout() {
 }
 
 function initializePhotoPicker(fileSelectID, fileElemID) {
-    // console.log("initializePhotoPicker() called");
     let photoSelect = document.getElementById(fileSelectID),
         photoElem = document.getElementById(fileElemID);
 
@@ -103,7 +97,6 @@ function initializePhotoPicker(fileSelectID, fileElemID) {
 }
 
 function handleFiles(files, imgID) {
-    // console.log("Files length = " + files.length);
     for (let i = 0; i < files.length; i++) {
         let file = files[i];
 
@@ -114,7 +107,6 @@ function handleFiles(files, imgID) {
         var img = document.getElementById(imgID);
         img.classList.add("obj");
         img.file = file;
-        // console.log(img);
 
         var reader = new FileReader();
         reader.onload = (function (aImg) {
