@@ -22,6 +22,10 @@ function changePage(dest) {
 
             if (dest === "register.html") {
                 initializePhotoPicker("registerPhotoSelect", "registerPhotoElem");
+            } else if (dest === "client_profile.html") {
+                showClientProfile();
+                initializePhotoPicker("addPetPhotoSelect", "addPetInputPhoto");
+                initializePhotoPicker("editPetPhotoSelect", "editPetInputPhoto");
             }
         });
         if (dest !== 'home.html') {

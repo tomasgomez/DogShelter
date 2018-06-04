@@ -32,12 +32,16 @@ let user_store_schema = {
 };
 
 /* Table 'Delivery Address'
- *   It's a child of 'User'. This way, the primary key of a new delivery address
- *   must be linked to the primary key ('id') of ONLY 1 client.
+ *   It's a child of 'User'.
  */
 let delivery_address_store_schema = {
   name: "delivery-address",
+  keyPath: "id",
+  autoIncrement: true,
   indexes: [{
+      keyPath: "userID"
+    },
+    {
       keyPath: "postalCode"
     },
     {
@@ -53,12 +57,15 @@ let delivery_address_store_schema = {
 };
 
 /* Table 'Pet'
- *   It's a child of 'User'. This way, the primary key of a new pet
- *   must be linked to the primary key ('id') of ONLY 1 client.
+ *   It's a child of 'User'.
  */
 let pet_store_schema = {
   name: "pet",
+  keyPath: "id",
+  autoIncrement: true,
   indexes: [{
+      keyPath: "userID",
+    }, {
       keyPath: "name"
     },
     {
@@ -74,12 +81,15 @@ let pet_store_schema = {
 };
 
 /* Table 'Order'
- *   It's a child of 'User'. This way, the primary key of a new order
- *   must be linked to the primary key ('id') of ONLY 1 client.
+ *   It's a child of 'User'.
  */
 let order_store_schema = {
   name: "order",
+  keyPath: "id",
+  autoIncrement: true,
   indexes: [{
+    keyPath: "userID",
+  }, {
     keyPath: "creditCardNo"
   }]
 };
@@ -88,8 +98,12 @@ let order_store_schema = {
  */
 let order_service_line_store_schema = {
   name: "order-service-line",
-  keyPath: ["orderId", "serviceID"],
+  keyPath: "id",
+  autoIncrement: true,
   indexes: [{
+      keyPath: "orderID"
+    },
+    {
       keyPath: "salePrice"
     },
     {
@@ -105,8 +119,12 @@ let order_service_line_store_schema = {
  */
 let order_product_line_store_schema = {
   name: "order-product-line",
-  keyPath: ["orderId", "productID"],
+  keyPath: "id",
+  autoIncrement: true,
   indexes: [{
+      keyPath: "productID"
+    },
+    {
       keyPath: "salePrice"
     },
     {
@@ -255,7 +273,7 @@ function showProducts() {
         output +=
           "<a onclick='editProduct(" +
           v.id +
-          ")' href='#'><span class='mini glyphicon glyphicon-wrench'></span></a>";
+          ")' href='#'><span class='mini glyphicons glyphicons-pencil'></span></a>";
         output += "</li>";
       },
       iter,
@@ -349,6 +367,7 @@ function addUser() {
         alert("Your account was created successfully.");
 
         //Log user in automatically
+        sessionStorage.setItem("userID", key.toString());
         sessionStorage.setItem("userEmail", email);
         sessionStorage.setItem("userRole", "client");
         changePage("client_profile.html");
@@ -390,6 +409,7 @@ function userLogin() {
       if (success) {
         console.log(JSON.stringify(userInfo));
         sessionStorage.setItem("userEmail", userEmail);
+        sessionStorage.setItem("userID", userInfo.id);
         sessionStorage.setItem("userRole", userInfo.role);
         if (userInfo.role === "client") {
           changePage("client_profile.html");
@@ -421,7 +441,7 @@ function showUsers() {
         output +=
           "<a onclick='editUserRole(" +
           v.id +
-          ")' href='#'><span class='mini glyphicon glyphicon-wrench'></span></a>";
+          ")' href='#'><span class='mini glyphicons glyphicons-pencil'></span></a>";
         output += "</li>";
       },
       iter,
@@ -490,4 +510,140 @@ function showAdminProfile() {
       console.error("A wild error appears = " + e);
     }
   );
+}
+
+function showClientProfile() {
+  $(".btn-pref .btn").click(function () {
+    $(".btn-pref .btn").removeClass("btn-primary").addClass("btn-default");
+    // $(".tab").addClass("active"); // instead of this do the below 
+    $(this).removeClass("btn-default").addClass("btn-primary");
+  });
+
+  let userEmail = sessionStorage.getItem("userEmail");
+  // Search for user email in client_table
+  let key_range = ydn.db.KeyRange.only(userEmail);
+  db.values("user", "email", key_range).then(
+    record => {
+      if (record.length > 0) {
+        $("#client-cover-photo").attr("src", record[0].photo);
+        $("#client-profile-photo").attr("src", record[0].photo);
+        $("#client-profile-name").html(record[0].name);
+        $("#client-profile-phone").html(record[0].phone);
+        $("#client-profile-email").html(record[0].email);
+      }
+    },
+    function (e) {
+      console.error("A wild error appears (client) = " + e);
+    }
+  );
+}
+
+function addPet() {
+  let name = $("#addPetInputName").val();
+  let photo = $("#addPetImgThumb").attr("src");
+  let breed = $("#addPetInputBreed").val();
+  let age = parseInt($("#addPetInputAge").val());
+  let userID = parseInt(sessionStorage.getItem("userID"));
+
+  $("#addPetInputName").val("");
+  $("#addPetImgThumb").attr("src", "img/no_image.png");
+  $("#addPetInputBred").val("");
+  $("#addPetInputAge").val("");
+
+  db
+    .put("pet", {
+      userID: userID,
+      name: name,
+      photo: photo,
+      breed: breed,
+      age: age,
+    })
+    .then(
+      key => {
+        console.log("Success adding pet of id #" + key);
+      },
+      e => {
+        console.error(e.stack);
+      }
+    );
+
+  showPets();
+}
+
+function showPets() {
+  let output = "";
+
+  let iter = new ydn.db.ValueIterator("pet");
+  db
+    .open(
+      cursor => {
+        let v = cursor.getValue();
+        output += "<li class='list-group-item' id='pet-" + v.id + "'>";
+        output += v.name;
+        output +=
+          "<a onclick='removePet(" +
+          v.id +
+          ")' href='#'><span class='mini glyphicon red glyphicon-remove'></span></a>";
+        output +=
+          "<a onclick='editPet(" +
+          v.id +
+          ")' href='#'><span class='mini glyphicon glyphicon-wrench'></span></a>";
+        output += "</li>";
+      },
+      iter,
+      "readonly"
+    )
+    .then(() => {
+      $("#petList").html(output);
+    });
+}
+
+function removePet(id) {
+  db.remove("pet", id).then(
+    n => {
+      console.log(
+        n.toString() + " pets deleted with given id #" + id.toString()
+      );
+      showPets();
+    },
+    e => {
+      console.log(e.message);
+    }
+  );
+}
+
+function editPet(id) {
+  $("#editPetForm").modal();
+
+  db.get("pet", id).then(record => {
+    $("#editPetInputID").html(record.id.toString());
+    $("#editPetInputName").val(record.name);
+    $("#editPetImgThumb").attr("src", record.photo);
+    $("#editPetInputBreed").val(record.breed);
+    $("#editPetInputAge").val(record.age);
+  });
+}
+
+function savePetChanges() {
+  console.log("Saving pet changes...");
+  console.log("pet id = " + parseInt($("#editPetInputID").html()));
+  db
+    .put("pet", {
+      id: parseInt($("#editPetInputID").html()),
+      userID: parseInt(sessionStorage.getItem("userID")),
+      name: $("#editPetInputName").val(),
+      photo: $("#editPetImgThumb").attr("src"),
+      breed: $("#editPetInputBreed").val(),
+      age: $("#editPetInputAge").val(),
+    })
+    .then(
+      key => {
+        console.log("Success editting pet of id #" + key);
+        $("#editPetForm").modal("toggle");
+        showPets();
+      },
+      e => {
+        console.error(e.stack);
+      }
+    );
 }
