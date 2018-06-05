@@ -1,7 +1,7 @@
 /* DEFINITION OF OBJECT STORES */
 
 /* Table 'User'
- *   It's necessary to create at least 1 delivery address to 
+ *   It's necessary to create at least 1 delivery address to
  *   every new client which is added to the database
  */
 let user_store_schema = {
@@ -194,6 +194,38 @@ db.addEventListener("ready", event => {
       password: "admin",
       role: "admin"
     });
+    db.put("product", {
+        name: "Dog Collar",
+        photo: "img/dog_collar.jpg",
+        description: "It's a Dog Collar very cute",
+        retailPrice: "15",
+        inventoryQty: "20",
+        qtySold: "0"
+      })
+      .then(
+        key => {
+          console.log("Success adding product of id #" + key);
+        },
+        e => {
+          console.error(e.stack);
+        }
+      );
+    db.put("service", {
+        name: "DogGrooming",
+        photo: "img/dog_grooming.png",
+        description: "It's a Dog Grooming very nice",
+        retailPrice: "45",
+        inventoryQty: "30",
+        qtySold: "0"
+      })
+      .then(
+        key => {
+          console.log("Success adding service of id #" + key);
+        },
+        e => {
+          console.error(e.stack);
+        }
+      );
   } else if (is_updated) {
     console.log("database connected with new schema");
   } else {
@@ -490,4 +522,172 @@ function showAdminProfile() {
       console.error("A wild error appears = " + e);
     }
   );
+}
+
+function showProductsUser() {
+  let output = "";
+
+  let iter = new ydn.db.ValueIterator("product");
+  db
+    .open(
+      cursor => {
+        let v = cursor.getValue();
+        output += "<div class='col-md-4'><div class='product'>" +
+          "<div class='link-to-prod' onclick='showSelectedProd(" +
+          v.id +
+          ");'>";
+        output += "<img src='"+ v.photo +"' class='image'>";
+        output += "<p><span>"+ v.name +"</span></p></div>"
+        output += "<p><span class='product-price'> $" +
+          v.retailPrice +
+          "</span></p></div></div>";
+      },
+      iter,
+      "readonly"
+    )
+    .then(() => {
+      $("#productsPanel").html(output);
+    });
+}
+
+function showSelectedProd(id) {
+  $("#test").load("prod1.html", () => {
+    db.get("product",id).then(record => {
+      $("#buyBtn").attr("onclick","buyAction(" + id + ")");
+      $("#productName").html(record.name);
+      $("#productPhoto").attr("src", record.photo);
+      $("#productDescription").html(record.description);
+      $("#productPrice").html(record.retailPrice);
+      $("#productStock").html(record.inventoryQty);
+      $("#productQuantity").attr("max", record.inventoryQty);
+    });
+  });
+}
+
+function showServicesUser() {
+  let output = "";
+
+  let iter = new ydn.db.ValueIterator("service");
+  db
+    .open(
+      cursor => {
+        let v = cursor.getValue();
+        output += "<div class='col-md-4'><div class='service'>" +
+          "<div class='link-to-prod' onclick='showSelectedServ(" +
+          v.id +
+          ");'>";
+        output += "<img src='"+ v.photo +"' class='image'>";
+        output += "<p><span>"+ v.name +"</span></p></div>"
+        output += "<p><span class='service-price'> $" +
+          v.retailPrice +
+          "</span></p></div></div>";
+      },
+      iter,
+      "readonly"
+    )
+    .then(() => {
+      $("#servicePanel").html(output);
+    });
+}
+
+function showSelectedServ(id) {
+  $("#test").load("service1.html", () => {
+    db.get("service",id).then(record => {
+      $("#serviceName").html(record.name);
+      $("#servicePhoto").attr("src", record.photo);
+      $("#serviceDescription").html(record.description);
+      $("#servicePrice").html(record.retailPrice);
+    });
+    calendar();
+  });
+}
+
+function buyAction(id) {
+  let quantity_prod = parseInt($("#productQuantity").val());
+
+  db.get("product",id).then(record => {
+    let stock_prod = parseInt(record.inventoryQty);
+    let name_prod = record.name;
+    let price_prod = record.retailPrice;
+
+    if (quantity_prod > stock_prod) {
+      alert("The quantity you are willing to buy it's more than the stock");
+    }
+    else {
+      stock_prod -= quantity_prod;
+      let product = {
+        id: id,
+        name: name_prod,
+        retailPrice: price_prod,
+        quantity: quantity_prod,
+        inventoryQty: stock_prod
+      };
+
+      if (sessionStorage.getItem("selectedProducts") === null) {
+        sessionStorage.setItem("selectedProducts", JSON.stringify([product]));
+      }
+      else {
+        let product_list = sessionStorage.getItem("selectedProducts");
+        let products = JSON.parse(product_list);
+        products.push(product);
+        sessionStorage.setItem("selectedProducts", JSON.stringify(products));
+      }
+    }
+    alert("Your product was added to the cart :)");
+  });
+}
+
+function showOrder() {
+  let output = "";
+  let paymentVar = "payBtn(";
+  let total = 0;
+  let product_list = sessionStorage.getItem("selectedProducts");
+  let products = JSON.parse(product_list);
+  console.log(products);
+
+  if (products !== null) {
+    for (prod of products) {
+      let total_price = parseInt(prod.quantity) * parseInt(prod.retailPrice)
+      output += "<li class='list-group-item' id='product-ord-" + prod.id + "'>";
+      output += "<p>"+ prod.name + "</p>";
+      output += " <p> Quantity : " +
+        prod.quantity + "</p>";
+      output += "<p> Unity price : " +
+        prod.retailPrice + "</p>";
+      output += "<p> Total price : " +
+        total_price + "</p>";
+      output += "</li>";
+      total += parseInt(total_price);
+    }
+    output += "<br /> <h3> Total: " + total +"</h3>";
+    paymentVar += total + ")"
+    $("#productsClient").html(output);
+    $("#payBtn").attr("onclick", paymentVar);
+  }
+}
+
+function cleanBtn() {
+  var txt;
+  var r = confirm("Are you sure you want to empty your cart?");
+  if (r == true) {
+    sessionStorage.removeItem("selectedProducts");
+    alert("Your cart it's now empty");
+  }
+  changePage("orders.html");
+}
+
+function payBtn(total) {
+  let userId = sessionStorage.getItem("userID");
+  console.log(userId);
+  if (userId === null) {
+    changePage("login.html");
+  }
+  else {
+    $("#paymentForm").modal("toggle");
+
+    bd.get("user", userId).then( record => {
+      $("deliveryAddress").html(record.address);
+      $("totalProducts").html(total);
+    })
+  }
 }

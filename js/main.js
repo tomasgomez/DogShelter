@@ -23,6 +23,15 @@ function changePage(dest) {
             if (dest === "register.html") {
                 initializePhotoPicker("registerPhotoSelect", "registerPhotoElem");
             }
+            else if (dest === "products.html") {
+                showProductsUser();
+            }
+            else if (dest === "services.html") {
+                showServicesUser();
+            }
+            else if (dest === "orders.html") {
+                showOrder();
+            }
         });
         if (dest !== 'home.html') {
             $("#navRow").attr("class", "new-row");
@@ -120,4 +129,11 @@ function handleFiles(files, imgID) {
         })(img);
         reader.readAsDataURL(file);
     }
+}
+
+function calendar() {
+  jQuery('.calendar7').Calendar7({
+      allowTimeStart: '6:00',
+      allowTimeEnd: '20:00'
+  })
 }

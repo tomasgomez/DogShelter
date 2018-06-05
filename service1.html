@@ -1,46 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <link rel="stylesheet" type="text/css" href="css/ionicons.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet" type="text/css">
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <script type="text/javascript" src="js/calendar7.js"></script>
-
-    <title>DogShelter</title>
-</head>
-
-<body>
-<div class="all-bg">
-    <nav>
-        <div class="row">
-            <ul class="main-nav black">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="products.html">Products</a></li>
-                <li><a href="services.html">Services</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="login.html">Sign In</a></li>
-                <li><a href="orders.html"><i class="ion-ios-cart icon-big"></i></a></li>
-                <!--<li><a href="myaccount.html"><i class="ion-person icon-big"></i></a></li>-->
-            </ul>
-        </div>
-    </nav>
-</div>
 <div class="new-row">
     <div class="service">
         <div class="service-panel">
             <div class="service-name">
-                <h1>Dog Grooming</h1>
+                <h1 id="serviceName"></h1>
                 <hr class="hr-small-brown">
             </div>
 
             <div class="service-description">
-                <img src="img/dog_grooming.png">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                    eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                 <p> To schedule an appointment for this service, select a free time slot (green slots) in the next calendar.
-                Then click in "book".</p>
+                <img id="servicePhoto" src="" >
+                <p> Description: </p>
+                <p id="serviceDescription"></p>
+                <p >Price:</p>
+                <p id="servicePrice"></p>
             </div>
 
             <hr class="hr-big-white">
@@ -54,18 +25,10 @@
         <div class="service-calendar">
             <input class="calendar7 form-control" style="color: black;">
         </div>
-        
+
          <hr class="hr-small-brown">
         <div class="service-book">
             <input type="submit" class="btn btn-full" value="Book">
         </div>
     </div>
 </div>
-</body>
-<script>
-        jQuery('.calendar7').Calendar7({
-            allowTimeStart: '6:00',
-            allowTimeEnd: '20:00'
-        })
-    </script>
-</html>

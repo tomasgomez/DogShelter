@@ -1,54 +1,27 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <link rel="stylesheet" type="text/css" href="css/ionicons.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet" type="text/css">
-
-    <title>DogShelter</title>
-</head>
-
-<body>
-<div class="all-bg">
-    <nav>
-        <div class="row">
-            <ul class="main-nav black">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="products.html">Products</a></li>
-                <li><a href="services.html">Services</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="login.html">Sign In</a></li>
-                <li><a href="orders.html"><i class="ion-ios-cart icon-big"></i></a></li>
-                <!--<li><a href="myaccount.html"><i class="ion-person icon-big"></i></a></li>-->
-            </ul>
-        </div>
-    </nav>
-</div>
 <div class="new-row">
     <div class="product-view">
         <div class="product-name">
-            <h4>Soft Touch Collars - Luxury Real Leather Padded Dog Collar</h4>
+            <h4 id="productName"></h4>
         </div>
             <hr class="hr-small-brown">
-        <div class="col-md-4">
-            <img src="img/dog_collar.jpg" class="product-img">
+        <div class="col-md-4.offset-md-3">
+            <img id="productPhoto" src="" class="product-img" />
             <div class="buy">
             Quantity:
-                <input type="number" name="quantity" min="1" value="1" style="width: 100px; color:#402D22;">
-                <a class="btn btn-full-brown" href="buyactio">Buy</a>
+                <input type="number" id="productQuantity" name="quantity" min="1" max="" value="1" style="width: 100px; color:#402D22;">
+                <a class="btn btn-full-brown" id="buyBtn" onclick="">Buy</a>
             </div>
-        </div>    
-        <div class="col-md-8">
+        </div>
+        <div class="col-md-5">
             <div class="product-description">
-                <p>Bacon ipsum dolor amet ball tip turkey shoulder, hamburger tongue swine frankfurter pastrami ham. Porchetta tongue cupim, frankfurter chuck landjaeger jowl tail drumstick short ribs shoulder rump tenderloin. Meatball cupim shoulder spare ribs. Ham hock meatball shankle short loin jerky. Tri-tip salami meatloaf cupim shankle short loin rump prosciutto spare ribs sirloin porchetta. Pancetta tail porchetta pork picanha chicken.</p>
-
-                <p>Spicy jalapeno bacon ipsum dolor amet tenderloin kielbasa brisket t-bone reprehenderit ribeye. Ham sint swine ball tip veniam sausage esse jerky do aliquip consequat. Commodo do culpa brisket short loin porchetta. Commodo turducken velit jowl turkey brisket buffalo lorem aute salami short loin meatloaf. Frankfurter bresaola elit, sunt reprehenderit esse exercitation fugiat chicken.</p>
-
+                <p>Description:</p>
+                <p id="productDescription"></p>
+                <p>Price:</p>
+                <p id="productPrice"></p>
+                <p>Stock:</p>
+                <p id="productStock"></p>
             </div>
         </div>
     </div>
 
 </div>
-</body>
-</html>

@@ -256,12 +256,12 @@ input[type="submit"] {
     margin-bottom: 15px;
 }
 
-a.link-to-prod {
+div.link-to-prod {
     text-decoration: none;
     color: #fff;
 }
 
-a.link-to-prod:hover {
+div.link-to-prod:hover {
     text-decoration: none;
     color: #402D22;
     transition: color 0.5s;
