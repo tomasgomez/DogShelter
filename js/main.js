@@ -11,6 +11,13 @@ function changePage(dest) {
           "editProductPhotoSelect",
           "editProductInputPhoto"
         );
+      } else if (dest === "admin_services.html") {
+        showServices();
+        initializePhotoPicker("addServicePhotoSelect", "addServiceInputPhoto");
+        initializePhotoPicker(
+          "editServicePhotoSelect",
+          "editServiceInputPhoto"
+        );
       } else if (dest === "admin_user_roles.html") {
         showUsers();
       } else if (dest === "admin_profile.html") {
@@ -90,7 +97,10 @@ function userHomepage() {
 
 function userLogout() {
   let role = sessionStorage.getItem("userRole");
-  sessionStorage.clear();
+  // sessionStorage.clear();
+  sessionStorage.removeItem("userEmail");
+  sessionStorage.removeItem("userID");
+  sessionStorage.removeItem("userRole");
   if (role === "admin") {
     changePage("admin_logout.html");
   } else {

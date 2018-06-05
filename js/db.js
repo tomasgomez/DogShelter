@@ -295,7 +295,7 @@ function showProducts() {
     iter,
     "readonly"
   ).then(() => {
-    $("#productList").html(output);
+    $("#productsList").html(output);
   });
 }
 
@@ -335,6 +335,101 @@ function saveProductChanges() {
     console.log("Success editting product of id #" + key);
     $("#editProductForm").modal("toggle");
     showProducts();
+  });
+}
+
+//-------- Manipulate the SERVICE store
+function addService() {
+  let name = $("#addServiceInputName").val();
+  let photo = $("#addServiceImgThumb").attr("src");
+  let desc = $("#addServiceInputDescription").val();
+  let rPrice = $("#addServiceInputRetailPrice").val();
+
+  $("#addServiceInputName").val("");
+  $("#addServiceImgThumb").attr("src", "img/no_image.png");
+  $("#addServiceInputDescription").val("");
+  $("#addServiceInputRetailPrice").val("");
+
+  db.put("service", {
+    name: name,
+    photo: photo,
+    description: desc,
+    retailPrice: rPrice
+  }).then(key => {
+    console.log("Success adding service of id #" + key);
+  });
+
+  showServices();
+}
+
+function showServices() {
+  let output = "";
+
+  let iter = new ydn.db.ValueIterator("service");
+  db.open(
+    cursor => {
+      let v = cursor.getValue();
+      output += "<li class='list-group-item' id='service-" + v.id + "'>";
+      output += v.name;
+      output +=
+        "<a onclick='removeService(" +
+        v.id +
+        ")' href='#'><span class='mini glyphicon red glyphicon-remove'></span></a>";
+      output +=
+        "<a onclick='addAvailabilityToService(" +
+        v.id +
+        ")' href='#'><span class='mini glyphicon glyphicon-time'></span></a>";
+      output +=
+        "<a onclick='editService(" +
+        v.id +
+        ")' href='#'><span class='mini glyphicon glyphicon-pencil'></span></a>";
+      output += "</li>";
+    },
+    iter,
+    "readonly"
+  ).then(() => {
+    $("#servicesList").html(output);
+  });
+}
+
+function removeService(id) {
+  db.remove("service", id).then(n => {
+    console.log(
+      n.toString() + " services deleted with given id #" + id.toString()
+    );
+    showServices();
+  });
+}
+
+function editService(id) {
+  $("#editServiceForm").modal();
+
+  db.get("service", id).then(record => {
+    $("#editServiceInputID").val(record.id);
+    $("#editServiceInputName").val(record.name);
+    $("#editServiceImgThumb").attr("src", record.photo);
+    $("#editServiceInputDescription").val(record.description);
+    $("#editServiceInputRetailPrice").val(record.retailPrice);
+  });
+}
+
+function addAvailabilityToService(id) {
+  alert(
+    "This function is yet to be implemented! It shall allow admins to add free time slots to a specific service."
+  );
+}
+
+function saveServiceChanges() {
+  db.put("service", {
+    id: parseInt($("#editServiceInputID").val()),
+    name: $("#editServiceInputName").val(),
+    photo: $("#editServiceImgThumb").attr("src"),
+    description: $("#editServiceInputDescription").val(),
+    retailPrice: $("#editServiceInputRetailPrice").val()
+  }).then(key => {
+    console.log("Success editting service of id #" + key);
+    $("#editServiceForm").modal("toggle");
+    showServices();
   });
 }
 
