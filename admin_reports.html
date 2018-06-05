@@ -38,95 +38,18 @@
         <hr class="grey-line">
 
         <div class="main-panel">
-            <div class="row">
-                <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <span class="big-glyphicon glyphicon glyphicon-user"></span>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <div class="big">35</div>
-                                    <div>New Users!</div>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="#">
-                            <div class="panel-body blue">
-                                <span class="pull-left">View Details</span>
-                                <span class="glyphicon glyphicon-circle-arrow-right pull-right"></span>
-                            </div>
-                        </a>
-                    </div>
+            <ul class="list-group">
+                <li class="list-group-item ruby">List of Orders</li>
+                <div id="ordersList">
+                    <!-- Filled with JavaScript -->
                 </div>
-
-                <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-green">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <span class="big-glyphicon glyphicon glyphicon-calendar"></span>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <div class="big">12</div>
-                                    <div>New Appointments!</div>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="#">
-                            <div class="panel-body green">
-                                <span class="pull-left">View Details</span>
-                                <span class="glyphicon glyphicon-circle-arrow-right pull-right"></span>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-orange">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <span class="big-glyphicon glyphicon glyphicon-shopping-cart"></span>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <div class="big">15</div>
-                                    <div>New Orders!</div>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="#">
-                            <div class="panel-body orange">
-                                <span class="pull-left">View Details</span>
-                                <span class="glyphicon glyphicon-circle-arrow-right pull-right"></span>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-ruby">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <span class="big-glyphicon glyphicon glyphicon-usd"></span>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <div class="big">$1 232</div>
-                                    <div>Daily incomming!</div>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="#">
-                            <div class="panel-body ruby">
-                                <span class="pull-left">View Details</span>
-                                <span class="glyphicon glyphicon-circle-arrow-right pull-right"></span>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
+                <p>
+                    Total quantity of products sold:
+                    <span id="reports-no-prod-sold"></span>
+                    <br> Sum of order values:
+                    <span id="reports-sum-orders-values"></span>
+                </p>
+            </ul>
         </div>
     </div>
 </div>

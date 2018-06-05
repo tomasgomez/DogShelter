@@ -233,6 +233,27 @@ db.addEventListener("ready", event => {
       password: "admin",
       role: "admin"
     });
+
+    let orders = [
+      { userID: 1, creditCardNo: 13454 },
+      { userID: 1, creditCardNo: 2525 },
+      { userID: 2, creditCardNo: 2121 },
+      { userID: 2, creditCardNo: 89524 }
+    ];
+    let orderProductLines = [
+      { orderID: 1, productID: 1, salePrice: 5.6, quantity: 2 },
+      { orderID: 1, productID: 2, salePrice: 3.8, quantity: 1 },
+      { orderID: 1, productID: 3, salePrice: 1.5, quantity: 3 },
+      { orderID: 2, productID: 1, salePrice: 5.6, quantity: 1 },
+      { orderID: 2, productID: 3, salePrice: 2.0, quantity: 2 }
+    ];
+
+    db.putAll("order", orders).always(function(x) {
+      console.log(JSON.stringify(x));
+    });
+    db.putAll("order-product-line", orderProductLines).always(function(x) {
+      console.log(JSON.stringify(x));
+    });
   } else if (is_updated) {
     console.log("database connected with new schema");
   } else {
@@ -494,6 +515,7 @@ function showAdminProfile() {
       $("#admin-name").html(record[0].name);
       $("#admin-phone").html(record[0].phone);
       $("#admin-email").html(record[0].email);
+      $("#admin-address").html(record[0].address);
     }
   });
 }
@@ -608,4 +630,56 @@ function savePetChanges() {
     $("#editPetForm").modal("toggle");
     showPets();
   });
+}
+
+//-------- Manipulate the ORDER store
+function showOrders() {
+  // console.log("showing orders");
+  let totalSum = 0;
+  let totalQty = 0;
+
+  let iter = new ydn.db.ValueIterator("order");
+  db.open(
+    cursor => {
+      let v = cursor.getValue();
+      // console.log("order ID = " + v.id + ". user ID = " + v.userID);
+
+      db.get("user", v.userID).then(record => {
+        if (record) {
+          let userName = record.name;
+          // console.log("userName = " + userName);
+          let keyRange = ydn.db.KeyRange.only(v.id);
+          let sum = 0;
+          let qty = 0;
+
+          let orderProductLines = db
+            .values("order-product-line", "orderID", keyRange)
+            .then(records => {
+              if (records) {
+                // console.log("products = " + JSON.stringify(records));
+                for (productLine of records) {
+                  sum += productLine.salePrice * productLine.quantity;
+                  qty += productLine.quantity;
+                }
+              }
+
+              let output = "";
+              output += "<li class='list-group-item' id='order-" + v.id + "'>";
+              output +=
+                userName + " (" + qty + " products | total = $" + sum + ")";
+              output += "</li>";
+              $("#ordersList").append(output);
+              // console.log("output = " + output);
+              // console.log("sum = " + sum + ". qty = " + qty);
+              totalSum += sum;
+              totalQty += qty;
+              $("#reports-no-prod-sold").html(totalQty.toString());
+              $("#reports-sum-orders-values").html(totalSum.toString());
+            });
+        }
+      });
+    },
+    iter,
+    "readonly"
+  );
 }
