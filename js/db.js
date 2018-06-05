@@ -8,8 +8,7 @@ let user_store_schema = {
   name: "user",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [
-    {
+  indexes: [{
       keyPath: "name"
     },
     {
@@ -67,8 +66,7 @@ let pet_store_schema = {
   name: "pet",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [
-    {
+  indexes: [{
       keyPath: "userID"
     },
     {
@@ -93,8 +91,7 @@ let order_store_schema = {
   name: "order",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [
-    {
+  indexes: [{
       keyPath: "userID"
     },
     {
@@ -109,8 +106,7 @@ let order_service_line_store_schema = {
   name: "order-service-line",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [
-    {
+  indexes: [{
       keyPath: "orderID"
     },
     {
@@ -134,8 +130,7 @@ let order_product_line_store_schema = {
   name: "order-product-line",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [
-    {
+  indexes: [{
       keyPath: "orderID"
     },
     {
@@ -156,8 +151,7 @@ let service_store_schema = {
   name: "service",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [
-    {
+  indexes: [{
       keyPath: "name"
     },
     {
@@ -179,8 +173,7 @@ let product_store_schema = {
   name: "product",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [
-    {
+  indexes: [{
       keyPath: "name"
     },
     {
@@ -568,7 +561,7 @@ function saveUserRoleChanges() {
     },
     iter,
     "readwrite"
-  ).then(function() {
+  ).then(function () {
     $("#editUserRoleModal").modal("toggle");
   });
 }
@@ -598,7 +591,7 @@ function showAdminProfile() {
 }
 
 function showClientProfile() {
-  $(".btn-pref .btn").click(function() {
+  $(".btn-pref .btn").click(function () {
     $(".btn-pref .btn")
       .removeClass("btn-primary")
       .addClass("btn-default");
@@ -711,7 +704,6 @@ function savePetChanges() {
 
 //-------- Manipulate the ORDER store
 function showOrders() {
-  // console.log("showing orders");
   let totalSum = 0;
   let totalQty = 0;
 
@@ -719,12 +711,10 @@ function showOrders() {
   db.open(
     cursor => {
       let v = cursor.getValue();
-      // console.log("order ID = " + v.id + ". user ID = " + v.userID);
 
       db.get("user", v.userID).then(record => {
         if (record) {
           let userName = record.name;
-          // console.log("userName = " + userName);
           let keyRange = ydn.db.KeyRange.only(v.id);
           let sum = 0;
           let qty = 0;
@@ -733,7 +723,6 @@ function showOrders() {
             .values("order-product-line", "orderID", keyRange)
             .then(records => {
               if (records) {
-                // console.log("products = " + JSON.stringify(records));
                 for (productLine of records) {
                   sum += productLine.salePrice * productLine.quantity;
                   qty += productLine.quantity;
@@ -746,8 +735,6 @@ function showOrders() {
                 userName + " (" + qty + " products | total = $" + sum + ")";
               output += "</li>";
               $("#ordersList").append(output);
-              // console.log("output = " + output);
-              // console.log("sum = " + sum + ". qty = " + qty);
               totalSum += sum;
               totalQty += qty;
               $("#reports-no-prod-sold").html(totalQty.toString());
@@ -879,18 +866,17 @@ function showOrder() {
   let total = 0;
   let product_list = sessionStorage.getItem("selectedProducts");
   let products = JSON.parse(product_list);
-  console.log(products);
 
   if (products !== null) {
     for (prod of products) {
-      let total_price = parseInt(prod.quantity) * parseInt(prod.retailPrice);
+      let total_price = parseInt(prod.quantity) * prod.retailPrice;
       output += "<li class='list-group-item' id='product-ord-" + prod.id + "'>";
       output += "<p>" + prod.name + "</p>";
       output += " <p> Quantity : " + prod.quantity + "</p>";
       output += "<p> Unity price : " + prod.retailPrice + "</p>";
       output += "<p> Total price : " + total_price + "</p>";
       output += "</li>";
-      total += parseInt(total_price);
+      total += total_price;
     }
     output += "<br /> <h3> Total: " + total + "</h3>";
     paymentVar += total + ")";
@@ -906,19 +892,17 @@ function cleanBtn() {
     sessionStorage.removeItem("selectedProducts");
     alert("Your cart it's now empty");
   }
-  changePage("orders.html");
+  changePage("checkout.html");
 }
 
 function payBtn(total) {
   let userId = sessionStorage.getItem("userID");
-  console.log(userId);
   if (userId === null) {
     changePage("login.html");
   } else {
     $("#paymentForm").modal("toggle");
 
     db.get("user", parseInt(userId)).then(record => {
-      console.log("record = " + JSON.stringify(record));
       $("#deliveryAddress").val(record.address);
       $("#totalProducts").val(total.toString());
     });
@@ -929,10 +913,12 @@ function savePurchase() {
   let userID = parseInt(sessionStorage.getItem("userID"));
   let creditCardNo = parseInt($("#creditCard").val());
 
-  db.put("order", { userID: userID, creditCardNo: creditCardNo }).done(
+  db.put("order", {
+    userID: userID,
+    creditCardNo: creditCardNo
+  }).done(
     order => {
       let product_list = JSON.parse(sessionStorage.getItem("selectedProducts"));
-      console.log("product list = " + JSON.stringify(product_list));
       for (prod of product_list) {
         db.put("order-product-line", {
           orderID: order,
@@ -940,8 +926,27 @@ function savePurchase() {
           salePrice: prod.retailPrice,
           quantity: prod.quantity
         });
+
+        // Update product 'qtySold' and 'inventoryQty'
+        let iter = new ydn.db.ValueIterator("product", ydn.db.KeyRange.only(prod.id));
+        db.open(
+          (cursor) => {
+            let product = cursor.getValue();
+            let qtySold = product_list.filter(function (obj) {
+              return obj.id == product.id;
+            })[0].quantity;
+            product.qtySold += qtySold;
+            product.inventoryQty -= qtySold;
+            cursor.update(product).done(e => {
+              console.log("Successful saving inventory quantities for product #" + product.id);
+            });
+          },
+          iter,
+          "readwrite"
+        );
       }
       sessionStorage.removeItem("selectedProducts");
+      alert("Your order was approved! Redirecting to your profile...");
       changePage("client_profile.html");
       $(".modal-backdrop").remove();
     }
@@ -949,8 +954,7 @@ function savePurchase() {
 }
 
 function insertSomeTestData() {
-  let users = [
-    {
+  let users = [{
       name: "John Doe",
       phone: "202-555-0164",
       address: "60 Lees Creek Lane North Andover, MA 01845",
@@ -978,8 +982,7 @@ function insertSomeTestData() {
       role: "admin"
     }
   ];
-  let pets = [
-    {
+  let pets = [{
       userID: 1,
       name: "Bailey",
       breed: "Alaskan Malamute",
@@ -1001,67 +1004,141 @@ function insertSomeTestData() {
       age: 8
     }
   ];
-  let orders = [
-    { userID: 2, creditCardNo: 341768679371831 },
-    { userID: 2, creditCardNo: 341768679371831 },
-    { userID: 2, creditCardNo: 341768679371831 },
-    { userID: 2, creditCardNo: 341768679371831 },
-    { userID: 2, creditCardNo: 6011948489198451 },
-    { userID: 3, creditCardNo: 4716275103937400 },
-    { userID: 3, creditCardNo: 4716275103937400 },
-    { userID: 3, creditCardNo: 4716275103937400 }
-  ];
-  let orderProductLines = [
-    { orderID: 1, productID: 1, salePrice: 9, quantity: 1 },
-    { orderID: 1, productID: 2, salePrice: 12.34, quantity: 2 },
-    { orderID: 2, productID: 4, salePrice: 34.99, quantity: 1 },
-    { orderID: 3, productID: 1, salePrice: 10.63, quantity: 2 },
-    { orderID: 3, productID: 3, salePrice: 15.39, quantity: 2 },
-    { orderID: 4, productID: 1, salePrice: 10.63, quantity: 1 },
-    { orderID: 4, productID: 2, salePrice: 12.34, quantity: 1 },
-    { orderID: 5, productID: 3, salePrice: 14.5, quantity: 1 },
-    { orderID: 6, productID: 1, salePrice: 10.63, quantity: 2 },
-    { orderID: 7, productID: 2, salePrice: 12.34, quantity: 1 },
-    { orderID: 7, productID: 3, salePrice: 15.39, quantity: 1 },
-    { orderID: 8, productID: 4, salePrice: 34.99, quantity: 1 }
-  ];
-  let services = [
+  let orders = [{
+      userID: 2,
+      creditCardNo: 341768679371831
+    },
     {
+      userID: 2,
+      creditCardNo: 341768679371831
+    },
+    {
+      userID: 2,
+      creditCardNo: 341768679371831
+    },
+    {
+      userID: 2,
+      creditCardNo: 341768679371831
+    },
+    {
+      userID: 2,
+      creditCardNo: 6011948489198451
+    },
+    {
+      userID: 3,
+      creditCardNo: 4716275103937400
+    },
+    {
+      userID: 3,
+      creditCardNo: 4716275103937400
+    },
+    {
+      userID: 3,
+      creditCardNo: 4716275103937400
+    }
+  ];
+  let orderProductLines = [{
+      orderID: 1,
+      productID: 1,
+      salePrice: 9,
+      quantity: 1
+    },
+    {
+      orderID: 1,
+      productID: 2,
+      salePrice: 12.34,
+      quantity: 2
+    },
+    {
+      orderID: 2,
+      productID: 4,
+      salePrice: 34.99,
+      quantity: 1
+    },
+    {
+      orderID: 3,
+      productID: 1,
+      salePrice: 10.63,
+      quantity: 2
+    },
+    {
+      orderID: 3,
+      productID: 3,
+      salePrice: 15.39,
+      quantity: 2
+    },
+    {
+      orderID: 4,
+      productID: 1,
+      salePrice: 10.63,
+      quantity: 1
+    },
+    {
+      orderID: 4,
+      productID: 2,
+      salePrice: 12.34,
+      quantity: 1
+    },
+    {
+      orderID: 5,
+      productID: 3,
+      salePrice: 14.5,
+      quantity: 1
+    },
+    {
+      orderID: 6,
+      productID: 1,
+      salePrice: 10.63,
+      quantity: 2
+    },
+    {
+      orderID: 7,
+      productID: 2,
+      salePrice: 12.34,
+      quantity: 1
+    },
+    {
+      orderID: 7,
+      productID: 3,
+      salePrice: 15.39,
+      quantity: 1
+    },
+    {
+      orderID: 8,
+      productID: 4,
+      salePrice: 34.99,
+      quantity: 1
+    }
+  ];
+  let services = [{
       name: "Full-Service Bath",
       photo: "img/full-service-bath.jpeg",
-      description:
-        "Includes bath with natural shampoo, blow dry, 15-minute brush-out, ear cleaning, nail trim, gland expression & scented spritz.",
+      description: "Includes bath with natural shampoo, blow dry, 15-minute brush-out, ear cleaning, nail trim, gland expression & scented spritz.",
       retailPrice: 30
     },
     {
       name: "Full-Service Bath with Haircut",
       photo: "img/full-service-bath-haircut.jpeg",
-      description:
-        "Includes bath with natural shampoo, blow dry, 15-minute brush-out, ear cleaning, nail trim, gland expression & scented spritz. PLUS a cut and style to breed-specific standard or shave down.",
+      description: "Includes bath with natural shampoo, blow dry, 15-minute brush-out, ear cleaning, nail trim, gland expression & scented spritz. PLUS a cut and style to breed-specific standard or shave down.",
       retailPrice: 50
     },
     {
       name: "De-shedding Treatment",
       photo: "img/deshedding-treatment.jpeg",
-      description:
-        "Includes FURminator loose undercoat removal, natural shed-reducing shampoo and treatment, followed by another thorough FURminator brush-out and aloe hydrating treatment.",
+      description: "Includes FURminator loose undercoat removal, natural shed-reducing shampoo and treatment, followed by another thorough FURminator brush-out and aloe hydrating treatment.",
       retailPrice: 25
     },
     {
       name: "Flea Relief",
       photo: "img/flea-relief.jpeg",
-      description:
-        "Protect your dog with your choice of a naturally medicated or flea shampoo, moisturizing coat conditioner and spritz.",
+      description: "Protect your dog with your choice of a naturally medicated or flea shampoo, moisturizing coat conditioner and spritz.",
       retailPrice: 30
     }
   ];
-  let products = [
-    {
-      name:
-        "Sentry Natural Defense Natural Flea & Tick Shampoo for Dogs & Puppies, 12 fl. oz.",
+  let products = [{
+      name: "Sentry Natural Defense Natural Flea & Tick Shampoo for Dogs & Puppies, 12 fl. oz.",
       photo: "img/sentry-dog-shampoo.jpeg",
-      description:
-        "Sentry Natural Defense Natural Flea & Tick Shampoo for Dogs. Kills adult fleas using natural ingredients. Wonderful spice scent. Naturally cleans and conditions. Safe for use around children & pets.",
+      description: "Sentry Natural Defense Natural Flea & Tick Shampoo for Dogs. Kills adult fleas using natural ingredients. Wonderful spice scent. Naturally cleans and conditions. Safe for use around children & pets.",
       retailPrice: 10.63,
       inventoryQty: 100,
       qtySold: 22
@@ -1069,8 +1146,7 @@ function insertSomeTestData() {
     {
       name: "Fly Free Zone Natural Fly Repellent Dog Collar",
       photo: "img/fly-free-collar.jpeg",
-      description:
-        "Fly Free Zone Natural Fly Repellent Dog Collar. Naturally creates a no pest zone around your dog. Repels flies, fleas, ticks and mosquitoes. Easy to use and comfortable for your dog",
+      description: "Fly Free Zone Natural Fly Repellent Dog Collar. Naturally creates a no pest zone around your dog. Repels flies, fleas, ticks and mosquitoes. Easy to use and comfortable for your dog",
       retailPrice: 12.34,
       inventoryQty: 50,
       qtySold: 40
@@ -1078,8 +1154,7 @@ function insertSomeTestData() {
     {
       name: "Adams Plus Flea & Tick Carpet Spray, 16 oz.",
       photo: "img/carpet-spray-adams.jpeg",
-      description:
-        "16 oz., Kills fleas, ticks, cockroaches & ants on contact while killing all four stages of the flea-adults, eggs, larvae and pupae. Breaks the flea life cycle and controls reinfestation for up to 7 months. Treats up to 1,000 sq. ft. Breaks the flea life cycle and controls reinfestation for up to 210 days. Use on carpets, rugs, upholstery, drapes & other places where fleas may hide. Treats up to 2,000 sq. ft. Adams Plus Flea & Tick Carpet Spray.",
+      description: "16 oz., Kills fleas, ticks, cockroaches & ants on contact while killing all four stages of the flea-adults, eggs, larvae and pupae. Breaks the flea life cycle and controls reinfestation for up to 7 months. Treats up to 1,000 sq. ft. Breaks the flea life cycle and controls reinfestation for up to 210 days. Use on carpets, rugs, upholstery, drapes & other places where fleas may hide. Treats up to 2,000 sq. ft. Adams Plus Flea & Tick Carpet Spray.",
       retailPrice: 15.39,
       inventoryQty: 20,
       qtySold: 10
@@ -1087,8 +1162,7 @@ function insertSomeTestData() {
     {
       name: "Cabana Bay Tan Geometric-Print Staycationer Dog Bed, Small",
       photo: "img/small-cabana-bay.jpeg",
-      description:
-        "The Cabana Bay Collection hops into summer with vibrant essentials fit for a day of lounging in the sunshine. Breathable materials pair with resort-ready patterns to complement your fun-filled days together, whether you're spending a lazy afternoon by the pool or taking off on a spontaneous day trip. Tan Geometric-Print Staycationer Dog Bed from Cabana Bay. Suitable for indoor and outdoor spaces. Styled with the Cabana Bay Lounge Life Dog Bed Riser, available and sold separately. Mix and match with the rest of the Cabana Bay Collection. Lounger silhouette is perfect for dogs that love to stretch out in their sleep. Machine washable cover is made of water-resistant beige and white canvas. Features an eye-catching geometric print the along sides and mint piping at top",
+      description: "The Cabana Bay Collection hops into summer with vibrant essentials fit for a day of lounging in the sunshine. Breathable materials pair with resort-ready patterns to complement your fun-filled days together, whether you're spending a lazy afternoon by the pool or taking off on a spontaneous day trip. Tan Geometric-Print Staycationer Dog Bed from Cabana Bay. Suitable for indoor and outdoor spaces. Styled with the Cabana Bay Lounge Life Dog Bed Riser, available and sold separately. Mix and match with the rest of the Cabana Bay Collection. Lounger silhouette is perfect for dogs that love to stretch out in their sleep. Machine washable cover is made of water-resistant beige and white canvas. Features an eye-catching geometric print the along sides and mint piping at top",
       retailPrice: 34.99,
       inventoryQty: 10,
       qtySold: 1

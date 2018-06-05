@@ -401,12 +401,12 @@ div.link-to-prod:hover {
     margin-right: auto;
 }
 
-input[type=text],
-input[type=email],
-input[type=phone],
-input[type=password],
-select,
-textarea {
+input[type=text].hero,
+input[type=email].hero,
+input[type=phone].hero,
+input[type=password].hero,
+select.hero,
+textarea.hero {
     width: 100%;
     margin-bottom: 15px;
     background-color: #F2ECE4;
@@ -595,7 +595,6 @@ section h1 {
     cursor: not-allowed
 }
 
-
 /* --------------------------------------------------------------- */
 
 /* CLIENT PROFILE CSS */
@@ -699,4 +698,3 @@ div#client-profile {
     -webkit-border-radius: 0 !important;
     border-radius: 0;
 }
-

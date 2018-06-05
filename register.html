@@ -8,16 +8,16 @@
             <img src="img/unknown_person.jpg" alt="user photo" class="img-thumbnail mx-auto" id="registerImgThumb" style="height:100px; margin-left: 10px;">
             <input type="file" name="customer[photo]" id="registerPhotoElem" accept="image/*" style="display:none" onchange="handleFiles(this.files, 'registerImgThumb')">
             <button id="registerPhotoSelect" class="btn btn-md">Change photo</button>
-            <input type="text" name="customer[first_name]" id="registerInputFirstName" class="input-full" style="margin-top: 10px;" autocomplete='given-name'
-                placeholder="First Name" autofocus="" required>
-            <input type="text" name="customer[last_name]" id="registerInputLastName" class="input-full" autocomplete='family-name' placeholder="Last Name"
+            <input type="text" name="customer[first_name]" id="registerInputFirstName" class="input-full hero" style="margin-top: 10px;"
+                autocomplete='given-name' placeholder="First Name" autofocus="" required>
+            <input type="text" name="customer[last_name]" id="registerInputLastName" class="input-full hero" autocomplete='family-name'
+                placeholder="Last Name" required>
+            <input type="text" name="customer[phone]" id="registerInputPhone" class="input-full hero" autocomplete='tel' placeholder="Phone"
                 required>
-            <input type="text" name="customer[phone]" id="registerInputPhone" class="input-full" autocomplete='tel' placeholder="Phone"
+            <input type="text" name="customer[address]" id="registerInputAddress" class="input-full hero" placeholder="Address" required>
+            <input type="email" name="customer[email]" id="registerInputEmail" class="input-full hero" autocomplete='email' placeholder="Email"
                 required>
-            <input type="text" name="customer[address]" id="registerInputAddress" class="input-full" placeholder="Address" required>
-            <input type="email" name="customer[email]" id="registerInputEmail" class="input-full" autocomplete='email' placeholder="Email"
-                required>
-            <input type="password" name="customer[password]" id="registerInputPassword" class="input-full" autocomplete='new-password'
+            <input type="password" name="customer[password]" id="registerInputPassword" class="input-full hero" autocomplete='new-password'
                 placeholder="Password" required>
             <p>
                 <button type="button" class="btn btn-full" onclick="addUser()">Create</button>

@@ -19,7 +19,7 @@
 - **home.html** apenas o conteúdo da página inicial
 - **index.html** primeira página carregada ao entrar no site
 - **login.html** página de login
-- **orders.html** página de carrinho
+- **checkout.html** página de carrinho
 - **products.html** lista de produtos disponíveis para compra
 - **prod1.html** um produto específico disponível para compra
 - **register.html** página de registro no site
@@ -38,5 +38,5 @@ Caso opte por não inserir esses dados após a criação da base de dados, visit
 
 Note que, para a aplicação não ficar sem administrador, mesmo comentando a chamada dessa função, o usuário 'admin' continuará sendo adicionado.
 
-**Importante: **Não conseguimos finalizar a parte de reserva de serviços. A aplicação permite que o administrador adicione, edite e exclua serviços, mas ainda não é capaz de permitir que um cliente reserve um ou mais serviços ou que um administrador adicione horários disponíveis para um certo serviço.
+**Importante:** Não conseguimos finalizar a parte de reserva de serviços. A aplicação permite que o administrador adicione, edite e exclua serviços, mas ainda não é capaz de permitir que um cliente reserve um ou mais serviços ou que um administrador adicione horários disponíveis para um certo serviço.
 **Entretanto**, a parte de gerenciamento e compra de produtos está funcionando perfeitamente.
