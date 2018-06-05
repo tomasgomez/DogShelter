@@ -134,3 +134,13 @@ function handleFiles(files, imgID) {
     reader.readAsDataURL(file);
   }
 }
+
+function sendMessage() {
+  $("#contact-name").val("");
+  $("#contact-email").val("");
+  $("#contact-find-us").prop("selectedIndex", 0);
+  $("#contact-news").prop("checked", true);
+  $("#contact-message").val("");
+
+  alert("We received your message! Thanks for the feedback.");
+}

@@ -472,6 +472,7 @@ function editUserRole(id) {
     $("#editUserRoleInputID").val(record.id);
     $("#editUserRoleInputName").val(record.name);
     $("#editUserRoleInputEmail").val(record.email);
+    $("#editUserRoleCurRole").html(record.role);
   });
 }
 
