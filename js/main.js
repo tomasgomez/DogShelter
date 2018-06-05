@@ -43,41 +43,37 @@ function changePage(dest) {
       $("#cartIcon").attr("class", "ion-ios-cart icon-big");
       $("#userHomeIcon").attr("class", "ion-person icon-big");
     } else {
-        $("#test").load(dest, () => {
-            console.log("Change made...");
+      $("#test").load(dest, () => {
+        console.log("Change made...");
 
-            if (dest === "register.html") {
-                initializePhotoPicker("registerPhotoSelect", "registerPhotoElem");
-            }
-            else if (dest === "products.html") {
-                showProductsUser();
-            }
-            else if (dest === "services.html") {
-                showServicesUser();
-            }
-            else if (dest === "orders.html") {
-                showOrder();
-            }
-        });
-        if (dest !== 'home.html') {
-            $("#navRow").attr("class", "new-row");
-            $("#navList").attr("class", "main-nav black");
-            $("#fullPage").attr("class", "all-bg");
-            $("#cartIcon").attr("class", "ion-ios-cart icon-big");
-            $("#userHomeIcon").attr("class", "ion-person icon-big");
-        } else {
-            $("#navRow").attr("class", "row");
-            $("#navList").attr("class", "main-nav");
-            $("#fullPage").attr("class", "home-bg");
-            $("#cartIcon").attr("class", "ion-ios-cart icon-white");
-            $("#userHomeIcon").attr("class", "ion-person icon-white");
+        if (dest === "register.html") {
+          initializePhotoPicker("registerPhotoSelect", "registerPhotoElem");
+        } else if (dest === "products.html") {
+          showProductsUser();
+        } else if (dest === "services.html") {
+          showServicesUser();
+        } else if (dest === "orders.html") {
+          showOrder();
         }
+      });
+      if (dest !== "home.html") {
+        $("#navRow").attr("class", "new-row");
+        $("#navList").attr("class", "main-nav black");
+        $("#fullPage").attr("class", "all-bg");
+        $("#cartIcon").attr("class", "ion-ios-cart icon-big");
+        $("#userHomeIcon").attr("class", "ion-person icon-big");
+      } else {
+        $("#navRow").attr("class", "row");
+        $("#navList").attr("class", "main-nav");
+        $("#fullPage").attr("class", "home-bg");
+        $("#cartIcon").attr("class", "ion-ios-cart icon-white");
+        $("#userHomeIcon").attr("class", "ion-person icon-white");
+      }
       $("#navRow").attr("class", "row");
       $("#navList").attr("class", "main-nav");
       $("#fullPage").attr("class", "home-bg");
       $("#cartIcon").attr("class", "ion-ios-cart icon-white");
       $("#userHomeIcon").attr("class", "ion-person icon-white");
-
     }
   }
 
@@ -165,23 +161,22 @@ function handleFiles(files, imgID) {
     img.classList.add("obj");
     img.file = file;
 
-
     var reader = new FileReader();
-    reader.onload = (function (aImg) {
-        return function (e) {
-            aImg.src = e.target.result;
-        };
+    reader.onload = (function(aImg) {
+      return function(e) {
+        aImg.src = e.target.result;
+      };
     })(img);
     reader.readAsDataURL(file);
-    }
+  }
 }
 
 function calendar() {
-  jQuery('.calendar7').Calendar7({
-      allowTimeStart: '6:00',
-      allowTimeEnd: '20:00'
-  })
-
+  jQuery(".calendar7").Calendar7({
+    allowTimeStart: "6:00",
+    allowTimeEnd: "20:00"
+  });
+}
 
 function sendMessage() {
   $("#contact-name").val("");
@@ -191,5 +186,4 @@ function sendMessage() {
   $("#contact-message").val("");
 
   alert("We received your message! Thanks for the feedback.");
-
 }

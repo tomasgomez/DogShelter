@@ -765,32 +765,32 @@ function showProductsUser() {
   let output = "";
 
   let iter = new ydn.db.ValueIterator("product");
-  db
-    .open(
-      cursor => {
-        let v = cursor.getValue();
-        output += "<div class='col-md-4'><div class='product'>" +
-          "<div class='link-to-prod' onclick='showSelectedProd(" +
-          v.id +
-          ");'>";
-        output += "<img src='"+ v.photo +"' class='image'>";
-        output += "<p><span>"+ v.name +"</span></p></div>"
-        output += "<p><span class='product-price'> $" +
-          v.retailPrice +
-          "</span></p></div></div>";
-      },
-      iter,
-      "readonly"
-    )
-    .then(() => {
-      $("#productsPanel").html(output);
-    });
+  db.open(
+    cursor => {
+      let v = cursor.getValue();
+      output +=
+        "<div class='col-md-4'><div class='product'>" +
+        "<div class='link-to-prod' onclick='showSelectedProd(" +
+        v.id +
+        ");'>";
+      output += "<img src='" + v.photo + "' class='image'>";
+      output += "<p><span>" + v.name + "</span></p></div>";
+      output +=
+        "<p><span class='product-price'> $" +
+        v.retailPrice +
+        "</span></p></div></div>";
+    },
+    iter,
+    "readonly"
+  ).then(() => {
+    $("#productsPanel").html(output);
+  });
 }
 
 function showSelectedProd(id) {
   $("#test").load("prod1.html", () => {
-    db.get("product",id).then(record => {
-      $("#buyBtn").attr("onclick","buyAction(" + id + ")");
+    db.get("product", id).then(record => {
+      $("#buyBtn").attr("onclick", "buyAction(" + id + ")");
       $("#productName").html(record.name);
       $("#productPhoto").attr("src", record.photo);
       $("#productDescription").html(record.description);
@@ -805,31 +805,31 @@ function showServicesUser() {
   let output = "";
 
   let iter = new ydn.db.ValueIterator("service");
-  db
-    .open(
-      cursor => {
-        let v = cursor.getValue();
-        output += "<div class='col-md-4'><div class='service'>" +
-          "<div class='link-to-prod' onclick='showSelectedServ(" +
-          v.id +
-          ");'>";
-        output += "<img src='"+ v.photo +"' class='image'>";
-        output += "<p><span>"+ v.name +"</span></p></div>"
-        output += "<p><span class='service-price'> $" +
-          v.retailPrice +
-          "</span></p></div></div>";
-      },
-      iter,
-      "readonly"
-    )
-    .then(() => {
-      $("#servicePanel").html(output);
-    });
+  db.open(
+    cursor => {
+      let v = cursor.getValue();
+      output +=
+        "<div class='col-md-4'><div class='service'>" +
+        "<div class='link-to-prod' onclick='showSelectedServ(" +
+        v.id +
+        ");'>";
+      output += "<img src='" + v.photo + "' class='image'>";
+      output += "<p><span>" + v.name + "</span></p></div>";
+      output +=
+        "<p><span class='service-price'> $" +
+        v.retailPrice +
+        "</span></p></div></div>";
+    },
+    iter,
+    "readonly"
+  ).then(() => {
+    $("#servicePanel").html(output);
+  });
 }
 
 function showSelectedServ(id) {
   $("#test").load("service1.html", () => {
-    db.get("service",id).then(record => {
+    db.get("service", id).then(record => {
       $("#serviceName").html(record.name);
       $("#servicePhoto").attr("src", record.photo);
       $("#serviceDescription").html(record.description);
@@ -842,15 +842,14 @@ function showSelectedServ(id) {
 function buyAction(id) {
   let quantity_prod = parseInt($("#productQuantity").val());
 
-  db.get("product",id).then(record => {
+  db.get("product", id).then(record => {
     let stock_prod = parseInt(record.inventoryQty);
     let name_prod = record.name;
     let price_prod = record.retailPrice;
 
     if (quantity_prod > stock_prod) {
       alert("The quantity you are willing to buy it's more than the stock");
-    }
-    else {
+    } else {
       stock_prod -= quantity_prod;
       let product = {
         id: id,
@@ -862,8 +861,7 @@ function buyAction(id) {
 
       if (sessionStorage.getItem("selectedProducts") === null) {
         sessionStorage.setItem("selectedProducts", JSON.stringify([product]));
-      }
-      else {
+      } else {
         let product_list = sessionStorage.getItem("selectedProducts");
         let products = JSON.parse(product_list);
         products.push(product);
@@ -884,20 +882,17 @@ function showOrder() {
 
   if (products !== null) {
     for (prod of products) {
-      let total_price = parseInt(prod.quantity) * parseInt(prod.retailPrice)
+      let total_price = parseInt(prod.quantity) * parseInt(prod.retailPrice);
       output += "<li class='list-group-item' id='product-ord-" + prod.id + "'>";
-      output += "<p>"+ prod.name + "</p>";
-      output += " <p> Quantity : " +
-        prod.quantity + "</p>";
-      output += "<p> Unity price : " +
-        prod.retailPrice + "</p>";
-      output += "<p> Total price : " +
-        total_price + "</p>";
+      output += "<p>" + prod.name + "</p>";
+      output += " <p> Quantity : " + prod.quantity + "</p>";
+      output += "<p> Unity price : " + prod.retailPrice + "</p>";
+      output += "<p> Total price : " + total_price + "</p>";
       output += "</li>";
       total += parseInt(total_price);
     }
-    output += "<br /> <h3> Total: " + total +"</h3>";
-    paymentVar += total + ")"
+    output += "<br /> <h3> Total: " + total + "</h3>";
+    paymentVar += total + ")";
     $("#productsClient").html(output);
     $("#payBtn").attr("onclick", paymentVar);
   }
@@ -918,15 +913,15 @@ function payBtn(total) {
   console.log(userId);
   if (userId === null) {
     changePage("login.html");
-  }
-  else {
+  } else {
     $("#paymentForm").modal("toggle");
 
-    bd.get("user", userId).then( record => {
+    bd.get("user", userId).then(record => {
       $("deliveryAddress").html(record.address);
       $("totalProducts").html(total);
-    })
+    });
   }
+}
 
 function insertSomeTestData() {
   let users = [
@@ -1080,5 +1075,4 @@ function insertSomeTestData() {
   db.putAll("order-product-line", orderProductLines);
   db.putAll("service", services);
   db.putAll("product", products);
-
 }
