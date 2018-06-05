@@ -1,45 +1,42 @@
-**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
+> Este arquivo está escrito em linguagem Markdown. De preferência, utilize um visualizador adequado para este tipo de arquivo.
 
-When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
+#Autores
 
-*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
+1.  Brigitta Hodován (10628958)
+2.  Filipe Mariano Freire da Silva (9293161)
+3.  István Varga (10655420)
+4.  Tomas Gomez Molina (10655413)
 
----
+## Arquivos e pastas submetidos
 
-## Edit a file
+- **css/** contém todas folhas de estilo usadas no projeto (1 bootstrap, 1 IonIcons e 2 personalizadas)
+- **fonts/** arquivos de fontes usadas no projeto
+- **img/** todas imagens usadas no projeto
+- **js/** arquivos JavaScript do projeto ('main.js': configurações e funções principais; 'db.js': configurações e funções que manipulam a base de dados)
+- **admin\_\*.html**: páginas relacionadas à dashboard do usuário 'admin'
+- **client_profile.html** página de perfil do usuário 'cliente'
+- **contact.html** formulário de contato com o site (atualmente ignorado)
+- **home.html** apenas o conteúdo da página inicial
+- **index.html** primeira página carregada ao entrar no site
+- **login.html** página de login
+- **orders.html** página de carrinho
+- **products.html** lista de produtos disponíveis para compra
+- **prod1.html** um produto específico disponível para compra
+- **register.html** página de registro no site
+- **services.html** lista de serviços disponíveis para reserva
+- **service1.html** um serviço específico disponível para reserva
 
-You’ll start by editing this README file to learn how to edit a file in Bitbucket.
+## Notas sobre a execução da aplicação
 
-1. Click **Source** on the left side.
-2. Click the README.md link from the list of files.
-3. Click the **Edit** button.
-4. Delete the following text: *Delete this line to make a change to the README from Bitbucket.*
-5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and you’ll see the change you just made.
-6. Go back to the **Source** page.
+A aplicação foi desenvolvida com o auxílio das ferramentas JQuery, Bootstrap e YDN-DB. Os testes foram conduzidos no navegador Google Chrome.
 
----
+Para facilitar o teste da aplicação, inserimos alguns dados (de usuários, produtos, serviços, etc.) na base de dados logo após sua criação. Desse modo, a aplicação já vem, por exemplo, com um usuário administrador (**usuário** 'admin', **senha** 'admin') e um usuário cliente (**usuário** 'john.doe@gmail.com' e **senha** 'john123').
 
-## Create a file
+Caso opte por não inserir esses dados após a criação da base de dados, visite o arquivo 'js/db.js' e comente a chamada da função
 
-Next, you’ll add a new file to this repository.
+    insertSomeTestData()
 
-1. Click the **New file** button at the top of the **Source** page.
-2. Give the file a filename of **contributors.txt**.
-3. Enter your name in the empty file space.
-4. Click **Commit** and then **Commit** again in the dialog.
-5. Go back to the **Source** page.
+Note que, para a aplicação não ficar sem administrador, mesmo comentando a chamada dessa função, o usuário 'admin' continuará sendo adicionado.
 
-Before you move on, go ahead and explore the repository. You've already seen the **Source** page, but check out the **Commits**, **Branches**, and **Settings** pages.
-
----
-
-## Clone a repository
-
-Use these steps to clone from SourceTree, our client for using the repository command-line free. Cloning allows you to work on your files locally. If you don't yet have SourceTree, [download and install first](https://www.sourcetreeapp.com/). If you prefer to clone from the command line, see [Clone a repository](https://confluence.atlassian.com/x/4whODQ).
-
-1. You’ll see the clone button under the **Source** heading. Click that button.
-2. Now click **Check out in SourceTree**. You may need to create a SourceTree account or log in.
-3. When you see the **Clone New** dialog in SourceTree, update the destination path and name if you’d like to and then click **Clone**.
-4. Open the directory you just created to see your repository’s files.
-
-Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
+**Importante: **Não conseguimos finalizar a parte de reserva de serviços. A aplicação permite que o administrador adicione, edite e exclua serviços, mas ainda não é capaz de permitir que um cliente reserve um ou mais serviços ou que um administrador adicione horários disponíveis para um certo serviço.
+**Entretanto**, a parte de gerenciamento e compra de produtos está funcionando perfeitamente.
