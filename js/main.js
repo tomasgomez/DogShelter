@@ -34,6 +34,12 @@ function changePage(dest) {
         showClientProfile();
         initializePhotoPicker("addPetPhotoSelect", "addPetInputPhoto");
         initializePhotoPicker("editPetPhotoSelect", "editPetInputPhoto");
+      } else if (dest === "products.html") {
+        showProductsUser();
+      } else if (dest === "services.html") {
+        showServicesUser();
+      } else if (dest === "orders.html") {
+        showOrder();
       }
     });
     if (dest !== "home.html") {
@@ -43,32 +49,6 @@ function changePage(dest) {
       $("#cartIcon").attr("class", "ion-ios-cart icon-big");
       $("#userHomeIcon").attr("class", "ion-person icon-big");
     } else {
-      $("#test").load(dest, () => {
-        console.log("Change made...");
-
-        if (dest === "register.html") {
-          initializePhotoPicker("registerPhotoSelect", "registerPhotoElem");
-        } else if (dest === "products.html") {
-          showProductsUser();
-        } else if (dest === "services.html") {
-          showServicesUser();
-        } else if (dest === "orders.html") {
-          showOrder();
-        }
-      });
-      if (dest !== "home.html") {
-        $("#navRow").attr("class", "new-row");
-        $("#navList").attr("class", "main-nav black");
-        $("#fullPage").attr("class", "all-bg");
-        $("#cartIcon").attr("class", "ion-ios-cart icon-big");
-        $("#userHomeIcon").attr("class", "ion-person icon-big");
-      } else {
-        $("#navRow").attr("class", "row");
-        $("#navList").attr("class", "main-nav");
-        $("#fullPage").attr("class", "home-bg");
-        $("#cartIcon").attr("class", "ion-ios-cart icon-white");
-        $("#userHomeIcon").attr("class", "ion-person icon-white");
-      }
       $("#navRow").attr("class", "row");
       $("#navList").attr("class", "main-nav");
       $("#fullPage").attr("class", "home-bg");

@@ -761,6 +761,7 @@ function showOrders() {
   );
 }
 
+//-------- SHOW PRODUCTS
 function showProductsUser() {
   let output = "";
 
@@ -916,11 +917,35 @@ function payBtn(total) {
   } else {
     $("#paymentForm").modal("toggle");
 
-    bd.get("user", userId).then(record => {
-      $("deliveryAddress").html(record.address);
-      $("totalProducts").html(total);
+    db.get("user", parseInt(userId)).then(record => {
+      console.log("record = " + JSON.stringify(record));
+      $("#deliveryAddress").val(record.address);
+      $("#totalProducts").val(total.toString());
     });
   }
+}
+
+function savePurchase() {
+  let userID = parseInt(sessionStorage.getItem("userID"));
+  let creditCardNo = parseInt($("#creditCard").val());
+
+  db.put("order", { userID: userID, creditCardNo: creditCardNo }).done(
+    order => {
+      let product_list = JSON.parse(sessionStorage.getItem("selectedProducts"));
+      console.log("product list = " + JSON.stringify(product_list));
+      for (prod of product_list) {
+        db.put("order-product-line", {
+          orderID: order,
+          productID: prod.id,
+          salePrice: prod.retailPrice,
+          quantity: prod.quantity
+        });
+      }
+      sessionStorage.removeItem("selectedProducts");
+      changePage("client_profile.html");
+      $(".modal-backdrop").remove();
+    }
+  );
 }
 
 function insertSomeTestData() {
