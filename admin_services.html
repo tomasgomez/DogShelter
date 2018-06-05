@@ -38,25 +38,104 @@
         <hr class="grey-line">
         <div class="main-panel">
             <ul class="list-group">
-                <li class="list-group-item orange">List of Products</li>
-                <li class="list-group-item">Dog Grooming
-                    <a href="deleteaction">
-                        <span class="mini glyphicon red glyphicon-remove"></span>
-                    </a>
-                    <a href="editaction">
-                        <span class="mini glyphicon glyphicon-wrench"></span>
-                    </a>
-                </li>
-                <li class="list-group-item">Dog Bathing
-                    <a href="deleteaction">
-                        <span class="mini glyphicon red glyphicon-remove"></span>
-                    </a>
-                    <a href="editaction">
-                        <span class="mini glyphicon glyphicon-wrench"></span>
-                    </a>
-                </li>
+                <li class="list-group-item orange">List of Services</li>
+                <div id="servicesList">
+                    <!-- Filled with JavaScript -->
+                </div>
             </ul>
         </div>
-        <button type="button" class="btn btn-orange" style="float: right;">Add Service</button>
+        <button type="button" class="btn btn-orange" style="float: right;" data-toggle="modal" data-target="#addServiceForm">Add Service</button>
+    </div>
+</div>
+
+<!-- ********* FORMS ********* -->
+
+<!-- Add Service Form (Modal) -->
+<div class="modal fade" id="addServiceForm" tabindex="-1" role="dialog" aria-labelledby="add service form" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="modal-title">Add Service</h5>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="addServiceInputName">Name</label>
+                        <input type="text" name="name" class="form-control" id="addServiceInputName" placeholder="Enter service name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addServiceInputPhoto">Photo</label>
+                        <br>
+                        <img src="img/no_image.png" alt="service photo" class="img-thumbnail" id="addServiceImgThumb" style="height:80px">
+                        <input type="file" name="photo" id="addServiceInputPhoto" accept="image/*" style="display:none" onchange="handleFiles(this.files, 'addServiceImgThumb')">
+                        <button id="addServicePhotoSelect" class="btn btn-md">Choose photo</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="addServiceInputDescription">Description</label>
+                        <input type="text" name="description" class="form-control" id="addServiceInputDescription" placeholder="Enter service description"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addServiceInputRetailPrice">Retail Price</label>
+                        <input type="number" min="0" step="0.01" name="retail price" class="form-control" id="addServiceInputRetailPrice" placeholder="Enter service retail price"
+                            required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="addService()">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Service Form (Modal) -->
+<div class="modal fade" id="editServiceForm" tabindex="-1" role="dialog" aria-labelledby="edit service form" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="modal-title">Edit Service</h5>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="return false;">
+                    <div class="form-group">
+                        <label for="editServiceInputID">ID</label>
+                        <input type="number" name="ID" class="form-control" id="editServiceInputID" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="editServiceInputName">Name</label>
+                        <input type="text" name="name" class="form-control" id="editServiceInputName" placeholder="Enter service name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editServiceInputPhoto">Photo</label>
+                        <br>
+                        <img src="img/no_image.png" alt="service photo" class="img-thumbnail" id="editServiceImgThumb" style="height:80px">
+                        <input type="file" name="photo" id="editServiceInputPhoto" accept="image/*" style="display:none" onchange="handleFiles(this.files, 'editServiceImgThumb')">
+                        <button id="editServicePhotoSelect" class="btn btn-md">Change photo</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="editServiceInputDescription">Description</label>
+                        <input type="text" name="description" class="form-control" id="editServiceInputDescription" placeholder="Enter service description"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editServiceInputRetailPrice">Retail Price</label>
+                        <input type="number" min="0" step="0.01" name="retail price" class="form-control" id="editServiceInputRetailPrice" placeholder="Enter service retail price"
+                            required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="saveServiceChanges()">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
