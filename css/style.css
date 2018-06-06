@@ -1,7 +1,5 @@
 /* --------------------------------------------------------------- */
-
 /* BASIC SETUP */
-
 /* --------------------------------------------------------------- */
 
 * {
@@ -22,11 +20,8 @@ body {
 }
 
 /* --------------------------------------------------------------- */
-
 /* REUSEABLE */
-
 /* --------------------------------------------------------------- */
-
 a {
     color: inherit;
     text-decoration: none;
@@ -58,9 +53,7 @@ h4 {
 }
 
 /* --------------------------------------------------------------- */
-
 /* REUSEABLE */
-
 /* --------------------------------------------------------------- */
 
 .new-row {
@@ -93,9 +86,7 @@ h3.main-title {
 }
 
 /* --------------------------------------------------------------- */
-
 /* HEADER */
-
 /* --------------------------------------------------------------- */
 
 .home-bg {
@@ -155,15 +146,12 @@ h3.main-title {
     text-align: center;
 }
 
-.hero-text-box h1,
-h4 {
+.hero-text-box h1, h4 {
     color: #fff;
 }
 
 /* --------------------------------------------------------------- */
-
 /* BUTTONS */
-
 /* --------------------------------------------------------------- */
 
 .btn:link,
@@ -199,6 +187,21 @@ input[type="submit"] {
     border: 1px solid #fff;
 }
 
+
+button.btn.btn-full-brown {
+    align-items:min-height: ;
+    text-align: center;
+    cursor: pointer;
+    color: #BFA473;
+    background-color: none;
+    box-sizing: border-box;
+    padding: 3px 9px;
+    border-width: 0px;
+    border-style: none;
+    border-color: #BFA473;
+    border-image: initial;
+}
+
 .btn-full-brown:link,
 .btn-full-brown:visited {
     margin-left: 15px;
@@ -215,9 +218,7 @@ input[type="submit"] {
 }
 
 /* --------------------------------------------------------------- */
-
 /* COLLECTION */
-
 /* --------------------------------------------------------------- */
 
 .collections,
@@ -240,28 +241,28 @@ input[type="submit"] {
 }
 
 /* --------------------------------------------------------------- */
-
 /* PRODUCTS */
-
 /* --------------------------------------------------------------- */
 
-.product-header {
+.product-header,
+.cart-header {
     margin-top: 50px;
     margin-bottom: 50px;
     text-align: center;
 }
+
 
 .products,
 .services {
     margin-bottom: 15px;
 }
 
-div.link-to-prod {
+a.link-to-prod {
     text-decoration: none;
-    color: #fff;
+    color: #fff;  
 }
 
-div.link-to-prod:hover {
+a.link-to-prod:hover {
     text-decoration: none;
     color: #402D22;
     transition: color 0.5s;
@@ -274,10 +275,11 @@ div.link-to-prod:hover {
     color: white;
     padding: 10px;
     margin-bottom: 15px;
-    -webkit-box-shadow: 7px 8px 20px -3px rgba(0, 0, 0, 0.34);
-    -moz-box-shadow: 7px 8px 20px -3px rgba(0, 0, 0, 0.34);
-    box-shadow: 7px 8px 20px -3px rgba(0, 0, 0, 0.34);
+    -webkit-box-shadow: 7px 8px 20px -3px rgba(0,0,0,0.34);
+    -moz-box-shadow: 7px 8px 20px -3px rgba(0,0,0,0.34);
+    box-shadow: 7px 8px 20px -3px rgba(0,0,0,0.34);
     display: inline-block
+
 }
 
 .product-price,
@@ -290,8 +292,8 @@ div.link-to-prod:hover {
     width: 100%;
     height: auto;
     margin-left: auto;
-    margin-right: auto;
-    display: block;
+	margin-right: auto;
+	display: block;
     padding-bottom: 10px;
     padding-top: 20px;
     overflow: hidden;
@@ -301,26 +303,24 @@ div.link-to-prod:hover {
 }
 
 .image:hover {
-    transform: scale(1);
-    opacity: 1;
+  transform: scale(1);
+  opacity: 1;
 }
 
-/* --------------------------------------------------------------- */
 
+/* --------------------------------------------------------------- */
 /* PRODUCT */
-
 /* --------------------------------------------------------------- */
 
-.product-name {
+.product-name{
     margin-bottom: 20px;
     text-align: center;
 }
 
-.product-image img {
+.product-image img{
     width: 80%;
     height: 80%;
 }
-
 .product-view {
     margin-bottom: 15px;
     margin-top: 50px;
@@ -331,14 +331,12 @@ div.link-to-prod:hover {
     float: right;
 }
 
-.product-description p {
+.product-description p{
     margin-bottom: 5px;
 }
 
 /* --------------------------------------------------------------- */
-
 /* SERVICES */
-
 /* --------------------------------------------------------------- */
 
 .service-header {
@@ -347,10 +345,9 @@ div.link-to-prod:hover {
     text-align: center;
 }
 
+
 /* --------------------------------------------------------------- */
-
 /* SERVICE */
-
 /* --------------------------------------------------------------- */
 
 .service {
@@ -362,8 +359,7 @@ div.link-to-prod:hover {
 .service-book {
     text-align: center;
 }
-
-.service-name h1 {
+.service-name h1{
     color: #fff;
 }
 
@@ -383,9 +379,7 @@ div.link-to-prod:hover {
 }
 
 /* --------------------------------------------------------------- */
-
 /* CONTACT */
-
 /* --------------------------------------------------------------- */
 
 .form-container-header.contact-header {
@@ -401,12 +395,12 @@ div.link-to-prod:hover {
     margin-right: auto;
 }
 
-input[type=text].hero,
-input[type=email].hero,
-input[type=phone].hero,
-input[type=password].hero,
-select.hero,
-textarea.hero {
+input[type=text],
+input[type=email],
+input[type=phone],
+input[type=password],
+select,
+textarea {
     width: 100%;
     margin-bottom: 15px;
     background-color: #F2ECE4;
@@ -419,23 +413,31 @@ textarea.hero {
     font-style: italic;
 }
 
-::-webkit-input-placeholder {
-    /* Chrome/Opera/Safari */
+input[type=text].form-control {
+    font-size: 80%;
+    height: 30px;
+}
+
+.form-control:focus {
+  border-color: #fff;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
     color: #BFA473;
 }
 
-::-moz-placeholder {
-    /* Firefox 19+ */
+::-moz-placeholder { /* Firefox 19+ */
     color: #BFA473;
 }
 
-:-ms-input-placeholder {
-    /* IE 10+ */
+:-ms-input-placeholder { /* IE 10+ */
     color: #BFA473;
 }
 
-:-moz-placeholder {
-    /* Firefox 18- */
+:-moz-placeholder { /* Firefox 18- */
     color: #BFA473;
 }
 
@@ -452,11 +454,8 @@ input[type=checkbox] {
 }
 
 /* --------------------------------------------------------------- */
-
 /* ICONS */
-
 /* --------------------------------------------------------------- */
-
 .icon-big {
     font-size: 130%;
 }
@@ -466,9 +465,7 @@ input[type=checkbox] {
 }
 
 /* --------------------------------------------------------------- */
-
 /* BIBI CSS */
-
 /* --------------------------------------------------------------- */
 
 section h1 {
@@ -511,18 +508,87 @@ section h1 {
 
 .hr-big-white {
     border-width: 20px;
-    width: auto;
+    width: auto;    
     margin-left: -10px;
     margin-right: -10px;
     border-color: #fff;
     border-style: solid;
 }
 
+
+
+/* --------------------------------------------------------------- */
+/* CART CSS */
 /* --------------------------------------------------------------- */
 
+.cart {
+    background-color: #BFA473;
+    color: white;
+    padding: 15px;
+    margin-bottom: 100px;
+    -webkit-box-shadow: 7px 8px 20px -3px rgba(0,0,0,0.34);
+    -moz-box-shadow: 7px 8px 20px -3px rgba(0,0,0,0.34);
+    box-shadow: 7px 8px 20px -3px rgba(0,0,0,0.34);
+}
+
+.cart-hr {
+    width: 99%;
+    float: left;
+    border-bottom: 0.5px solid #fff;
+    margin: 0px auto 5px auto;
+}
+
+.cart h3{
+    font-size: 80%;
+    text-align: center;
+}
+
+.cart-prod {
+    border-bottom: 0.01em solid #fff;
+    border-top: 0.01em solid #fff;
+    padding: 5px 0px;
+    margin: 0px 5px;
+    display: flex;
+    align-items: center;
+}
+
+.cart-prod img{
+    width: 100%;
+    height: 100%;
+}
+
+p.name-in-cart,
+p.labels  {
+    font-size: 75%;
+}
+
+.cart-glyphicon {
+    font-size: 90%;
+    float: right;
+}
+
+.cart-input {
+    font-size: 75%; 
+    width: 30px;
+    height: 20px; 
+    color:#402D22;
+    float: left;
+    background-color: #F2ECE4;
+    border: 1px solid #D9CAAD;
+    font-family: inherit;
+    font-style: italic;
+    border-radius: 0;
+    color: #BFA473;
+}
+
+.address {
+    border-right: 0.01em solid #fff;
+}
+
+/* --------------------------------------------------------------- */
 /* CALENDAR CSS */
-
 /* --------------------------------------------------------------- */
+
 
 .calendar-7 {
     position: absolute;
@@ -547,13 +613,9 @@ section h1 {
     margin-bottom: 8px
 }
 
-.calendar-7 .days .calendar-7-day:hover,
-.calendar-7 .days .calendar-7-day.active {
-    background-color: #2874c6
-}
+.calendar-7 .days .calendar-7-day:hover, .calendar-7 .days .calendar-7-day.active { background-color: #2874c6 }
 
-.calendar-7 .hours,
-.calendar-7 .minutes {
+.calendar-7 .hours, .calendar-7 .minutes {
     background-color: white;
     width: 360px;
     height: 162px;
@@ -566,8 +628,7 @@ section h1 {
     height: 81px
 }
 
-.calendar-7 .calendar-7-hour,
-.calendar-7 .calendar-7-minute {
+.calendar-7 .calendar-7-hour, .calendar-7 .calendar-7-minute {
     float: left;
     display: inline-block;
     box-sizing: border-box;
@@ -579,122 +640,14 @@ section h1 {
     cursor: pointer
 }
 
-.calendar-7 .calendar-7-hour:hover,
-.calendar-7 .calendar-7-minute:hover,
-.calendar-7 .calendar-7-hour.active,
-.calendar-7 .active.calendar-7-minute {
+.calendar-7 .calendar-7-hour:hover, .calendar-7 .calendar-7-minute:hover, .calendar-7 .calendar-7-hour.active, .calendar-7 .active.calendar-7-minute {
     background-color: #53a2f6;
     color: white;
     border-radius: 3px
 }
 
-.calendar-7 .calendar-7-hour.disabled,
-.calendar-7 .disabled.calendar-7-minute {
+.calendar-7 .calendar-7-hour.disabled, .calendar-7 .disabled.calendar-7-minute {
     color: #333;
     background-color: #eee;
     cursor: not-allowed
-}
-
-/* --------------------------------------------------------------- */
-
-/* CLIENT PROFILE CSS */
-
-/* --------------------------------------------------------------- */
-
-div#client-profile {
-    width: 60%;
-    margin: auto;
-}
-
-.card {
-    margin-top: 20px;
-    padding: 30px;
-    background-color: rgba(214, 224, 226, 0.2);
-    -webkit-border-top-left-radius: 5px;
-    -moz-border-top-left-radius: 5px;
-    border-top-left-radius: 5px;
-    -webkit-border-top-right-radius: 5px;
-    -moz-border-top-right-radius: 5px;
-    border-top-right-radius: 5px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-.card.hovercard {
-    position: relative;
-    padding-top: 0;
-    overflow: hidden;
-    text-align: center;
-    background-color: #fff;
-    background-color: rgba(255, 255, 255, 1);
-}
-
-.card.hovercard .card-background {
-    height: 130px;
-}
-
-.card-background img {
-    -webkit-filter: blur(25px);
-    -moz-filter: blur(25px);
-    -o-filter: blur(25px);
-    -ms-filter: blur(25px);
-    filter: blur(25px);
-    margin-left: -100px;
-    margin-top: -200px;
-    min-width: 130%;
-}
-
-.card.hovercard .useravatar {
-    position: absolute;
-    top: 15px;
-    left: 0;
-    right: 0;
-}
-
-.card.hovercard .useravatar img {
-    width: 100px;
-    height: 100px;
-    max-width: 100px;
-    max-height: 100px;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    border-radius: 50%;
-    border: 5px solid rgba(255, 255, 255, 0.5);
-}
-
-.card.hovercard .card-info {
-    position: absolute;
-    bottom: 14px;
-    left: 0;
-    right: 0;
-}
-
-.card.hovercard .card-info .card-title {
-    padding: 0 5px;
-    font-size: 20px;
-    line-height: 1;
-    color: #262626;
-    background-color: rgba(255, 255, 255, 0.1);
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-}
-
-.card.hovercard .card-info {
-    overflow: hidden;
-    font-size: 12px;
-    line-height: 20px;
-    color: #737373;
-    text-overflow: ellipsis;
-}
-
-.card.hovercard .bottom {
-    padding: 0 20px;
-    margin-bottom: 17px;
-}
-
-.btn-pref .btn {
-    -webkit-border-radius: 0 !important;
-    border-radius: 0;
 }
