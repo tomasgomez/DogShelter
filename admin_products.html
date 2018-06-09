@@ -1,5 +1,5 @@
 <nav id="sidebar">
-    <div class="sidebar-header">
+    <div class="sidebar-header" onclick="changePage('admin_logout.html')">
         <h3>Dog Shelter</h3>
     </div>
 
@@ -66,7 +66,7 @@
                 <form>
                     <div class="form-group">
                         <label for="addProductInputName">Name</label>
-                        <input type="text" name="name" class="form-control" id="addProductInputName" placeholder="Enter product name" required>
+                        <input type="text" name="name" class="form-control" id="addProductInputName" placeholder="Enter product name" autofocus required>
                     </div>
                     <div class="form-group">
                         <label for="addProductInputPhoto">Photo</label>
@@ -77,8 +77,10 @@
                     </div>
                     <div class="form-group">
                         <label for="addProductInputDescription">Description</label>
-                        <input type="text" name="description" class="form-control" id="addProductInputDescription" placeholder="Enter product description"
-                            required>
+                        <!-- <input type="text" name="description" class="form-control" id="addProductInputDescription" placeholder="Enter product description"
+                            required> -->
+                        <textarea name="description" rows="3" wrap="soft" class="form-control" id="addProductInputDescription" placeholder="Enter product description"
+                            required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="addProductInputRetailPrice">Retail Price</label>
@@ -118,7 +120,7 @@
                     </div>
                     <div class="form-group">
                         <label for="editProductInputName">Name</label>
-                        <input type="text" name="name" class="form-control" id="editProductInputName" placeholder="Enter product name" required>
+                        <input type="text" name="name" class="form-control" id="editProductInputName" placeholder="Enter product name" autofocus required>
                     </div>
                     <div class="form-group">
                         <label for="editProductInputPhoto">Photo</label>
@@ -129,8 +131,8 @@
                     </div>
                     <div class="form-group">
                         <label for="editProductInputDescription">Description</label>
-                        <input type="text" name="description" class="form-control" id="editProductInputDescription" placeholder="Enter product description"
-                            required>
+                        <textarea name="description" rows="3" wrap="soft" class="form-control" id="editProductInputDescription" placeholder="Enter product description"
+                            required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="editProductInputRetailPrice">Retail Price</label>

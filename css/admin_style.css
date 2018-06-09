@@ -32,8 +32,8 @@ a.admin-dash:focus {
   min-width: 250px;
   max-width: 250px;
   height: 100%;
-  background: #fff;
-  color: #006dcc;
+  background: #f9fafc;
+  color: #000;
   transition: all 0.3s;
   position: fixed;
   z-index: 1;
@@ -47,14 +47,15 @@ a.admin-dash:focus {
 
 #sidebar .sidebar-header {
   padding: 10px;
-  background: #006dcc;
-  color: #fff;
+  color: #bfa473;
 }
 
 #sidebar .sidebar-header h3 {
   text-transform: uppercase;
   letter-spacing: 2px;
   font-size: 150%;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 #sidebar ul {
@@ -63,8 +64,6 @@ a.admin-dash:focus {
 
 #sidebar ul.components {
   padding: 0;
-  border-top: 1px solid #fff;
-  border-bottom: 1px solid #006dcc;
 }
 
 #sidebar ul p {
@@ -76,14 +75,15 @@ a.admin-dash:focus {
   padding: 10px;
   font-size: 1.1em;
   display: block;
+  text-decoration: none;
 }
 
 #sidebar ul li a:hover {
-  color: #fff;
-  background: #006dcc;
+  color: #000;
+  background: #f9fafc;
 }
 
-#sidebar ul li.active > a,
+#sidebar ul li.active>a,
 a[aria-expanded="true"] {
   color: #fff;
   background: #006dcc;
@@ -110,6 +110,7 @@ ul ul a {
 
 .menu-name h1 {
   text-transform: uppercase;
+  margin-top: 10px;
   margin-bottom: 0px;
 }
 
@@ -207,20 +208,20 @@ ul ul a {
   background-color: #fff;
 }
 
-.blue:hover {
+/* .blue:hover {
   color: #0050cc;
   background-color: #f5f5f5;
-}
+} */
 
 .green {
   color: #5bb75b;
   background-color: #fff;
 }
 
-.green:hover {
+/* .green:hover {
   color: #4a944a;
   background-color: #f5f5f5;
-}
+} */
 
 .panel-green {
   background-color: #5bb75b;
@@ -232,10 +233,10 @@ ul ul a {
   background-color: #fff;
 }
 
-.orange:hover {
+/* .orange:hover {
   color: #fa8d32;
   background-color: #f5f5f5;
-}
+} */
 
 .panel-orange {
   background-color: #faa732;
@@ -247,12 +248,24 @@ ul ul a {
   color: #fff;
 }
 
-.ruby:hover {
+/* .ruby:hover {
   color: #de504a;
   background-color: #f5f5f5;
-}
+} */
 
 .panel-ruby {
   background-color: #de504a;
   color: #fff;
+}
+
+#ordersList {
+  max-height: 250px;
+  overflow-y: scroll;
+}
+
+#servicesList,
+#productsList,
+#userList {
+  max-height: 400px;
+  overflow-y: scroll;
 }

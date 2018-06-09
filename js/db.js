@@ -776,9 +776,9 @@ function showProductsUser() {
 }
 
 function showSelectedProd(id) {
-  $("#test").load("prod1.html", () => {
+  $("#changeableContent").load("prod1.html", () => {
     db.get("product", id).then(record => {
-      $("#buyBtn").attr("onclick", "buyAction(" + id + ")");
+      $("#buyBtn").attr("onclick", "buyProduct(" + id + ")");
       $("#productName").html(record.name);
       $("#productPhoto").attr("src", record.photo);
       $("#productDescription").html(record.description);
@@ -816,7 +816,7 @@ function showServicesUser() {
 }
 
 function showSelectedServ(id) {
-  $("#test").load("service1.html", () => {
+  $("#changeableContent").load("service1.html", () => {
     db.get("service", id).then(record => {
       $("#serviceName").html(record.name);
       $("#servicePhoto").attr("src", record.photo);
@@ -827,84 +827,89 @@ function showSelectedServ(id) {
   });
 }
 
-function buyAction(id) {
-  let quantity_prod = parseInt($("#productQuantity").val());
-
-  db.get("product", id).then(record => {
-    let stock_prod = parseInt(record.inventoryQty);
-    let name_prod = record.name;
-    let price_prod = record.retailPrice;
-
-    if (quantity_prod > stock_prod) {
-      alert("The quantity you are willing to buy it's more than the stock");
+function buyProduct(id) {
+  let qty = parseFloat($("#productQuantity").val());
+  console.log("got qty = " + qty);
+  if (qty > 0 && Number.isInteger(qty)) {
+    let product = {
+      id: id,
+      qty: qty,
+      rPrice: parseFloat($("#productPrice").html()),
+      store: 'product'
+    };
+    let itemsInCart = sessionStorage.getItem("selectedItemsInCart");
+    if (itemsInCart === null) {
+      sessionStorage.setItem("selectedItemsInCart", JSON.stringify([product]));
     } else {
-      stock_prod -= quantity_prod;
-      let product = {
-        id: id,
-        name: name_prod,
-        retailPrice: price_prod,
-        quantity: quantity_prod,
-        inventoryQty: stock_prod
-      };
-
-      if (sessionStorage.getItem("selectedProducts") === null) {
-        sessionStorage.setItem("selectedProducts", JSON.stringify([product]));
-      } else {
-        let product_list = sessionStorage.getItem("selectedProducts");
-        let products = JSON.parse(product_list);
-        products.push(product);
-        sessionStorage.setItem("selectedProducts", JSON.stringify(products));
-      }
+      itemsInCart = JSON.parse(itemsInCart);
+      itemsInCart.push(product);
+      sessionStorage.setItem("selectedItemsInCart", JSON.stringify(itemsInCart));
     }
+
     alert("Your product was added to the cart :)");
-  });
-}
-
-function showOrder() {
-  let output = "";
-  let paymentVar = "payBtn(";
-  let total = 0;
-  let product_list = sessionStorage.getItem("selectedProducts");
-  let products = JSON.parse(product_list);
-
-  if (products !== null) {
-    for (prod of products) {
-      let total_price = parseInt(prod.quantity) * prod.retailPrice;
-      output += "<li class='list-group-item' id='product-ord-" + prod.id + "'>";
-      output += "<p>" + prod.name + "</p>";
-      output += " <p> Quantity : " + prod.quantity + "</p>";
-      output += "<p> Unity price : " + prod.retailPrice + "</p>";
-      output += "<p> Total price : " + total_price + "</p>";
-      output += "</li>";
-      total += total_price;
-    }
-    output += "<br /> <h3> Total: " + total + "</h3>";
-    paymentVar += total + ")";
-    $("#productsClient").html(output);
-    $("#payBtn").attr("onclick", paymentVar);
+  } else {
+    alert("Invalid quantity :(");
+    $("#productQuantity").val(1);
   }
 }
 
-function cleanBtn() {
-  var txt;
-  var r = confirm("Are you sure you want to empty your cart?");
-  if (r == true) {
-    sessionStorage.removeItem("selectedProducts");
-    alert("Your cart it's now empty");
+function showItemsInCart() {
+  let cartItems = sessionStorage.getItem("selectedItemsInCart");
+  let totalOrder = 0;
+
+  if (cartItems === null) {
+    $("#cartItemsList").append("<p style='padding-left:20px;'>Your cart is empty!</p>");
+    $("#cart-total-order").html("0.00");
+  } else {
+    cartItems = JSON.parse(cartItems);
+
+    for (cartItem of cartItems) {
+      ((cartItem) => {
+        if (cartItem.store === 'product') {
+          let qty = cartItem.qty;
+          db.get('product', cartItem.id).done((prod) => {
+            let output = "";
+
+            output += "<div class='row cart-prod'><div class='col-md-2'>";
+            output += "<img src='" + prod.photo + "' class='img-thumbnail '>";
+            output += "</div>";
+            output += "<div class='col-md-8'><p class='name-in-cart'>" + prod.name + "</p></div>";
+            output += "<div class='col-md-2'>";
+            // output += "<span class='glyphicon glyphicon-remove cart-glyphicon' onclick='removeCartProduct(" + prod.id + ")'></span>";
+            output += "<p>" + cartItem.qty + " x " + cartItem.rPrice + " =<br>" + (cartItem.qty * cartItem.rPrice).toFixed(2) + "</p>";
+            output += "</div></div>";
+
+            totalOrder += (prod.retailPrice * cartItem.qty);
+            sessionStorage.setItem("totalOrder", totalOrder);
+
+            $("#cartItemsList").append(output);
+            $("#cart-total-order").html(totalOrder.toFixed(2).toString());
+          });
+        } else {
+          alert("TODO: Add a service to the cart.");
+        }
+      })(cartItem);
+    }
+  }
+}
+
+function emptyCart() {
+  let ans = confirm("Are you sure you want to empty your cart?");
+  if (ans == true) {
+    sessionStorage.removeItem("selectedItemsInCart");
   }
   changePage("checkout.html");
 }
 
-function payBtn(total) {
+function initPayment() {
   let userId = sessionStorage.getItem("userID");
   if (userId === null) {
     changePage("login.html");
   } else {
-    $("#paymentForm").modal("toggle");
-
+    $("#cartCheckoutForm").modal("show");
     db.get("user", parseInt(userId)).then(record => {
       $("#deliveryAddress").val(record.address);
-      $("#totalProducts").val(total.toString());
+      $("#totalProducts").val(sessionStorage.getItem("totalOrder").toString());
     });
   }
 }
@@ -917,38 +922,46 @@ function savePurchase() {
     userID: userID,
     creditCardNo: creditCardNo
   }).done(
-    order => {
-      let product_list = JSON.parse(sessionStorage.getItem("selectedProducts"));
-      for (prod of product_list) {
-        db.put("order-product-line", {
-          orderID: order,
-          productID: prod.id,
-          salePrice: prod.retailPrice,
-          quantity: prod.quantity
-        });
-
-        // Update product 'qtySold' and 'inventoryQty'
-        let iter = new ydn.db.ValueIterator("product", ydn.db.KeyRange.only(prod.id));
-        db.open(
-          (cursor) => {
-            let product = cursor.getValue();
-            let qtySold = product_list.filter(function (obj) {
-              return obj.id == product.id;
-            })[0].quantity;
-            product.qtySold += qtySold;
-            product.inventoryQty -= qtySold;
-            cursor.update(product).done(e => {
-              console.log("Successful saving inventory quantities for product #" + product.id);
+    orderId => {
+      let cartItems = JSON.parse(sessionStorage.getItem("selectedItemsInCart"));
+      for (cartItem of cartItems) {
+        ((cartItem) => {
+          //Add a product line to the order
+          if (cartItem.store === "product") {
+            db.put("order-product-line", {
+              orderID: orderId,
+              productID: cartItem.id,
+              salePrice: cartItem.rPrice,
+              quantity: cartItem.qty
             });
-          },
-          iter,
-          "readwrite"
-        );
+
+            // Update product 'qtySold' and 'inventoryQty'
+            let iter = new ydn.db.ValueIterator("product", ydn.db.KeyRange.only(cartItem.id));
+            db.open(
+              (cursor) => {
+                let product = cursor.getValue();
+                let qtySold = cartItem.qty;
+                product.qtySold += qtySold;
+                product.inventoryQty -= qtySold;
+                cursor.update(product).done(e => {
+                  console.log("Successful saving inventory quantities for product #" + product.id);
+                });
+              },
+              iter,
+              "readwrite"
+            );
+          } else {
+            //Add a service line to the order
+            console.log("TODO: Add service #" + cartItem.id + " to the order");
+          }
+        })(cartItem);
       }
-      sessionStorage.removeItem("selectedProducts");
+      sessionStorage.removeItem("selectedItemsInCart");
       alert("Your order was approved! Redirecting to your profile...");
-      changePage("client_profile.html");
-      $(".modal-backdrop").remove();
+      $("#cartCheckoutForm").modal("hide");
+      $("#cartCheckoutForm").on("hidden.bs.modal", (e) => {
+        changePage("client_profile.html");
+      });
     }
   );
 }

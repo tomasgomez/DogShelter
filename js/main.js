@@ -25,9 +25,10 @@ function changePage(dest) {
       } else if (dest === "admin_reports.html") {
         showOrders();
       }
+      checkLoggedUser();
     });
   } else {
-    $("#test").load(dest, () => {
+    $("#changeableContent").load(dest, () => {
       if (dest === "register.html") {
         initializePhotoPicker("registerPhotoSelect", "registerPhotoElem");
       } else if (dest === "client_profile.html") {
@@ -39,8 +40,9 @@ function changePage(dest) {
       } else if (dest === "services.html") {
         showServicesUser();
       } else if (dest === "checkout.html") {
-        showOrder();
+        showItemsInCart();
       }
+      checkLoggedUser();
     });
     if (dest !== "home.html") {
       $("#navRow").attr("class", "new-row");
@@ -72,8 +74,6 @@ function changePage(dest) {
       "home.html"
     );
   }
-
-  checkLoggedUser();
 }
 
 function checkLoggedUser() {

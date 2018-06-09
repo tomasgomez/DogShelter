@@ -3,25 +3,24 @@
         <div class="product-name">
             <h4 id="productName"></h4>
         </div>
-            <hr class="hr-small-brown">
-        <div class="col-md-4.offset-md-3">
-            <img id="productPhoto" src="" class="product-img" />
-            <div class="buy">
-            Quantity:
-                <input type="number" id="productQuantity" name="quantity" min="1" max="" value="1" style="width: 100px; color:#402D22;">
-                <a class="btn btn-full-brown" id="buyBtn" onclick="">Buy</a>
+        <hr class="hr-small-brown">
+        <div class="clearfix">
+            <div style="width:25%; float:left;">
+                <img id="productPhoto" src="img/no_image.png" class="product-img img-thumbnail" />
+            </div>
+            <div style="float:left; width: 75%">
+                <p style="display:block;font-size:200%;font-weight: bold;">
+                    $
+                    <span id="productPrice"></span>
+                </p>
+                <br>
+                <input type="number" id="productQuantity" value="1" name="quantity" min="1" max="" style="color:black;">
+                <a class="btn btn-success" id="buyBtn" onclick="">Add to Cart</a>
             </div>
         </div>
-        <div class="col-md-5">
-            <div class="product-description">
-                <p>Description:</p>
-                <p id="productDescription"></p>
-                <p>Price:</p>
-                <p id="productPrice"></p>
-                <p>Stock:</p>
-                <p id="productStock"></p>
-            </div>
+        <div style="margin-top: 20px;">
+            <p>Description:</p>
+            <p id="productDescription"></p>
         </div>
     </div>
-
 </div>
