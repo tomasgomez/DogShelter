@@ -506,6 +506,26 @@ function saveServiceChanges() {
   });
 }
 
+function initServiceBooking() {
+  let userID = parseInt(sessionStorage.getItem("userID"));
+  if (userID) {
+    $("#serviceBookingForm").modal("show");
+    db.values("pet", "userID", ydn.db.KeyRange.only(userID)).then(pets => {
+      let output = "";
+      for (pet of pets) {
+        output +=
+          "<option value='pet-" + pet.id + "'>" + pet.name + "</option>";
+      }
+      $("#service-booking-pet").html(output);
+    });
+  } else {
+    alert("You need to login to make an appointment.");
+    changePage("login.html");
+  }
+}
+
+function saveAppointment() {}
+
 //-------- Manipulate the USER store
 function addUser() {
   let photo = $("#registerImgThumb").attr("src");
@@ -908,7 +928,16 @@ function showSelectedServ(id) {
       $("#serviceDescription").html(record.description);
       $("#servicePrice").html(record.retailPrice);
     });
-    calendar();
+
+    $("#service-booking-date-picker").datetimepicker({
+      format: "DD-MM-YYYY"
+    });
+
+    // RESTART FROM HERE!!
+    // $("#service-booking-date").on("input", function(e) {
+    //   alert("Changed!");
+    // });
+    //calendar();
   });
 }
 

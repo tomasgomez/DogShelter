@@ -10,8 +10,6 @@
                 <img id="servicePhoto" src="">
                 <p> Description: </p>
                 <p id="serviceDescription"></p>
-                <p>Price:</p>
-                <p id="servicePrice"></p>
             </div>
 
             <hr class="hr-big-white">
@@ -22,13 +20,54 @@
             </div>
         </div>
 
-        <div class="service-calendar">
-            <input class="calendar7 form-control" style="color: black;">
-        </div>
-
-        <hr class="hr-small-brown">
+        <p class="service-page-price">$
+            <span id="servicePrice"></span>
+        </p>
         <div class="service-book">
-            <input type="submit" class="btn btn-full" value="Book">
+            <a class="btn btn-full" href="#" onclick="initServiceBooking()">Book</a>
+        </div>
+    </div>
+</div>
+
+<!-- Service Booking Form (Modal) -->
+<div class="modal fade" id="serviceBookingForm" tabindex="-1" role="dialog" aria-labelledby="service booking form" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="modal-title">Make an appointment</h5>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="service-booking-pet">Pet</label>
+                        <select name="pet" id="service-booking-pet">
+                            <!-- <option value="friends" selected="">Friends</option>
+                            <option value="search">Search engine</option>
+                            <option value="ad">Advertisement</option>
+                            <option value="other">Other</option> -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="service-booking-date-picker">Date</label>
+                        <div class='input-group date' id="service-booking-date-picker">
+                            <input type='text' class="form-control" id='service-booking-date'>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="serviceBookingInputTime">Available time slots</label>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="saveAppointment()">Finish</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
