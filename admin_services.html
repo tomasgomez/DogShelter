@@ -141,7 +141,7 @@
 </div>
 
 <!-- Form: Add Time Slots to a Service (Modal) -->
-<div class="modal fade" id="addTimeSlotsService" tabindex="-1" role="dialog" aria-labelledby="Form to add time slots to a service"
+<div class="modal fade" id="addTimeSlotsServiceForm" tabindex="-1" role="dialog" aria-labelledby="Form to add time slots to a service"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -161,9 +161,28 @@
                         <label for="addTimeSlotsServiceInputName">Name</label>
                         <input type="text" name="name" class="form-control" id="addTimeSlotsServiceInputName" readonly>
                     </div>
+                    <div class="form-group">
+                        <label for="addTimeSlotsServiceInputDate">Add Time Slot</label>
+                        <div class='input-group date' id="addTimeSlotsServiceFormDatePicker">
+                            <input type='text' class="form-control" id='addTimeSlotsServiceInputDate' />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                            <span class="input-group-addon" onclick="addTimeSlotToService()">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </span>
+                            <span class="input-group-addon" onclick="deleteAllTimeSlotsFromService()">
+                                <span class="glyphicon glyphicon-ban-circle"></span>
+                            </span>
+                        </div>
+                        <div id="time-slots-service">
+                            <!-- Filled with JavaScript -->
+                        </div>
+                        <!-- <textarea name="time-slots" rows="5" wrap="soft" class="form-control" id="addTimeSlotsServiceInputTimeSlots" placeholder="Select a time slot for this service"
+                            required readonly></textarea> -->
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="addServiceTimeSlots()">Save</button>
                     </div>
                 </form>
             </div>

@@ -178,25 +178,24 @@ input[type="submit"] {
     transition: background-color 0.3s, border 0.3s, color 0.3s;
 }
 
-.btn:hover,
+/* .btn:hover,
 .btn:active,
 input[type="submit"]:hover,
 input[type="submit"]:active {
     background-color: #BFA473;
     color: #fff;
-}
+} */
 
 .btn-full:link,
-.btn-full:visited,
-input[type="submit"] {
+.btn-full:visited {
     background-color: #fff;
     border: 1px solid #BFA473;
     color: #BFA473;
 }
 
 .btn-full:hover,
-.btn-full:active {
-    border: 1px solid #fff;
+.btn-full:active, {
+    border: 2px solid #BFA473;
 }
 
 button.btn.btn-full-brown {
@@ -396,6 +395,13 @@ a.link-to-prod:hover {
 .service-calendar {
     text-align: center;
     margin-bottom: 30px;
+}
+
+.service-page-price {
+    display: block;
+    font-size: 200%;
+    font-weight: bold;
+    text-align: center;
 }
 
 /* --------------------------------------------------------------- */

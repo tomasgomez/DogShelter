@@ -8,7 +8,8 @@ let user_store_schema = {
   name: "user",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [{
+  indexes: [
+    {
       keyPath: "name"
     },
     {
@@ -66,7 +67,8 @@ let pet_store_schema = {
   name: "pet",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [{
+  indexes: [
+    {
       keyPath: "userID"
     },
     {
@@ -91,7 +93,8 @@ let order_store_schema = {
   name: "order",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [{
+  indexes: [
+    {
       keyPath: "userID"
     },
     {
@@ -106,7 +109,8 @@ let order_service_line_store_schema = {
   name: "order-service-line",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [{
+  indexes: [
+    {
       keyPath: "orderID"
     },
     {
@@ -130,7 +134,8 @@ let order_product_line_store_schema = {
   name: "order-product-line",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [{
+  indexes: [
+    {
       keyPath: "orderID"
     },
     {
@@ -151,7 +156,8 @@ let service_store_schema = {
   name: "service",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [{
+  indexes: [
+    {
       keyPath: "name"
     },
     {
@@ -167,13 +173,33 @@ let service_store_schema = {
   ]
 };
 
+/* Table 'Service Time Slot'
+ */
+let service_time_slot_store_schema = {
+  name: "service-time-slot",
+  keyPath: "id",
+  autoIncrement: true,
+  indexes: [
+    {
+      keyPath: "serviceID"
+    },
+    {
+      keyPath: "date"
+    },
+    {
+      name: "taken"
+    }
+  ]
+};
+
 /* Table 'Product'
  */
 let product_store_schema = {
   name: "product",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [{
+  indexes: [
+    {
       keyPath: "name"
     },
     {
@@ -206,6 +232,7 @@ let schema = {
     order_service_line_store_schema,
     order_product_line_store_schema,
     service_store_schema,
+    service_time_slot_store_schema,
     product_store_schema
   ]
 };
@@ -369,7 +396,7 @@ function showServices() {
         v.id +
         ")' href='#'><span class='mini glyphicon red glyphicon-remove'></span></a>";
       output +=
-        "<a onclick='addAvailabilityToService(" +
+        "<a onclick='initAddTimeSlotsServiceForm(" +
         v.id +
         ")' href='#'><span class='mini glyphicon glyphicon-time'></span></a>";
       output +=
@@ -406,10 +433,63 @@ function editService(id) {
   });
 }
 
-function addAvailabilityToService(id) {
-  alert(
-    "This function is yet to be implemented! It shall allow admins to add free time slots to a specific service."
-  );
+function showTimeSlots(serviceID) {
+  let output = "";
+  db.values(
+    "service-time-slot",
+    "serviceID",
+    ydn.db.KeyRange.only(serviceID)
+  ).then(timeSlots => {
+    for (timeSlot of timeSlots) {
+      output += "<li class='list-group-item'>";
+      output += timeSlot.date;
+      output +=
+        "<span onclick='removeTimeSlotFromService(" +
+        timeSlot.id +
+        ")' class='mini glyphicon red glyphicon-remove' style='cursor: pointer;'></span>";
+      output += "</li>";
+    }
+    $("#time-slots-service").html(output);
+  });
+}
+
+function initAddTimeSlotsServiceForm(serviceID) {
+  $("#addTimeSlotsServiceForm").modal("show");
+  $("#addTimeSlotsServiceInputID").val(serviceID.toString());
+  db.get("service", serviceID).done(service => {
+    $("#addTimeSlotsServiceInputName").val(service.name);
+  });
+  showTimeSlots(serviceID);
+}
+
+function addTimeSlotToService() {
+  let serviceID = parseInt($("#addTimeSlotsServiceInputID").val());
+  let timeSlot = $("#addTimeSlotsServiceInputDate").val();
+
+  db.put("service-time-slot", {
+    serviceID: serviceID,
+    date: timeSlot,
+    taken: false
+  }).done(k => {
+    showTimeSlots(serviceID);
+  });
+}
+
+function removeTimeSlotFromService(timeSlotID) {
+  db.remove("service-time-slot", timeSlotID);
+  showTimeSlots(parseInt($("#addTimeSlotsServiceInputID").val()));
+}
+
+function deleteAllTimeSlotsFromService() {
+  let serviceID = parseInt($("#addTimeSlotsServiceInputID").val());
+  db.remove(
+    "service-time-slot",
+    "serviceID",
+    ydn.db.KeyRange.only(serviceID)
+  ).done(n => {
+    console.log(n + "time slots deleted associated to service #" + serviceID);
+    showTimeSlots(serviceID);
+  });
 }
 
 function saveServiceChanges() {
@@ -561,7 +641,7 @@ function saveUserRoleChanges() {
     },
     iter,
     "readwrite"
-  ).then(function () {
+  ).then(function() {
     $("#editUserRoleModal").modal("toggle");
   });
 }
@@ -591,7 +671,7 @@ function showAdminProfile() {
 }
 
 function showClientProfile() {
-  $(".btn-pref .btn").click(function () {
+  $(".btn-pref .btn").click(function() {
     $(".btn-pref .btn")
       .removeClass("btn-primary")
       .addClass("btn-default");
@@ -732,7 +812,12 @@ function showOrders() {
               let output = "";
               output += "<li class='list-group-item' id='order-" + v.id + "'>";
               output +=
-                userName + " (" + qty + " products | total = $" + sum + ")";
+                userName +
+                " (" +
+                qty +
+                " products | total = $" +
+                sum.toFixed(2) +
+                ")";
               output += "</li>";
               $("#ordersList").append(output);
               totalSum += sum;
@@ -835,7 +920,7 @@ function buyProduct(id) {
       id: id,
       qty: qty,
       rPrice: parseFloat($("#productPrice").html()),
-      store: 'product'
+      store: "product"
     };
     let itemsInCart = sessionStorage.getItem("selectedItemsInCart");
     if (itemsInCart === null) {
@@ -843,7 +928,10 @@ function buyProduct(id) {
     } else {
       itemsInCart = JSON.parse(itemsInCart);
       itemsInCart.push(product);
-      sessionStorage.setItem("selectedItemsInCart", JSON.stringify(itemsInCart));
+      sessionStorage.setItem(
+        "selectedItemsInCart",
+        JSON.stringify(itemsInCart)
+      );
     }
 
     alert("Your product was added to the cart :)");
@@ -858,28 +946,40 @@ function showItemsInCart() {
   let totalOrder = 0;
 
   if (cartItems === null) {
-    $("#cartItemsList").append("<p style='padding-left:20px;'>Your cart is empty!</p>");
+    $("#cartItemsList").append(
+      "<p style='padding-left:20px;'>Your cart is empty!</p>"
+    );
     $("#cart-total-order").html("0.00");
   } else {
     cartItems = JSON.parse(cartItems);
 
     for (cartItem of cartItems) {
-      ((cartItem) => {
-        if (cartItem.store === 'product') {
+      (cartItem => {
+        if (cartItem.store === "product") {
           let qty = cartItem.qty;
-          db.get('product', cartItem.id).done((prod) => {
+          db.get("product", cartItem.id).done(prod => {
             let output = "";
 
             output += "<div class='row cart-prod'><div class='col-md-2'>";
             output += "<img src='" + prod.photo + "' class='img-thumbnail '>";
             output += "</div>";
-            output += "<div class='col-md-8'><p class='name-in-cart'>" + prod.name + "</p></div>";
+            output +=
+              "<div class='col-md-8'><p class='name-in-cart'>" +
+              prod.name +
+              "</p></div>";
             output += "<div class='col-md-2'>";
             // output += "<span class='glyphicon glyphicon-remove cart-glyphicon' onclick='removeCartProduct(" + prod.id + ")'></span>";
-            output += "<p>" + cartItem.qty + " x " + cartItem.rPrice + " =<br>" + (cartItem.qty * cartItem.rPrice).toFixed(2) + "</p>";
+            output +=
+              "<p>" +
+              cartItem.qty +
+              " x " +
+              cartItem.rPrice +
+              " =<br>" +
+              (cartItem.qty * cartItem.rPrice).toFixed(2) +
+              "</p>";
             output += "</div></div>";
 
-            totalOrder += (prod.retailPrice * cartItem.qty);
+            totalOrder += prod.retailPrice * cartItem.qty;
             sessionStorage.setItem("totalOrder", totalOrder);
 
             $("#cartItemsList").append(output);
@@ -921,53 +1021,63 @@ function savePurchase() {
   db.put("order", {
     userID: userID,
     creditCardNo: creditCardNo
-  }).done(
-    orderId => {
-      let cartItems = JSON.parse(sessionStorage.getItem("selectedItemsInCart"));
-      for (cartItem of cartItems) {
-        ((cartItem) => {
-          //Add a product line to the order
-          if (cartItem.store === "product") {
-            db.put("order-product-line", {
-              orderID: orderId,
-              productID: cartItem.id,
-              salePrice: cartItem.rPrice,
-              quantity: cartItem.qty
-            });
+  }).done(orderId => {
+    let cartItems = JSON.parse(sessionStorage.getItem("selectedItemsInCart"));
+    for (cartItem of cartItems) {
+      (cartItem => {
+        //Add a product line to the order
+        if (cartItem.store === "product") {
+          db.put("order-product-line", {
+            orderID: orderId,
+            productID: cartItem.id,
+            salePrice: cartItem.rPrice,
+            quantity: cartItem.qty
+          });
 
-            // Update product 'qtySold' and 'inventoryQty'
-            let iter = new ydn.db.ValueIterator("product", ydn.db.KeyRange.only(cartItem.id));
-            db.open(
-              (cursor) => {
-                let product = cursor.getValue();
-                let qtySold = cartItem.qty;
-                product.qtySold += qtySold;
-                product.inventoryQty -= qtySold;
-                cursor.update(product).done(e => {
-                  console.log("Successful saving inventory quantities for product #" + product.id);
-                });
-              },
-              iter,
-              "readwrite"
-            );
-          } else {
-            //Add a service line to the order
-            console.log("TODO: Add service #" + cartItem.id + " to the order");
-          }
-        })(cartItem);
-      }
-      sessionStorage.removeItem("selectedItemsInCart");
-      alert("Your order was approved! Redirecting to your profile...");
-      $("#cartCheckoutForm").modal("hide");
-      $("#cartCheckoutForm").on("hidden.bs.modal", (e) => {
-        changePage("client_profile.html");
-      });
+          // Update product 'qtySold' and 'inventoryQty'
+          let iter = new ydn.db.ValueIterator(
+            "product",
+            ydn.db.KeyRange.only(cartItem.id)
+          );
+          db.open(
+            cursor => {
+              let product = cursor.getValue();
+              let qtySold = cartItem.qty;
+              product.qtySold += qtySold;
+              product.inventoryQty -= qtySold;
+              cursor.update(product).done(e => {
+                console.log(
+                  "Successful saving inventory quantities for product #" +
+                    product.id
+                );
+              });
+            },
+            iter,
+            "readwrite"
+          );
+        } else {
+          //Add a service line to the order
+          console.log("TODO: Add service #" + cartItem.id + " to the order");
+        }
+      })(cartItem);
     }
-  );
+    sessionStorage.removeItem("selectedItemsInCart");
+    alert("Your order was approved! Redirecting to your profile...");
+    $("#cartCheckoutForm").modal("hide");
+    $("#cartCheckoutForm").on("hidden.bs.modal", e => {
+      let userRole = sessionStorage.getItem("userRole");
+      if (userRole === "client") {
+        changePage("client_profile.html");
+      } else {
+        changePage("admin_profile.html");
+      }
+    });
+  });
 }
 
 function insertSomeTestData() {
-  let users = [{
+  let users = [
+    {
       name: "John Doe",
       phone: "202-555-0164",
       address: "60 Lees Creek Lane North Andover, MA 01845",
@@ -995,7 +1105,8 @@ function insertSomeTestData() {
       role: "admin"
     }
   ];
-  let pets = [{
+  let pets = [
+    {
       userID: 1,
       name: "Bailey",
       breed: "Alaskan Malamute",
@@ -1017,7 +1128,8 @@ function insertSomeTestData() {
       age: 8
     }
   ];
-  let orders = [{
+  let orders = [
+    {
       userID: 2,
       creditCardNo: 341768679371831
     },
@@ -1050,7 +1162,8 @@ function insertSomeTestData() {
       creditCardNo: 4716275103937400
     }
   ];
-  let orderProductLines = [{
+  let orderProductLines = [
+    {
       orderID: 1,
       productID: 1,
       salePrice: 9,
@@ -1123,35 +1236,43 @@ function insertSomeTestData() {
       quantity: 1
     }
   ];
-  let services = [{
+  let services = [
+    {
       name: "Full-Service Bath",
       photo: "img/full-service-bath.jpeg",
-      description: "Includes bath with natural shampoo, blow dry, 15-minute brush-out, ear cleaning, nail trim, gland expression & scented spritz.",
+      description:
+        "Includes bath with natural shampoo, blow dry, 15-minute brush-out, ear cleaning, nail trim, gland expression & scented spritz.",
       retailPrice: 30
     },
     {
       name: "Full-Service Bath with Haircut",
       photo: "img/full-service-bath-haircut.jpeg",
-      description: "Includes bath with natural shampoo, blow dry, 15-minute brush-out, ear cleaning, nail trim, gland expression & scented spritz. PLUS a cut and style to breed-specific standard or shave down.",
+      description:
+        "Includes bath with natural shampoo, blow dry, 15-minute brush-out, ear cleaning, nail trim, gland expression & scented spritz. PLUS a cut and style to breed-specific standard or shave down.",
       retailPrice: 50
     },
     {
       name: "De-shedding Treatment",
       photo: "img/deshedding-treatment.jpeg",
-      description: "Includes FURminator loose undercoat removal, natural shed-reducing shampoo and treatment, followed by another thorough FURminator brush-out and aloe hydrating treatment.",
+      description:
+        "Includes FURminator loose undercoat removal, natural shed-reducing shampoo and treatment, followed by another thorough FURminator brush-out and aloe hydrating treatment.",
       retailPrice: 25
     },
     {
       name: "Flea Relief",
       photo: "img/flea-relief.jpeg",
-      description: "Protect your dog with your choice of a naturally medicated or flea shampoo, moisturizing coat conditioner and spritz.",
+      description:
+        "Protect your dog with your choice of a naturally medicated or flea shampoo, moisturizing coat conditioner and spritz.",
       retailPrice: 30
     }
   ];
-  let products = [{
-      name: "Sentry Natural Defense Natural Flea & Tick Shampoo for Dogs & Puppies, 12 fl. oz.",
+  let products = [
+    {
+      name:
+        "Sentry Natural Defense Natural Flea & Tick Shampoo for Dogs & Puppies, 12 fl. oz.",
       photo: "img/sentry-dog-shampoo.jpeg",
-      description: "Sentry Natural Defense Natural Flea & Tick Shampoo for Dogs. Kills adult fleas using natural ingredients. Wonderful spice scent. Naturally cleans and conditions. Safe for use around children & pets.",
+      description:
+        "Sentry Natural Defense Natural Flea & Tick Shampoo for Dogs. Kills adult fleas using natural ingredients. Wonderful spice scent. Naturally cleans and conditions. Safe for use around children & pets.",
       retailPrice: 10.63,
       inventoryQty: 100,
       qtySold: 22
@@ -1159,7 +1280,8 @@ function insertSomeTestData() {
     {
       name: "Fly Free Zone Natural Fly Repellent Dog Collar",
       photo: "img/fly-free-collar.jpeg",
-      description: "Fly Free Zone Natural Fly Repellent Dog Collar. Naturally creates a no pest zone around your dog. Repels flies, fleas, ticks and mosquitoes. Easy to use and comfortable for your dog",
+      description:
+        "Fly Free Zone Natural Fly Repellent Dog Collar. Naturally creates a no pest zone around your dog. Repels flies, fleas, ticks and mosquitoes. Easy to use and comfortable for your dog",
       retailPrice: 12.34,
       inventoryQty: 50,
       qtySold: 40
@@ -1167,7 +1289,8 @@ function insertSomeTestData() {
     {
       name: "Adams Plus Flea & Tick Carpet Spray, 16 oz.",
       photo: "img/carpet-spray-adams.jpeg",
-      description: "16 oz., Kills fleas, ticks, cockroaches & ants on contact while killing all four stages of the flea-adults, eggs, larvae and pupae. Breaks the flea life cycle and controls reinfestation for up to 7 months. Treats up to 1,000 sq. ft. Breaks the flea life cycle and controls reinfestation for up to 210 days. Use on carpets, rugs, upholstery, drapes & other places where fleas may hide. Treats up to 2,000 sq. ft. Adams Plus Flea & Tick Carpet Spray.",
+      description:
+        "16 oz., Kills fleas, ticks, cockroaches & ants on contact while killing all four stages of the flea-adults, eggs, larvae and pupae. Breaks the flea life cycle and controls reinfestation for up to 7 months. Treats up to 1,000 sq. ft. Breaks the flea life cycle and controls reinfestation for up to 210 days. Use on carpets, rugs, upholstery, drapes & other places where fleas may hide. Treats up to 2,000 sq. ft. Adams Plus Flea & Tick Carpet Spray.",
       retailPrice: 15.39,
       inventoryQty: 20,
       qtySold: 10
@@ -1175,7 +1298,8 @@ function insertSomeTestData() {
     {
       name: "Cabana Bay Tan Geometric-Print Staycationer Dog Bed, Small",
       photo: "img/small-cabana-bay.jpeg",
-      description: "The Cabana Bay Collection hops into summer with vibrant essentials fit for a day of lounging in the sunshine. Breathable materials pair with resort-ready patterns to complement your fun-filled days together, whether you're spending a lazy afternoon by the pool or taking off on a spontaneous day trip. Tan Geometric-Print Staycationer Dog Bed from Cabana Bay. Suitable for indoor and outdoor spaces. Styled with the Cabana Bay Lounge Life Dog Bed Riser, available and sold separately. Mix and match with the rest of the Cabana Bay Collection. Lounger silhouette is perfect for dogs that love to stretch out in their sleep. Machine washable cover is made of water-resistant beige and white canvas. Features an eye-catching geometric print the along sides and mint piping at top",
+      description:
+        "The Cabana Bay Collection hops into summer with vibrant essentials fit for a day of lounging in the sunshine. Breathable materials pair with resort-ready patterns to complement your fun-filled days together, whether you're spending a lazy afternoon by the pool or taking off on a spontaneous day trip. Tan Geometric-Print Staycationer Dog Bed from Cabana Bay. Suitable for indoor and outdoor spaces. Styled with the Cabana Bay Lounge Life Dog Bed Riser, available and sold separately. Mix and match with the rest of the Cabana Bay Collection. Lounger silhouette is perfect for dogs that love to stretch out in their sleep. Machine washable cover is made of water-resistant beige and white canvas. Features an eye-catching geometric print the along sides and mint piping at top",
       retailPrice: 34.99,
       inventoryQty: 10,
       qtySold: 1
