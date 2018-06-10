@@ -565,15 +565,6 @@ function initServiceBooking() {
 }
 
 function addAppointmentToCart() {
-  // let serviceID = parseInt($("#service-page-id").html());
-  // let serviceName = $("#serviceName").html();
-  // let sPrice = parseFloat($("#servicePrice").html());
-  // let petID = parseInt($('#service-booking-pet').find(":selected").attr("value").split("-")[1]);
-  // let petName = $('#service-booking-pet').find(":selected").text();
-  // let timeSlotID = parseInt($('#service-booking-time-slot').find(":selected").attr("value").split("-")[2]);
-  // let date = $("#service-booking-date").val();
-  // let time = $('#service-booking-time-slot').find(":selected").text();
-  // console.log(serviceID, serviceName, sPrice, petID, petName, timeSlotID, date, time);
   let service = {
     serviceID: parseInt($("#service-page-id").html()),
     serviceName: $("#serviceName").html(),
@@ -593,7 +584,10 @@ function addAppointmentToCart() {
         .attr("value")
         .split("-")[2]
     ),
-    date: $("#service-booking-date").val(),
+    date: $("#service-booking-date-picker")
+      .data("DateTimePicker")
+      .date()
+      .format("DD-MM-YYYY"),
     time: $("#service-booking-time-slot")
       .find(":selected")
       .text(),
@@ -607,7 +601,7 @@ function addAppointmentToCart() {
     itemsInCart.push(service);
     sessionStorage.setItem("selectedItemsInCart", JSON.stringify(itemsInCart));
   }
-
+  $("#serviceBookingForm").modal("hide");
   alert("Your appointment was added to the cart :)");
 }
 
@@ -647,14 +641,44 @@ function showSelectedServ(serviceID) {
       $("#servicePrice").html(record.retailPrice);
     });
 
-    $("#service-booking-date-picker").datetimepicker({
-      format: "DD-MM-YYYY"
+    //Get available dates for the service
+    let enabledDates = [];
+    db.values(
+      "service-time-slot",
+      "serviceID",
+      ydn.db.KeyRange.only(serviceID)
+    ).done(timeSlots => {
+      for (timeSlot of timeSlots) {
+        if (timeSlot.orderServiceLineID === null) {
+          enabledDates.push(moment(timeSlot.date.split(" ")[0], "DD-MM,YYYY"));
+        }
+      }
+
+      //Config date time picker
+      if (enabledDates.length > 0) {
+        $("#service-booking-date-picker").datetimepicker({
+          format: "DD-MM-YYYY",
+          inline: true,
+          minDate: moment(new Date()),
+          enabledDates: enabledDates
+        });
+      } else {
+        $("#service-booking-date-picker").datetimepicker({
+          format: "DD-MM-YYYY",
+          inline: true
+        });
+        let current = moment();
+        $("#service-booking-date-picker")
+          .data("DateTimePicker")
+          .minDate(current)
+          .maxDate(current)
+          .disabledDates([current]);
+      }
     });
 
+    //Change available time slots when user changes date
     $("#service-booking-date-picker").on("dp.change", e => {
-      console.log("previous data = " + e.oldDate);
       let selectedDate = e.date.format("DD-MM-YYYY");
-      console.log("cur data = " + selectedDate);
       db.values(
         "service-time-slot",
         "serviceID",
@@ -667,7 +691,6 @@ function showSelectedServ(serviceID) {
           let date = datetime[0];
           let time = datetime[1] + " " + datetime[2];
           if (date === selectedDate && timeSlot.orderServiceLineID === null) {
-            console.log("Found this time slot" + JSON.stringify(timeSlot));
             output +=
               "<option value='time-slot-" +
               timeSlot.id +
@@ -1009,7 +1032,6 @@ function showOrders() {
 //-------- Manipulate CART
 function buyProduct(id) {
   let qty = parseFloat($("#productQuantity").val());
-  console.log("got qty = " + qty);
   if (qty > 0 && Number.isInteger(qty)) {
     let product = {
       id: id,
@@ -1075,7 +1097,7 @@ function showItemsInCart() {
             output += "</div></div>";
 
             totalOrder += prod.retailPrice * cartItem.qty;
-            sessionStorage.setItem("totalOrder", totalOrder);
+            sessionStorage.setItem("totalOrder", totalOrder.toFixed(2));
 
             $("#cartItemsList").append(output);
             $("#cart-total-order").html(totalOrder.toFixed(2).toString());
@@ -1112,7 +1134,7 @@ function showItemsInCart() {
             output += "</div></div>";
 
             totalOrder += serv.retailPrice;
-            sessionStorage.setItem("totalOrder", totalOrder);
+            sessionStorage.setItem("totalOrder", totalOrder.toFixed(2));
 
             $("#cartItemsList").append(output);
             $("#cart-total-order").html(totalOrder.toFixed(2).toString());
@@ -1187,7 +1209,6 @@ function savePurchase() {
           );
         } else {
           //Add a service line to the order
-          // console.log("TODO: Add service #" + cartItem.id + " to the order");
           db.put("order-service-line", {
             orderID: orderId,
             serviceID: cartItem.serviceID,
@@ -1202,9 +1223,6 @@ function savePurchase() {
             db.open(
               cursor => {
                 let timeSlot = cursor.getValue();
-                console.log(
-                  "found this time slot = " + JSON.stringify(timeSlot)
-                );
                 timeSlot.orderServiceLineID = orderServiceLineID;
                 cursor.update(timeSlot).done(e => {
                   console.log(
@@ -1433,12 +1451,12 @@ function insertSomeTestData() {
     },
     {
       serviceID: 1,
-      date: "10-06-2018 9:00 am",
+      date: "11-06-2018 9:00 am",
       orderServiceLineID: null
     },
     {
       serviceID: 2,
-      date: "10-06-2018 9:00 am",
+      date: "20-06-2018 9:00 am",
       orderServiceLineID: null
     }
   ];
