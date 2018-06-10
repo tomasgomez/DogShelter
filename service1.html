@@ -2,6 +2,7 @@
     <div class="service">
         <div class="service-panel">
             <div class="service-name">
+                <span id="service-page-id" style="display:none;"></span>
                 <h1 id="serviceName"></h1>
                 <hr class="hr-small-brown">
             </div>
@@ -44,10 +45,6 @@
                     <div class="form-group">
                         <label for="service-booking-pet">Pet</label>
                         <select name="pet" id="service-booking-pet">
-                            <!-- <option value="friends" selected="">Friends</option>
-                            <option value="search">Search engine</option>
-                            <option value="ad">Advertisement</option>
-                            <option value="other">Other</option> -->
                         </select>
                     </div>
                     <div class="form-group">
@@ -61,10 +58,13 @@
                     </div>
                     <div class="form-group">
                         <label for="serviceBookingInputTime">Available time slots</label>
+                        <select name="time-slot" id="service-booking-time-slot">
+                            <option value="" disabled selected>Select your option</option>
+                        </select>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="saveAppointment()">Finish</button>
+                        <button type="button" class="btn btn-primary" onclick="addAppointmentToCart()">Finish</button>
                     </div>
                 </form>
             </div>

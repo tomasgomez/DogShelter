@@ -18,7 +18,9 @@ function changePage(dest) {
           "editServicePhotoSelect",
           "editServiceInputPhoto"
         );
-        $("#addTimeSlotsServiceFormDatePicker").datetimepicker();
+        $("#addTimeSlotsServiceFormDatePicker").datetimepicker({
+          format: "DD-MM-YYYY h:mm a"
+        });
       } else if (dest === "admin_user_roles.html") {
         showUsers();
       } else if (dest === "admin_profile.html") {
@@ -61,16 +63,14 @@ function changePage(dest) {
   }
 
   if (dest !== "admin_logout.html") {
-    history.pushState(
-      {
+    history.pushState({
         foo: dest
       },
       "",
       dest
     );
   } else {
-    history.pushState(
-      {
+    history.pushState({
         foo: dest
       },
       "",
@@ -121,7 +121,7 @@ function initializePhotoPicker(fileSelectID, fileElemID) {
 
   photoSelect.addEventListener(
     "click",
-    function(e) {
+    function (e) {
       if (photoElem) {
         photoElem.click();
       }
@@ -143,8 +143,8 @@ function handleFiles(files, imgID) {
     img.file = file;
 
     var reader = new FileReader();
-    reader.onload = (function(aImg) {
-      return function(e) {
+    reader.onload = (function (aImg) {
+      return function (e) {
         aImg.src = e.target.result;
       };
     })(img);
