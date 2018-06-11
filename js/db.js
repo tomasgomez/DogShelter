@@ -958,7 +958,10 @@ function savePetChanges() {
 //-------- Manipulate the ORDER store
 function showOrders() {
   let totalSum = 0;
-  let totalQty = 0;
+  let totalSumProduct = 0;
+  let totalSumService = 0;
+  let totalQtyProduct = 0;
+  let totalQtyService = 0;
 
   let iter = new ydn.db.ValueIterator("order");
   db.open(
@@ -971,6 +974,7 @@ function showOrders() {
           let keyRange = ydn.db.KeyRange.only(v.id);
           let sum = 0;
           let qty = 0;
+          let qtyService = 0;
 
           let orderProductLines = db
             .values("order-product-line", "orderID", keyRange)
@@ -978,9 +982,20 @@ function showOrders() {
               if (records) {
                 for (productLine of records) {
                   sum += productLine.salePrice * productLine.quantity;
+                  totalSumProduct += productLine.salePrice * productLine.quantity;
                   qty += productLine.quantity;
                 }
               }
+
+              let orderServiceLines = db.values("order-service-line", "orderID", keyRange)
+              .then(services => {
+                if (services) {
+                  for (serviceLine of services) {
+                    sum += serviceLine.salePrice;
+                    totalSumService += serviceLine.salePrice;
+                    qtyService += 1;
+                  }
+                };
 
               let output = "";
               output += "<li class='list-group-item' id='order-" + v.id + "'>";
@@ -988,16 +1003,24 @@ function showOrders() {
                 userName +
                 " (" +
                 qty +
-                " products | total = $" +
+                " products | " +
+                qtyService +
+                " services | total = $" +
                 sum.toFixed(2) +
                 ")";
               output += "</li>";
               $("#ordersList").append(output);
               totalSum += sum;
-              totalQty += qty;
-              $("#reports-no-prod-sold").html(totalQty.toString());
-              $("#reports-sum-orders-values").html(totalSum.toString());
+              totalQtyProduct += qty;
+              totalQtyService += qtyService
+
+              $("#reports-no-prod-sold").html(totalQtyProduct.toString());
+              $("#reports-sum-prod-sold").html(totalSumProduct.toString());
+              $("#reports-no-serv-sold").html(totalQtyService.toString());
+              $("#reports-sum-serv-sold").html(totalSumService.toString());
+              $("#reports-sum-orders-values").html(totalSum.toFixed(2));
             });
+          });
         }
       });
     },
