@@ -1,7 +1,7 @@
 /*****
-
-  This JavaScript code sets up a indexedDB database called 'dogshelter'.
-  It contains the following stores:
+  This JavaScript file contains all code that manipulate the database of the pet shop.
+  The initial portion of code sets up a indexedDB database called 'dogshelter'.
+  The database contains the following stores:
     * user: users (clients and admins) of the pet shop;
         fields: id, name, phone, address, photo, email, password and role.
     * pet: users' pets.
@@ -18,7 +18,7 @@
         fields: id, serviceID, date, orderServiceLineID
     * product: products of the pet shop.
         fields: id, name, photo, description, retailPrice, inventoryQty, qtySold
-
+  The following code is composed of several useful functions that manipulate the db.
 *****/
 
 /***** DEFINITION of STORES SCHEMAS *****/
@@ -233,8 +233,34 @@ db.addEventListener("ready", event => {
   }
 });
 
-/* USEFUL FUNCTIONS */
-//-------- Manipulate the PRODUCT store
+/***** USEFUL FUNCTIONS *****/
+//-------- Manipulate the PRODUCt store
+function showProducts() {
+  let output = "";
+
+  let iter = new ydn.db.ValueIterator("product");
+  db.open(
+    cursor => {
+      let v = cursor.getValue();
+      output += "<li class='list-group-item' id='product-" + v.id + "'>";
+      output += v.name;
+      output +=
+        "<a onclick='removeProduct(" +
+        v.id +
+        ")' href='#'><span class='mini glyphicon red glyphicon-remove'></span></a>";
+      output +=
+        "<a onclick='editProduct(" +
+        v.id +
+        ")' href='#'><span class='mini glyphicon glyphicon-pencil'></span></a>";
+      output += "</li>";
+    },
+    iter,
+    "readonly"
+  ).then(() => {
+    $("#productsList").html(output);
+  });
+}
+
 function addProduct() {
   let name = $("#addProductInputName").val();
   let photo = $("#addProductImgThumb").attr("src");
@@ -261,32 +287,6 @@ function addProduct() {
   });
 
   showProducts();
-}
-
-function showProducts() {
-  let output = "";
-
-  let iter = new ydn.db.ValueIterator("product");
-  db.open(
-    cursor => {
-      let v = cursor.getValue();
-      output += "<li class='list-group-item' id='product-" + v.id + "'>";
-      output += v.name;
-      output +=
-        "<a onclick='removeProduct(" +
-        v.id +
-        ")' href='#'><span class='mini glyphicon red glyphicon-remove'></span></a>";
-      output +=
-        "<a onclick='editProduct(" +
-        v.id +
-        ")' href='#'><span class='mini glyphicon glyphicon-pencil'></span></a>";
-      output += "</li>";
-    },
-    iter,
-    "readonly"
-  ).then(() => {
-    $("#productsList").html(output);
-  });
 }
 
 function removeProduct(id) {
@@ -844,7 +844,6 @@ function showClientProfile() {
     $(".btn-pref .btn")
       .removeClass("btn-primary")
       .addClass("btn-default");
-    // $(".tab").addClass("active"); // instead of this do the below
     $(this)
       .removeClass("btn-default")
       .addClass("btn-primary");
@@ -1008,9 +1007,9 @@ function showOrders() {
               totalQtyService += qtyService
 
               $("#reports-no-prod-sold").html(totalQtyProduct.toString());
-              $("#reports-sum-prod-sold").html(totalSumProduct.toString());
+              $("#reports-sum-prod-sold").html(totalSumProduct.toFixed(2).toString());
               $("#reports-no-serv-sold").html(totalQtyService.toString());
-              $("#reports-sum-serv-sold").html(totalSumService.toString());
+              $("#reports-sum-serv-sold").html(totalSumService.toFixed(2).toString());
               $("#reports-sum-orders-values").html(totalSum.toFixed(2));
             });
           });
