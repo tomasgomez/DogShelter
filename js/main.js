@@ -152,13 +152,6 @@ function handleFiles(files, imgID) {
   }
 }
 
-function calendar() {
-  jQuery(".calendar7").Calendar7({
-    allowTimeStart: "6:00",
-    allowTimeEnd: "20:00"
-  });
-}
-
 function sendMessage() {
   $("#contact-name").val("");
   $("#contact-email").val("");

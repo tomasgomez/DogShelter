@@ -1,15 +1,32 @@
-/* DEFINITION OF OBJECT STORES */
+/*****
 
-/* Table 'User'
- *   It's necessary to create at least 1 delivery address to
- *   every new client which is added to the database
- */
+  This JavaScript code sets up a indexedDB database called 'dogshelter'.
+  It contains the following stores:
+    * user: users (clients and admins) of the pet shop;
+        fields: id, name, phone, address, photo, email, password and role.
+    * pet: users' pets.
+        fields: id,userID, name, breed, photo, age
+    * order: orders placed by users.
+        fields: id, userID, creditCardNo
+    * order-service-line: each record match a service line in a certain order.
+        fields: id, orderID, serviceID, salePrice, date, petID
+    * order-product-line: each record match a product line in a certain order.
+        fields: id, orderID, productID, salePrice, quantity
+    * service: services of the pet shop.
+        fields: id, name, photo, description, retailPrice
+    * service-time-slot: time slots available for a certain service.
+        fields: id, serviceID, date, orderServiceLineID
+    * product: products of the pet shop.
+        fields: id, name, photo, description, retailPrice, inventoryQty, qtySold
+
+*****/
+
+/***** DEFINITION of STORES SCHEMAS *****/
 let user_store_schema = {
   name: "user",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [
-    {
+  indexes: [{
       keyPath: "name"
     },
     {
@@ -35,40 +52,11 @@ let user_store_schema = {
   ]
 };
 
-/* Table 'Delivery Address'
- *   It's a child of 'User'.
- */
-/* let delivery_address_store_schema = {
-  name: "delivery-address",
-  keyPath: "id",
-  autoIncrement: true,
-  indexes: [{
-      keyPath: "userID"
-    },
-    {
-      keyPath: "postalCode"
-    },
-    {
-      name: "streetName"
-    },
-    {
-      keyPath: "streetNo"
-    },
-    {
-      keyPath: "receiversName"
-    }
-  ]
-}; */
-
-/* Table 'Pet'
- *   It's a child of 'User'.
- */
 let pet_store_schema = {
   name: "pet",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [
-    {
+  indexes: [{
       keyPath: "userID"
     },
     {
@@ -86,15 +74,11 @@ let pet_store_schema = {
   ]
 };
 
-/* Table 'Order'
- *   It's a child of 'User'.
- */
 let order_store_schema = {
   name: "order",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [
-    {
+  indexes: [{
       keyPath: "userID"
     },
     {
@@ -103,14 +87,11 @@ let order_store_schema = {
   ]
 };
 
-/* Table 'Order Service Line'
- */
 let order_service_line_store_schema = {
   name: "order-service-line",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [
-    {
+  indexes: [{
       keyPath: "orderID"
     },
     {
@@ -128,14 +109,11 @@ let order_service_line_store_schema = {
   ]
 };
 
-/* Table 'Order Product Line'
- */
 let order_product_line_store_schema = {
   name: "order-product-line",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [
-    {
+  indexes: [{
       keyPath: "orderID"
     },
     {
@@ -150,14 +128,11 @@ let order_product_line_store_schema = {
   ]
 };
 
-/* Table 'Service'
- */
 let service_store_schema = {
   name: "service",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [
-    {
+  indexes: [{
       keyPath: "name"
     },
     {
@@ -173,14 +148,11 @@ let service_store_schema = {
   ]
 };
 
-/* Table 'Service Time Slot'
- */
 let service_time_slot_store_schema = {
   name: "service-time-slot",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [
-    {
+  indexes: [{
       keyPath: "serviceID"
     },
     {
@@ -192,14 +164,11 @@ let service_time_slot_store_schema = {
   ]
 };
 
-/* Table 'Product'
- */
 let product_store_schema = {
   name: "product",
   keyPath: "id",
   autoIncrement: true,
-  indexes: [
-    {
+  indexes: [{
       keyPath: "name"
     },
     {
@@ -221,12 +190,11 @@ let product_store_schema = {
   ]
 };
 
-/* DEFINITION OF DATABASE SCHEMA */
+/***** DEFINITION of DATABASE SCHEMA *****/
 let schema = {
   // auto-versioning activated by not defining a version number
   stores: [
     user_store_schema,
-    // delivery_address_store_schema,
     pet_store_schema,
     order_store_schema,
     order_service_line_store_schema,
@@ -237,12 +205,14 @@ let schema = {
   ]
 };
 
-/* INITIALIZING DATABASE */
+/***** INITIALIZATION of DATABASE *****/
 db = new ydn.db.Storage("dogshelter", schema);
 db.addEventListener("ready", event => {
   let is_updated = event.getVersion() != event.getOldVersion();
+  
   if (isNaN(event.getOldVersion())) {
     console.log("new database created");
+    
     // Insert a default admin user
     db.put("user", {
       name: "admin",
@@ -254,13 +224,13 @@ db.addEventListener("ready", event => {
       role: "admin"
     });
 
+    // Inser some useful data to test the pet shop
     insertSomeTestData();
   } else if (is_updated) {
     console.log("database connected with new schema");
   } else {
     console.log("existing database connected");
   }
-  // heavy database operations should start from this.
 });
 
 /* USEFUL FUNCTIONS */
@@ -571,18 +541,18 @@ function addAppointmentToCart() {
     sPrice: parseFloat($("#servicePrice").html()),
     petID: parseInt(
       $("#service-booking-pet")
-        .find(":selected")
-        .attr("value")
-        .split("-")[1]
+      .find(":selected")
+      .attr("value")
+      .split("-")[1]
     ),
     petName: $("#service-booking-pet")
       .find(":selected")
       .text(),
     timeSlotID: parseInt(
       $("#service-booking-time-slot")
-        .find(":selected")
-        .attr("value")
-        .split("-")[2]
+      .find(":selected")
+      .attr("value")
+      .split("-")[2]
     ),
     date: $("#service-booking-date-picker")
       .data("DateTimePicker")
@@ -840,7 +810,7 @@ function saveUserRoleChanges() {
     },
     iter,
     "readwrite"
-  ).then(function() {
+  ).then(function () {
     $("#editUserRoleModal").modal("toggle");
   });
 }
@@ -870,7 +840,7 @@ function showAdminProfile() {
 }
 
 function showClientProfile() {
-  $(".btn-pref .btn").click(function() {
+  $(".btn-pref .btn").click(function () {
     $(".btn-pref .btn")
       .removeClass("btn-primary")
       .addClass("btn-default");
@@ -1200,7 +1170,7 @@ function savePurchase() {
               cursor.update(product).done(e => {
                 console.log(
                   "Successful saving inventory quantities for product #" +
-                    product.id
+                  product.id
                 );
               });
             },
@@ -1253,8 +1223,7 @@ function savePurchase() {
 
 // INSERT SOME TEST DATA IN THE DATABASE
 function insertSomeTestData() {
-  let users = [
-    {
+  let users = [{
       name: "John Doe",
       phone: "202-555-0164",
       address: "60 Lees Creek Lane North Andover, MA 01845",
@@ -1282,8 +1251,7 @@ function insertSomeTestData() {
       role: "admin"
     }
   ];
-  let pets = [
-    {
+  let pets = [{
       userID: 1,
       name: "Bailey",
       breed: "Alaskan Malamute",
@@ -1305,8 +1273,7 @@ function insertSomeTestData() {
       age: 8
     }
   ];
-  let orders = [
-    {
+  let orders = [{
       userID: 2,
       creditCardNo: 341768679371831
     },
@@ -1339,8 +1306,7 @@ function insertSomeTestData() {
       creditCardNo: 4716275103937400
     }
   ];
-  let orderProductLines = [
-    {
+  let orderProductLines = [{
       orderID: 1,
       productID: 1,
       salePrice: 9,
@@ -1413,38 +1379,32 @@ function insertSomeTestData() {
       quantity: 1
     }
   ];
-  let services = [
-    {
+  let services = [{
       name: "Full-Service Bath",
       photo: "img/full-service-bath.jpeg",
-      description:
-        "Includes bath with natural shampoo, blow dry, 15-minute brush-out, ear cleaning, nail trim, gland expression & scented spritz.",
+      description: "Includes bath with natural shampoo, blow dry, 15-minute brush-out, ear cleaning, nail trim, gland expression & scented spritz.",
       retailPrice: 30
     },
     {
       name: "Full-Service Bath with Haircut",
       photo: "img/full-service-bath-haircut.jpeg",
-      description:
-        "Includes bath with natural shampoo, blow dry, 15-minute brush-out, ear cleaning, nail trim, gland expression & scented spritz. PLUS a cut and style to breed-specific standard or shave down.",
+      description: "Includes bath with natural shampoo, blow dry, 15-minute brush-out, ear cleaning, nail trim, gland expression & scented spritz. PLUS a cut and style to breed-specific standard or shave down.",
       retailPrice: 50
     },
     {
       name: "De-shedding Treatment",
       photo: "img/deshedding-treatment.jpeg",
-      description:
-        "Includes FURminator loose undercoat removal, natural shed-reducing shampoo and treatment, followed by another thorough FURminator brush-out and aloe hydrating treatment.",
+      description: "Includes FURminator loose undercoat removal, natural shed-reducing shampoo and treatment, followed by another thorough FURminator brush-out and aloe hydrating treatment.",
       retailPrice: 25
     },
     {
       name: "Flea Relief",
       photo: "img/flea-relief.jpeg",
-      description:
-        "Protect your dog with your choice of a naturally medicated or flea shampoo, moisturizing coat conditioner and spritz.",
+      description: "Protect your dog with your choice of a naturally medicated or flea shampoo, moisturizing coat conditioner and spritz.",
       retailPrice: 30
     }
   ];
-  let serviceTimeSlots = [
-    {
+  let serviceTimeSlots = [{
       serviceID: 1,
       date: "10-06-2018 8:30 am",
       orderServiceLineID: null
@@ -1460,13 +1420,10 @@ function insertSomeTestData() {
       orderServiceLineID: null
     }
   ];
-  let products = [
-    {
-      name:
-        "Sentry Natural Defense Natural Flea & Tick Shampoo for Dogs & Puppies, 12 fl. oz.",
+  let products = [{
+      name: "Sentry Natural Defense Natural Flea & Tick Shampoo for Dogs & Puppies, 12 fl. oz.",
       photo: "img/sentry-dog-shampoo.jpeg",
-      description:
-        "Sentry Natural Defense Natural Flea & Tick Shampoo for Dogs. Kills adult fleas using natural ingredients. Wonderful spice scent. Naturally cleans and conditions. Safe for use around children & pets.",
+      description: "Sentry Natural Defense Natural Flea & Tick Shampoo for Dogs. Kills adult fleas using natural ingredients. Wonderful spice scent. Naturally cleans and conditions. Safe for use around children & pets.",
       retailPrice: 10.63,
       inventoryQty: 100,
       qtySold: 22
@@ -1474,8 +1431,7 @@ function insertSomeTestData() {
     {
       name: "Fly Free Zone Natural Fly Repellent Dog Collar",
       photo: "img/fly-free-collar.jpeg",
-      description:
-        "Fly Free Zone Natural Fly Repellent Dog Collar. Naturally creates a no pest zone around your dog. Repels flies, fleas, ticks and mosquitoes. Easy to use and comfortable for your dog",
+      description: "Fly Free Zone Natural Fly Repellent Dog Collar. Naturally creates a no pest zone around your dog. Repels flies, fleas, ticks and mosquitoes. Easy to use and comfortable for your dog",
       retailPrice: 12.34,
       inventoryQty: 50,
       qtySold: 40
@@ -1483,8 +1439,7 @@ function insertSomeTestData() {
     {
       name: "Adams Plus Flea & Tick Carpet Spray, 16 oz.",
       photo: "img/carpet-spray-adams.jpeg",
-      description:
-        "16 oz., Kills fleas, ticks, cockroaches & ants on contact while killing all four stages of the flea-adults, eggs, larvae and pupae. Breaks the flea life cycle and controls reinfestation for up to 7 months. Treats up to 1,000 sq. ft. Breaks the flea life cycle and controls reinfestation for up to 210 days. Use on carpets, rugs, upholstery, drapes & other places where fleas may hide. Treats up to 2,000 sq. ft. Adams Plus Flea & Tick Carpet Spray.",
+      description: "16 oz., Kills fleas, ticks, cockroaches & ants on contact while killing all four stages of the flea-adults, eggs, larvae and pupae. Breaks the flea life cycle and controls reinfestation for up to 7 months. Treats up to 1,000 sq. ft. Breaks the flea life cycle and controls reinfestation for up to 210 days. Use on carpets, rugs, upholstery, drapes & other places where fleas may hide. Treats up to 2,000 sq. ft. Adams Plus Flea & Tick Carpet Spray.",
       retailPrice: 15.39,
       inventoryQty: 20,
       qtySold: 10
@@ -1492,8 +1447,7 @@ function insertSomeTestData() {
     {
       name: "Cabana Bay Tan Geometric-Print Staycationer Dog Bed, Small",
       photo: "img/small-cabana-bay.jpeg",
-      description:
-        "The Cabana Bay Collection hops into summer with vibrant essentials fit for a day of lounging in the sunshine. Breathable materials pair with resort-ready patterns to complement your fun-filled days together, whether you're spending a lazy afternoon by the pool or taking off on a spontaneous day trip. Tan Geometric-Print Staycationer Dog Bed from Cabana Bay. Suitable for indoor and outdoor spaces. Styled with the Cabana Bay Lounge Life Dog Bed Riser, available and sold separately. Mix and match with the rest of the Cabana Bay Collection. Lounger silhouette is perfect for dogs that love to stretch out in their sleep. Machine washable cover is made of water-resistant beige and white canvas. Features an eye-catching geometric print the along sides and mint piping at top",
+      description: "The Cabana Bay Collection hops into summer with vibrant essentials fit for a day of lounging in the sunshine. Breathable materials pair with resort-ready patterns to complement your fun-filled days together, whether you're spending a lazy afternoon by the pool or taking off on a spontaneous day trip. Tan Geometric-Print Staycationer Dog Bed from Cabana Bay. Suitable for indoor and outdoor spaces. Styled with the Cabana Bay Lounge Life Dog Bed Riser, available and sold separately. Mix and match with the rest of the Cabana Bay Collection. Lounger silhouette is perfect for dogs that love to stretch out in their sleep. Machine washable cover is made of water-resistant beige and white canvas. Features an eye-catching geometric print the along sides and mint piping at top",
       retailPrice: 34.99,
       inventoryQty: 10,
       qtySold: 1
