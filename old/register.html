@@ -1,0 +1,30 @@
+<div class="row">
+    <div class="form-container">
+        <div class="form-container-header">
+            <h1>Register</h1>
+            <hr class="hr-small">
+        </div>
+        <form>
+            <img src="img/unknown_person.jpg" alt="user photo" class="img-thumbnail mx-auto" id="registerImgThumb" style="height:100px; margin-left: 10px;">
+            <input type="file" name="customer[photo]" id="registerPhotoElem" accept="image/*" style="display:none" onchange="handleFiles(this.files, 'registerImgThumb')">
+            <button id="registerPhotoSelect" class="btn btn-md">Change photo</button>
+            <input type="text" name="customer[first_name]" id="registerInputFirstName" class="input-full golden" style="margin-top: 10px;"
+                autocomplete='given-name' placeholder="First Name" autofocus="" required>
+            <input type="text" name="customer[last_name]" id="registerInputLastName" class="input-full golden" autocomplete='family-name'
+                placeholder="Last Name" required>
+            <input type="text" name="customer[phone]" id="registerInputPhone" class="input-full golden" autocomplete='tel' placeholder="Phone"
+                required>
+            <input type="text" name="customer[address]" id="registerInputAddress" class="input-full golden" placeholder="Address" required>
+            <input type="email" name="customer[email]" id="registerInputEmail" class="input-full golden" autocomplete='email' placeholder="Email"
+                required>
+            <input type="password" name="customer[password]" id="registerInputPassword" class="input-full golden" autocomplete='new-password'
+                placeholder="Password" required>
+            <p>
+                <a class="btn btn-full" href="#" onclick="addUser()">Create</a>
+            </p>
+            <p>
+                <a href="#" onclick="changePage('home.html')">Return to Store</a>
+            </p>
+        </form>
+    </div>
+</div>

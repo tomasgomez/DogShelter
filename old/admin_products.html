@@ -1,0 +1,159 @@
+<nav id="sidebar">
+    <div class="sidebar-header" onclick="changePage('admin_logout.html')">
+        <h3>Dog Shelter</h3>
+    </div>
+
+    <ul class="list-unstyled components">
+        <li>
+            <a href="#" onclick="changePage('admin_profile.html')">
+                <span class="glyphicon glyphicon-user"></span>Profile</a>
+        </li>
+        <li>
+            <a href="#" onclick="changePage('admin_user_roles.html')">
+                <span class="glyphicon glyphicon-wrench"></span>User Roles</a>
+        </li>
+        <li class="active">
+            <a href="#" onclick="changePage('admin_products.html')">
+                <span class="glyphicon glyphicon-gift"></span>Products</a>
+        </li>
+        <li>
+            <a href="#" onclick="changePage('admin_services.html')">
+                <span class="glyphicon glyphicon-calendar"></span>Services</a>
+        </li>
+        <li>
+            <a href="#" onclick="changePage('admin_reports.html')">
+                <span class="glyphicon glyphicon-equalizer"></span>Reports</a>
+        </li>
+        <li>
+            <a href="#" onclick="userLogout()">
+                <span class="glyphicon glyphicon-log-out"></span>Sign Out</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="main">
+    <div class="container-fluid">
+        <div class="menu-name">
+            <h1>Manage Products</h1>
+        </div>
+        <hr class="grey-line">
+        <div class="main-panel">
+            <ul class="list-group">
+                <li class="list-group-item green">List of Products</li>
+                <div id="productsList">
+                    <!-- Filled with JavaScript -->
+                </div>
+            </ul>
+        </div>
+        <!-- Button trigger 'add product form' -->
+        <button type="button" class="btn btn-success" style="float: right;" data-toggle="modal" data-target="#addProductForm">Add Product</button>
+    </div>
+</div>
+
+<!-- ********* FORMS ********* -->
+
+<!-- Add Product Form (Modal) -->
+<div class="modal fade" id="addProductForm" tabindex="-1" role="dialog" aria-labelledby="add product form" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="modal-title">Add Product</h5>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="addProductInputName">Name</label>
+                        <input type="text" name="name" class="form-control" id="addProductInputName" placeholder="Enter product name" autofocus required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addProductInputPhoto">Photo</label>
+                        <br>
+                        <img src="img/no_image.png" alt="product photo" class="img-thumbnail" id="addProductImgThumb" style="height:80px">
+                        <input type="file" name="photo" id="addProductInputPhoto" accept="image/*" style="display:none" onchange="handleFiles(this.files, 'addProductImgThumb')">
+                        <button id="addProductPhotoSelect" class="btn btn-md">Choose photo</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="addProductInputDescription">Description</label>
+                        <!-- <input type="text" name="description" class="form-control" id="addProductInputDescription" placeholder="Enter product description"
+                            required> -->
+                        <textarea name="description" rows="3" wrap="soft" class="form-control" id="addProductInputDescription" placeholder="Enter product description"
+                            required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="addProductInputRetailPrice">Retail Price</label>
+                        <input type="number" min="0" step="0.01" name="retail price" class="form-control" id="addProductInputRetailPrice" placeholder="Enter product retail price"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addProductInputInventoryQuantity">Inventory Quantity</label>
+                        <input type="number" min="0" name="inventory quantity" class="form-control" id="addProductInputInventoryQuantity" placeholder="Enter product inventory quantity"
+                            required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="addProduct()">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Product Form (Modal) -->
+<div class="modal fade" id="editProductForm" tabindex="-1" role="dialog" aria-labelledby="edit product form" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="modal-title">Edit Product</h5>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="return false;">
+                    <div class="form-group">
+                        <label for="editProductInputID">ID</label>
+                        <input type="number" name="ID" class="form-control" id="editProductInputID" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="editProductInputName">Name</label>
+                        <input type="text" name="name" class="form-control" id="editProductInputName" placeholder="Enter product name" autofocus required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editProductInputPhoto">Photo</label>
+                        <br>
+                        <img src="img/no_image.png" alt="product photo" class="img-thumbnail" id="editProductImgThumb" style="height:80px">
+                        <input type="file" name="photo" id="editProductInputPhoto" accept="image/*" style="display:none" onchange="handleFiles(this.files, 'editProductImgThumb')">
+                        <button id="editProductPhotoSelect" class="btn btn-md">Change photo</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="editProductInputDescription">Description</label>
+                        <textarea name="description" rows="3" wrap="soft" class="form-control" id="editProductInputDescription" placeholder="Enter product description"
+                            required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="editProductInputRetailPrice">Retail Price</label>
+                        <input type="number" min="0" step="0.01" name="retail price" class="form-control" id="editProductInputRetailPrice" placeholder="Enter product retail price"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editProductInputInventoryQuantity">Inventory Quantity</label>
+                        <input type="number" min="0" name="inventory quantity" class="form-control" id="editProductInputInventoryQuantity" placeholder="Enter product inventory quantity"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editProductInputID">Quantity Sold</label>
+                        <input type="number" name="quantity sold" class="form-control" id="editProductInputQuantitySold" readonly>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="saveProductChanges()">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

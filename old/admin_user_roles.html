@@ -1,0 +1,90 @@
+<nav id="sidebar">
+    <div class="sidebar-header" onclick="changePage('admin_logout.html')">
+        <h3>Dog Shelter</h3>
+    </div>
+
+    <ul class="list-unstyled components">
+        <li>
+            <a href="#" onclick="changePage('admin_profile.html')">
+                <span class="glyphicon glyphicon-user"></span>Profile</a>
+        </li>
+        <li class="active">
+            <a href="#" onclick="changePage('admin_user_roles.html')">
+                <span class="glyphicon glyphicon-wrench"></span>User Roles</a>
+        </li>
+        <li>
+            <a href="#" onclick="changePage('admin_products.html')">
+                <span class="glyphicon glyphicon-gift"></span>Products</a>
+        </li>
+        <li>
+            <a href="#" onclick="changePage('admin_services.html')">
+                <span class="glyphicon glyphicon-calendar"></span>Services</a>
+        </li>
+        <li>
+            <a href="#" onclick="changePage('admin_reports.html')">
+                <span class="glyphicon glyphicon-equalizer"></span>Reports</a>
+        </li>
+        <li>
+            <a href="#" onclick="userLogout()">
+                <span class="glyphicon glyphicon-log-out"></span>Sign Out</a>
+        </li>
+    </ul>
+</nav>
+<div class="main">
+    <div class="container-fluid">
+        <div class="menu-name">
+            <h1>Manage Users</h1>
+        </div>
+        <hr class="grey-line">
+        <div class="main-panel">
+            <ul class="list-group">
+                <li class="list-group-item active">List of Users</li>
+                <div id="userList">
+                    <!-- Filled with JavaScript -->
+                </div>
+            </ul>
+        </div>
+
+        <!-- Edit Product Form (Modal) -->
+        <div class="modal fade" id="editUserRoleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h5 class="modal-title">Edit User Role</h5>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editUserRoleForm">
+                            <div class="form-group">
+                                <label for="editUserRoleInputID">ID</label>
+                                <input type="number" name="ID" class="form-control" id="editUserRoleInputID" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="editUserRoleInputName">Name</label>
+                                <input type="text" name="name" class="form-control" id="editUserRoleInputName" autocomplete='name' readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="editUserRoleInputEmail">Email</label>
+                                <input type="text" name="email" class="form-control" id="editUserRoleInputEmail" autocomplete='email' readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="editUserRoleInputUserRole">Choose a user role (current =
+                                    <span id="editUserRoleCurRole"></span>)</label>
+                                <br>
+                                <input type="radio" name="user-role" value="administrator" required> Administrator
+                                <br>
+                                <input type="radio" name="user-role" value="client"> Client
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" onclick="saveUserRoleChanges()">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
