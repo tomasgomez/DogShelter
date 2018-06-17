@@ -1,0 +1,17 @@
+{
+  "name": "dogshelter",
+  "version": "1.0.0",
+  "description": "Dog Shelter: Me and my dog, we belong together.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Brigitta Hodován, Filipe Mariano, István Varga and Tomas Gomez",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.3",
+    "node-couchdb": "^1.3.0"
+  }
+}

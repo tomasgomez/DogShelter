@@ -1,0 +1,254 @@
+{
+    "docSets": [{
+            "dbName": "ds_users",
+            "data": [{
+                    "name": "John Doe",
+                    "phone": "202-555-0164",
+                    "address": "60 Lees Creek Lane North Andover, MA 01845",
+                    "photo": "img/unknown_person.jpg",
+                    "email": "john.doe@gmail.com",
+                    "password": "john123",
+                    "role": "client"
+                },
+                {
+                    "name": "Jose E. West",
+                    "phone": "202-555-0188",
+                    "address": "591 Homewood Drive Portsmouth, VA 23703",
+                    "photo": "img/unknown_person.jpg",
+                    "email": "jose.west@yahoo.com",
+                    "password": "westjose",
+                    "role": "client"
+                },
+                {
+                    "name": "Ann W. Schmitz",
+                    "phone": "+1-202-555-0171",
+                    "address": "9952 Arcadia Dr. Salt Lake City, UT 84119",
+                    "photo": "img/unknown_person.jpg",
+                    "email": "schmitz.ann@gmail.com",
+                    "password": "ann123",
+                    "role": "admin"
+                }
+            ]
+        },
+        {
+            "dbName": "ds_pets",
+            "data": [{
+                    "userID": 1,
+                    "name": "Bailey",
+                    "breed": "Alaskan Malamute",
+                    "photo": "img/no_image.png",
+                    "age": 5
+                },
+                {
+                    "userID": 1,
+                    "name": "Celeste",
+                    "breed": "American Eskimo Dog",
+                    "photo": "img/no_image.png",
+                    "age": 3
+                },
+                {
+                    "userID": 2,
+                    "name": "Diva",
+                    "breed": "Australian Kelpie",
+                    "photo": "img/no_image.png",
+                    "age": 8
+                }
+            ]
+        },
+        {
+            "dbName": "ds_orders",
+            "data": [{
+                    "userID": 2,
+                    "creditCardNo": 341768679371831
+                },
+                {
+                    "userID": 2,
+                    "creditCardNo": 341768679371831
+                },
+                {
+                    "userID": 2,
+                    "creditCardNo": 341768679371831
+                },
+                {
+                    "userID": 2,
+                    "creditCardNo": 341768679371831
+                },
+                {
+                    "userID": 2,
+                    "creditCardNo": 6011948489198451
+                },
+                {
+                    "userID": 3,
+                    "creditCardNo": 4716275103937400
+                },
+                {
+                    "userID": 3,
+                    "creditCardNo": 4716275103937400
+                },
+                {
+                    "userID": 3,
+                    "creditCardNo": 4716275103937400
+                }
+            ]
+        },
+        {
+            "dbName": "ds_order_product_lines",
+            "data": [{
+                    "orderID": 1,
+                    "productID": 1,
+                    "salePrice": 9,
+                    "quantity": 1
+                },
+                {
+                    "orderID": 1,
+                    "productID": 2,
+                    "salePrice": 12.34,
+                    "quantity": 2
+                },
+                {
+                    "orderID": 2,
+                    "productID": 4,
+                    "salePrice": 34.99,
+                    "quantity": 1
+                },
+                {
+                    "orderID": 3,
+                    "productID": 1,
+                    "salePrice": 10.63,
+                    "quantity": 2
+                },
+                {
+                    "orderID": 3,
+                    "productID": 3,
+                    "salePrice": 15.39,
+                    "quantity": 2
+                },
+                {
+                    "orderID": 4,
+                    "productID": 1,
+                    "salePrice": 10.63,
+                    "quantity": 1
+                },
+                {
+                    "orderID": 4,
+                    "productID": 2,
+                    "salePrice": 12.34,
+                    "quantity": 1
+                },
+                {
+                    "orderID": 5,
+                    "productID": 3,
+                    "salePrice": 14.5,
+                    "quantity": 1
+                },
+                {
+                    "orderID": 6,
+                    "productID": 1,
+                    "salePrice": 10.63,
+                    "quantity": 2
+                },
+                {
+                    "orderID": 7,
+                    "productID": 2,
+                    "salePrice": 12.34,
+                    "quantity": 1
+                },
+                {
+                    "orderID": 7,
+                    "productID": 3,
+                    "salePrice": 15.39,
+                    "quantity": 1
+                },
+                {
+                    "orderID": 8,
+                    "productID": 4,
+                    "salePrice": 34.99,
+                    "quantity": 1
+                }
+            ]
+        },
+        {
+            "dbName": "ds_services",
+            "data": [{
+                    "name": "Full-Service Bath",
+                    "photo": "img/full-service-bath.jpeg",
+                    "description": "Includes bath with natural shampoo, blow dry, 15-minute brush-out, ear cleaning, nail trim, gland expression & scented spritz.",
+                    "retailPrice": 30
+                },
+                {
+                    "name": "Full-Service Bath with Haircut",
+                    "photo": "img/full-service-bath-haircut.jpeg",
+                    "description": "Includes bath with natural shampoo, blow dry, 15-minute brush-out, ear cleaning, nail trim, gland expression & scented spritz. PLUS a cut and style to breed-specific standard or shave down.",
+                    "retailPrice": 50
+                },
+                {
+                    "name": "De-shedding Treatment",
+                    "photo": "img/deshedding-treatment.jpeg",
+                    "description": "Includes FURminator loose undercoat removal, natural shed-reducing shampoo and treatment, followed by another thorough FURminator brush-out and aloe hydrating treatment.",
+                    "retailPrice": 25
+                },
+                {
+                    "name": "Flea Relief",
+                    "photo": "img/flea-relief.jpeg",
+                    "description": "Protect your dog with your choice of a naturally medicated or flea shampoo, moisturizing coat conditioner and spritz.",
+                    "retailPrice": 30
+                }
+            ]
+        },
+        {
+            "dbName": "ds_service_time_slots",
+            "data": [{
+                    "serviceID": 1,
+                    "date": "10-06-2018 8:30 am",
+                    "orderServiceLineID": null
+                },
+                {
+                    "serviceID": 1,
+                    "date": "11-06-2018 9:00 am",
+                    "orderServiceLineID": null
+                },
+                {
+                    "serviceID": 2,
+                    "date": "20-06-2018 9:00 am",
+                    "orderServiceLineID": null
+                }
+            ]
+        },
+        {
+            "dbName": "ds_products",
+            "data": [{
+                    "name": "Sentry Natural Defense Natural Flea & Tick Shampoo for Dogs & Puppies, 12 fl. oz.",
+                    "photo": "img/sentry-dog-shampoo.jpeg",
+                    "description": "Sentry Natural Defense Natural Flea & Tick Shampoo for Dogs. Kills adult fleas using natural ingredients. Wonderful spice scent. Naturally cleans and conditions. Safe for use around children & pets.",
+                    "retailPrice": 10.63,
+                    "inventoryQty": 100,
+                    "qtySold": 22
+                },
+                {
+                    "name": "Fly Free Zone Natural Fly Repellent Dog Collar",
+                    "photo": "img/fly-free-collar.jpeg",
+                    "description": "Fly Free Zone Natural Fly Repellent Dog Collar. Naturally creates a no pest zone around your dog. Repels flies, fleas, ticks and mosquitoes. Easy to use and comfortable for your dog",
+                    "retailPrice": 12.34,
+                    "inventoryQty": 50,
+                    "qtySold": 40
+                },
+                {
+                    "name": "Adams Plus Flea & Tick Carpet Spray, 16 oz.",
+                    "photo": "img/carpet-spray-adams.jpeg",
+                    "description": "16 oz., Kills fleas, ticks, cockroaches & ants on contact while killing all four stages of the flea-adults, eggs, larvae and pupae. Breaks the flea life cycle and controls reinfestation for up to 7 months. Treats up to 1,000 sq. ft. Breaks the flea life cycle and controls reinfestation for up to 210 days. Use on carpets, rugs, upholstery, drapes & other places where fleas may hide. Treats up to 2,000 sq. ft. Adams Plus Flea & Tick Carpet Spray.",
+                    "retailPrice": 15.39,
+                    "inventoryQty": 20,
+                    "qtySold": 10
+                },
+                {
+                    "name": "Cabana Bay Tan Geometric-Print Staycationer Dog Bed, Small",
+                    "photo": "img/small-cabana-bay.jpeg",
+                    "description": "The Cabana Bay Collection hops into summer with vibrant essentials fit for a day of lounging in the sunshine. Breathable materials pair with resort-ready patterns to complement your fun-filled days together, whether you're spending a lazy afternoon by the pool or taking off on a spontaneous day trip. Tan Geometric-Print Staycationer Dog Bed from Cabana Bay. Suitable for indoor and outdoor spaces. Styled with the Cabana Bay Lounge Life Dog Bed Riser, available and sold separately. Mix and match with the rest of the Cabana Bay Collection. Lounger silhouette is perfect for dogs that love to stretch out in their sleep. Machine washable cover is made of water-resistant beige and white canvas. Features an eye-catching geometric print the along sides and mint piping at top",
+                    "retailPrice": 34.99,
+                    "inventoryQty": 10,
+                    "qtySold": 1
+                }
+            ]
+        }
+    ]
+}
