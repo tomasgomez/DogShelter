@@ -1,0 +1,64 @@
+<nav id="sidebar">
+    <div class="sidebar-header" onclick="changePage('admin_logout.html')">
+        <h3>Dog Shelter</h3>
+    </div>
+
+    <ul class="list-unstyled components">
+        <li>
+            <a href="#" onclick="changePage('admin_profile.html')">
+                <span class="glyphicon glyphicon-user"></span>Profile</a>
+        </li>
+        <li>
+            <a href="#" onclick="changePage('admin_user_roles.html')">
+                <span class="glyphicon glyphicon-wrench"></span>User Roles</a>
+        </li>
+        <li>
+            <a href="#" onclick="changePage('admin_products.html')">
+                <span class="glyphicon glyphicon-gift"></span>Products</a>
+        </li>
+        <li>
+            <a href="#" onclick="changePage('admin_services.html')">
+                <span class="glyphicon glyphicon-calendar"></span>Services</a>
+        </li>
+        <li class="active">
+            <a href="#" onclick="changePage('admin_reports.html')">
+                <span class="glyphicon glyphicon-equalizer"></span>Reports</a>
+        </li>
+        <li>
+            <a href="#" onclick="userLogout()">
+                <span class="glyphicon glyphicon-log-out"></span>Sign Out</a>
+        </li>
+    </ul>
+</nav>
+<div class="main">
+    <div class="container-fluid">
+        <div class="menu-name">
+            <h1>Dashboard</h1>
+        </div>
+        <hr class="grey-line">
+
+        <div class="main-panel">
+            <ul class="list-group">
+                <li class="list-group-item ruby">List of Orders</li>
+                <div id="ordersList">
+                    <!-- Filled with JavaScript -->
+                </div>
+                <div style="margin-top: 10px;">
+                    <hr />
+                    Quantity of products sold:
+                    <span id="reports-no-prod-sold"></span>
+                    <br /> Total of products sold: $
+                    <span id="reports-sum-prod-sold"></span>
+                    <hr />
+                    <br /> Quantity of services sold:
+                    <span id="reports-no-serv-sold"></span>
+                    <br /> Total of services sold: $
+                    <span id="reports-sum-serv-sold"></span>
+                    <hr />
+                    <br /> Sum of order values: $
+                    <span id="reports-sum-orders-values"></span>
+                </div>
+            </ul>
+        </div>
+    </div>
+</div>

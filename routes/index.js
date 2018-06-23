@@ -1,13 +1,10 @@
-const routes = require('express').Router();
-const products = require('./products');
+const express = require('express');
+const router = express.Router();
 
-module.exports = function Routes(app, database) {
-    //  Connect all our routes to our application
-    app.use('/', routes);
-
-    routes.get('/', (req, res) => {
-        res.sendFile(__dirname + '/../public/index.html'); // load the single view file
+router.get('/', function (req, res, next) {
+    res.status(200).json({
+        message: "ola index"
     });
+});
 
-    routes.use('/products', products);
-};
+module.exports = router;

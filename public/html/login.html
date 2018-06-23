@@ -1,0 +1,23 @@
+<div class="row">
+    <div class="form-container">
+        <div class="form-container-header">
+            <h1>Login</h1>
+            <hr class="hr-small">
+        </div>
+        <form action="/login" method="post" id="loginForm" onsubmit="login();return false">
+            <input type="email" name="username" id="loginInputEmail" autocomplete="email" class="input-full golden" placeholder="Email"
+                autofocus="">
+            <input type="password" value="" name="password" id="loginInputPassword" class="golden" autocomplete="current-password" class="input-full"
+                placeholder="Password">
+            <p>
+                <input type="submit" value="Sign in">
+            </p>
+            <p>
+                <a href="#" id="customer_register_link " onclick="changePage('register.html')">Create Account</a>
+            </p>
+            <p>
+                <a href="#" onclick="changePage('home.html')">Return to Store</a>
+            </p>
+        </form>
+    </div>
+</div>

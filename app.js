@@ -1,22 +1,30 @@
-const Express = require('express');
-const CookieParser = require('cookie-parser');
-const BodyParser = require('body-parser');
+const express = require("express");
+const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
 
-module.exports = function App() {
-    // Create a new Express application.
-    const app = Express();
+const passport = require("passport");
+require("./passport");
 
-    // Configure view engine to render EJS templates.
-    app.set('views', __dirname + '/views');
-    app.set('view engine', 'ejs');
+const index = require('./routes/index');
+const auth = require("./routes/auth");
+const user = require("./routes/user");
 
-    // Use application-level middleware for common functionality
-    app.use(CookieParser());
-    app.use(BodyParser.urlencoded({
+const app = express();
+
+app.use(cookieParser());
+app.use(
+    bodyParser.urlencoded({
         extended: true
-    }));
+    })
+);
+app.use(passport.initialize());
+app.use(express.static(__dirname + "/public"));
 
-    app.use(Express.static(__dirname + '/public'));
+// Routes
+app.use('/', index);
+app.use('/user', passport.authenticate('jwt', {
+    session: false
+}), user);
+app.use('/auth', auth);
 
-    return app;
-};
+module.exports = app;
