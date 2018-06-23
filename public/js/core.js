@@ -29,8 +29,6 @@ function changePage(dest) {
                 });
             } else if (dest === "admin_user_roles.html") {
                 showUsers();
-            } else if (dest === "admin_profile.html") {
-                showAdminProfile();
             } else if (dest === "admin_reports.html") {
                 showOrders();
             }
@@ -41,7 +39,9 @@ function changePage(dest) {
             if (dest === "register.html") {
                 initializePhotoPicker("registerPhotoSelect", "registerPhotoElem");
             } else if (dest === "client_profile.html") {
-                showClientProfile();
+                getUserData().then(userData => {
+                    renderClientProfile(userData);
+                });
                 initializePhotoPicker("addPetPhotoSelect", "addPetInputPhoto");
                 initializePhotoPicker("editPetPhotoSelect", "editPetInputPhoto");
             } else if (dest === "products.html") {
@@ -53,6 +53,7 @@ function changePage(dest) {
             }
             checkLoggedUser();
         });
+
         if (dest !== "home.html") {
             $("#navRow").attr("class", "new-row");
             $("#navList").attr("class", "main-nav black");
@@ -70,9 +71,9 @@ function changePage(dest) {
 }
 
 function checkLoggedUser() {
-    let res = sessionStorage.getItem("userEmail");
+    let token = localStorage.getItem("ds_logged_token");
     // Check if there's a logged user
-    if (res !== null) {
+    if (token) {
         $("#loginOption").hide();
         $("#logoutOption").show();
         $("#userHomepage").show();
@@ -95,34 +96,97 @@ function login() {
             alert("Invalid username or password.");
         },
         success: (data, textStatus, jqXHR) => {
-            console.log("data = " + JSON.stringify(data));
             localStorage.setItem("ds_logged_token", data.token);
+            renderUserPage();
         }
     });
     $("#loginInputEmail").val("");
     $("#loginInputPassword").val("");
 }
 
-function userHomepage() {
-    let role = sessionStorage.getItem("userRole");
-    if (role === "client") {
-        changePage("client_profile.html");
-    } else {
-        changePage("admin_profile.html");
-    }
+function getUserData() {
+    let token = localStorage.getItem("ds_logged_token");
+
+    return $.ajax({
+        type: "GET",
+        url: "/user/profile",
+        headers: {
+            "Authorization": 'Bearer ' + token
+        },
+        error: (jqXHR, exception) => {
+            return exception;
+        },
+        success: (data, textStatus, jqXHR) => {
+            return data;
+        }
+    });
+}
+
+function renderUserPage() {
+    getUserData().then((userData) => {
+        let role = userData.role;
+        if (role === "admin") {
+            $("#bodyContent").load('html/admin_profile.html', () => {
+                renderAdminProfile(userData);
+            });
+        } else {
+            $("#root").load('html/client_profile.html', () => {
+                $("#navRow").attr("class", "new-row");
+                $("#navList").attr("class", "main-nav black");
+                $("#fullPage").attr("class", "all-bg");
+                $("#cartIcon").attr("class", "ion-ios-cart icon-big");
+                $("#userHomeIcon").attr("class", "ion-person icon-big");
+                renderClientProfile(userData);
+            });
+        }
+    });
+}
+
+function renderClientProfile(userData) {
+    $(".btn-pref .btn").click(function () {
+        $(".btn-pref .btn")
+            .removeClass("btn-primary")
+            .addClass("btn-default");
+        $(this)
+            .removeClass("btn-default")
+            .addClass("btn-primary");
+    });
+
+    $("#client-cover-photo").attr("src", userData.photo);
+    $("#client-profile-photo").attr("src", userData.photo);
+    $("#client-profile-name").html(userData.name);
+    $("#client-profile-phone").html(userData.phone);
+    $("#client-profile-email").html(userData.email);
+    $("#client-profile-address").html(userData.address);
+}
+
+function renderAdminProfile(userData) {
+    $("#admin-photo").attr("src", userData.photo);
+    $("#admin-name").html(userData.name);
+    $("#admin-phone").html(userData.phone);
+    $("#admin-email").html(userData.email);
+    $("#admin-address").html(userData.address);
 }
 
 function userLogout() {
-    let role = sessionStorage.getItem("userRole");
-    // sessionStorage.clear();
-    sessionStorage.removeItem("userEmail");
-    sessionStorage.removeItem("userID");
-    sessionStorage.removeItem("userRole");
-    if (role === "admin") {
-        changePage("admin_logout.html");
-    } else {
-        changePage("home.html");
-    }
+    let token = localStorage.getItem("ds_logged_token");
+    localStorage.removeItem("ds_logged_token");
+
+    $.ajax({
+        type: "GET",
+        url: "/auth/logout",
+        headers: {
+            "Authorization": 'Bearer ' + token
+        },
+        success: (data, textStatus, jqXHR) => {
+            let role = data.role;
+            if (role == "admin") {
+                changePage('admin_logout.html');
+            } else {
+                changePage("home.html");
+            }
+        }
+    });
 }
 
 function initializePhotoPicker(fileSelectID, fileElemID) {
