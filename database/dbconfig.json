@@ -1,6 +1,6 @@
 {
-    "auth": {
-        "user": "admin",
-        "pass": "admin"
-    }
+	"auth": {
+		"user": "admin",
+		"pass": "admin"
+	}
 }
