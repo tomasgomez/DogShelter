@@ -84,13 +84,52 @@ function checkLoggedUser() {
     }
 }
 
-function login() {
+function addUser() {
+    let photo = $("#registerImgThumb").attr("src");
+    let fName = $("#registerInputFirstName").val();
+    let lName = $("#registerInputLastName").val();
+    let phone = $("#registerInputPhone").val();
+    let address = $("#registerInputAddress").val();
+    let email = $("#registerInputEmail").val();
+    let password = $("#registerInputPassword").val();
+
+    $("#registerImgThumb").attr("src", "img/unknown_person.jpg");
+    $("#registerInputFirstName").val("");
+    $("#registerInputLastName").val("");
+    $("#registerInputPhone").val("");
+    $("#registerInputAddress").val("");
+    $("#registerInputEmail").val("");
+    $("#registerInputPassword").val("");
+
+    $.ajax({
+        type: "POST",
+        url: "/users",
+        data: {
+            name: fName + " " + lName,
+            phone: phone,
+            address: address,
+            photo: photo,
+            email: email,
+            password: password
+        },
+        error: () => {
+            alert("Something went wrong while adding new user!");
+        },
+        success: (data) => {
+            alert("Your account was created successfully.");
+            //Log user in automatically
+            login(email, password);
+        }
+    });
+}
+
+function login(user, pass) {
     $.ajax({
         type: "POST",
         url: "/auth/login",
         data: {
-            username: $("#loginInputEmail").val(),
-            password: $("#loginInputPassword").val()
+            username: (user ? $("#loginInputEmail").val() : user),
+            password: (pass ? $("#loginInputPassword").val() : pass)
         },
         error: (jqXHR, exception) => {
             alert("Invalid username or password.");
@@ -109,7 +148,7 @@ function getUserData() {
 
     return $.ajax({
         type: "GET",
-        url: "/user/profile",
+        url: "/users/profile",
         headers: {
             "Authorization": 'Bearer ' + token
         },
@@ -158,6 +197,7 @@ function renderClientProfile(userData) {
     $("#client-profile-phone").html(userData.phone);
     $("#client-profile-email").html(userData.email);
     $("#client-profile-address").html(userData.address);
+    checkLoggedUser();
 }
 
 function renderAdminProfile(userData) {
@@ -166,6 +206,7 @@ function renderAdminProfile(userData) {
     $("#admin-phone").html(userData.phone);
     $("#admin-email").html(userData.email);
     $("#admin-address").html(userData.address);
+    checkLoggedUser();
 }
 
 function userLogout() {
@@ -254,4 +295,169 @@ function addTimeSlot() {
 
 function deleteAllTimeSlots() {
     $("#addTimeSlotsServiceInputTimeSlots").val("");
+}
+
+function showProductsUser() {
+    $.ajax({
+        type: "GET",
+        url: "/products",
+        error: () => {
+            alert("Error while trying to recover products from server.");
+        },
+        success: (products) => {
+            let output = "";
+            for (product of products) {
+                output +=
+                    "<div class='col-md-4'><div class='product'>" +
+                    "<div class='link-to-prod' onclick='showSelectedProd(\"" +
+                    product._id +
+                    "\");'>";
+                output += "<img src='" + product.photo + "' class='image'>";
+                output += "<p><span>" + product.name + "</span></p></div>";
+                output +=
+                    "<p><span class='product-price'> $" +
+                    product.retailPrice +
+                    "</span></p></div></div>";
+            }
+            $("#productsPanel").html(output);
+        }
+    });
+}
+
+function showSelectedProd(id) {
+    $("#root").load("html/prod1.html", () => {
+        $.ajax({
+            type: "GET",
+            url: "/products/" + id,
+            error: () => {
+                alert("Error while trying to recover product #" + id + " from server.");
+            },
+            success: (product) => {
+                $("#buyBtn").attr("onclick", "buyProduct(" + id + ")");
+                $("#productName").html(product.name);
+                $("#productPhoto").attr("src", product.photo);
+                $("#productDescription").html(product.description);
+                $("#productPrice").html(product.retailPrice);
+                $("#productStock").html(product.inventoryQty);
+                $("#productQuantity").attr("max", product.inventoryQty);
+            }
+        });
+    });
+}
+
+function showServicesUser() {
+    $.ajax({
+        type: "GET",
+        url: "/services",
+        error: () => {
+            alert("Error while trying to recover services from server.");
+        },
+        success: (services) => {
+            let output = "";
+            for (service of services) {
+                output +=
+                    "<div class='col-md-4'><div class='service'>" +
+                    "<div class='link-to-prod' onclick='showSelectedServ(\"" +
+                    service._id +
+                    "\");'>";
+                output += "<img src='" + service.photo + "' class='image'>";
+                output += "<p><span>" + service.name + "</span></p></div>";
+                output +=
+                    "<p><span class='service-price'> $" +
+                    service.retailPrice +
+                    "</span></p></div></div>";
+            }
+            $("#servicePanel").html(output);
+        }
+    });
+}
+
+function showSelectedServ(serviceID) {
+    console.log("aqui. id = " + serviceID);
+    $("#root").load("html/service1.html", () => {
+        $("#service-page-id").html(serviceID);
+        $.ajax({
+            type: "GET",
+            url: "/services/" + serviceID,
+            error: () => {
+                alert("Error while trying to recover services from server.");
+            },
+            success: (service) => {
+                $("#serviceName").html(service.name);
+                $("#servicePhoto").attr("src", service.photo);
+                $("#serviceDescription").html(service.description);
+                $("#servicePrice").html(service.retailPrice);
+            }
+        });
+
+        //Get available dates for the service
+        let enabledDates = [];
+
+        $.ajax({
+            type: "GET",
+            url: "/services/" + serviceID + "/time-slots",
+            error: () => {
+                alert("Error while trying to recover service time slots from server.");
+            },
+            success: (timeSlots) => {
+                for (timeSlot of timeSlots) {
+                    if (timeSlot.orderServiceLineID === null) {
+                        enabledDates.push(moment(timeSlot.date.split(" ")[0], "DD-MM,YYYY"));
+                    }
+                }
+
+                //Config date time picker
+                if (enabledDates.length > 0) {
+                    $("#service-booking-date-picker").datetimepicker({
+                        format: "DD-MM-YYYY",
+                        inline: true,
+                        minDate: moment(new Date()),
+                        enabledDates: enabledDates
+                    });
+                } else {
+                    $("#service-booking-date-picker").datetimepicker({
+                        format: "DD-MM-YYYY",
+                        inline: true
+                    });
+                    let current = moment();
+                    $("#service-booking-date-picker")
+                        .data("DateTimePicker")
+                        .minDate(current)
+                        .maxDate(current)
+                        .disabledDates([current]);
+                }
+            }
+        });
+
+        //Change available time slots when user changes date
+        $("#service-booking-date-picker").on("dp.change", e => {
+            let selectedDate = e.date.format("DD-MM-YYYY");
+
+            $.ajax({
+                type: "GET",
+                url: "/services/" + serviceID + "/time-slots",
+                error: () => {
+                    alert("Error while trying to recover service time slots from server.");
+                },
+                success: (timeSlots) => {
+                    let output =
+                        "<option value='' disabled selected>Select your option</option>";
+                    for (timeSlot of timeSlots) {
+                        let datetime = timeSlot.date.split(" ");
+                        let date = datetime[0];
+                        let time = datetime[1] + " " + datetime[2];
+                        if (date === selectedDate && timeSlot.orderServiceLineID === null) {
+                            output +=
+                                "<option value='time-slot-" +
+                                timeSlot._id +
+                                "'>" +
+                                time +
+                                "</option>";
+                        }
+                    }
+                    $("#service-booking-time-slot").html(output);
+                }
+            });
+        });
+    });
 }

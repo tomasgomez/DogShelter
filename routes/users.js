@@ -1,18 +1,28 @@
 const express = require('express');
 const router = express.Router();
 
+const passport = require("passport");
 const jwt_decode = require("jwt-decode");
 
-/* GET users listing. */
-router.get('/', function (req, res, next) {
-    console.log("/user called");
-    res.status(200).json({
-        message: "hello /user"
+router.post('/', (req, res) => {
+    database.uniqid().then(ids => {
+        let user = req.body;
+        user["_id"] = ids[0];
+        user["role"] = "client";
+
+        database.insert("ds_users", user).then(() => {
+            res.status(200).send({
+                message: "New user added!"
+            });
+        }, err => {
+            res.send(err);
+        });
     });
 });
 
-/* GET user profile. */
-router.get('/profile', function (req, res, next) {
+router.get('/profile', passport.authenticate('jwt', {
+    session: false
+}), (req, res) => {
     let bearer = req.get("Authorization");
     let token = bearer.split(" ")[1];
     let data = jwt_decode(token);
