@@ -5,18 +5,14 @@ const passport = require("passport");
 const jwt_decode = require("jwt-decode");
 
 router.post('/', (req, res) => {
-    database.uniqid().then(ids => {
-        let user = req.body;
-        user["_id"] = ids[0];
-        user["role"] = "client";
-
-        database.insert("ds_users", user).then(() => {
+    database.users.add(req.body, err => {
+        if (err) {
+            res.send(err);
+        } else {
             res.status(200).send({
                 message: "New user added!"
             });
-        }, err => {
-            res.send(err);
-        });
+        }
     });
 });
 
@@ -27,17 +23,19 @@ router.get('/profile', passport.authenticate('jwt', {
     let token = bearer.split(" ")[1];
     let data = jwt_decode(token);
 
-    database.get('ds_users', data.id).then((user) => {
-        res.status(200).json({
-            name: user.data.name,
-            phone: user.data.phone,
-            address: user.data.address,
-            photo: user.data.photo,
-            email: user.data.email,
-            role: user.data.role
-        });
-    }, err => {
-        res.send(err);
+    database.users.findById(data.id, (err, user) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.status(200).json({
+                name: user.name,
+                phone: user.phone,
+                address: user.address,
+                photo: user.photo,
+                email: user.email,
+                role: user.role
+            });
+        }
     });
 });
 

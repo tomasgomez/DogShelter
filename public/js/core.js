@@ -128,8 +128,8 @@ function login(user, pass) {
         type: "POST",
         url: "/auth/login",
         data: {
-            username: (user ? $("#loginInputEmail").val() : user),
-            password: (pass ? $("#loginInputPassword").val() : pass)
+            username: (user ? user : $("#loginInputEmail").val()),
+            password: (pass ? pass : $("#loginInputPassword").val())
         },
         error: (jqXHR, exception) => {
             alert("Invalid username or password.");

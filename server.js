@@ -1,9 +1,9 @@
 // server.js: composition root
-const Database = require("./database");
-const dbConfig = require("./database/dbconfig.json");
+global.database = require("./database");
 const app = require("./app");
 
-global.database = Database(dbConfig);
+database.createDatabases(true);
+// database.removeAllDatabases();
 
 // Listen for requests on port 3000
 app.listen(3000, () => {

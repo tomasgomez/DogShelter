@@ -20,9 +20,7 @@ router.post('/login', (req, res) => {
         req.login(user, {
             session: false
         }, (err) => {
-            if (err) {
-                res.send(err);
-            }
+            if (err) res.send(err);
             // generate a signed son web token with the contents of user object and return it in the response
             const token = jwt.sign({
                 id: user._id
@@ -41,9 +39,9 @@ router.get('/logout', (req, res) => {
     let token = bearer.split(" ")[1];
     let data = jwt_decode(token);
 
-    database.get('ds_users', data.id).then((user) => {
-        let role = user.data.role;
-        if (role === "client") {
+    database.users.findById(data.id, (err, user) => {
+        if (err) res.send(err);
+        else if (user.role === "client") {
             res.status(200).json({
                 role: "client"
             });
@@ -52,8 +50,6 @@ router.get('/logout', (req, res) => {
                 role: "admin"
             });
         }
-    }, err => {
-        res.send(err);
     });
 })
 

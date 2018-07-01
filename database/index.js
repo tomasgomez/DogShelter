@@ -1,25 +1,17 @@
 // Require needed modules
-const NodeCouchDb = require('node-couchdb');
-const testData = require("./testdata.json");
+const config = require("./dbconfig.json");
+const auth = config.auth.user + ":" + config.auth.pass;
+var nano = require('nano')("http://" + auth + "@localhost:5984");
+var Promise = require('bluebird');
+let createDatabaseAsync = Promise.promisify(nano.db.create);
 
-// Export 'database modules'
-// exports.users = require('./users');;
+function createDatabases(insertTestData) {
+    let docSets = null;
+    if (insertTestData)
+        docSets = require("./testdata.json").docSets;
+    let couch = database.couch;
+    let createReqs = [];
 
-module.exports = function Database(configuration) {
-    // Construct 'node-couchdb'
-    const couch = new NodeCouchDb(configuration);
-
-    // Create all needed databases and insert some test data
-    //  If you don't want to insert this test data, just remove
-    //  'testData.docSets' or pass null as 2nd parameter.
-    createDatabases(couch, testData.docSets);
-
-    // TODO: add 'admin' user to the database as default
-
-    return couch;
-};
-
-function createDatabases(couch, docSets) {
     dbNames = [
         "ds_users",
         "ds_pets",
@@ -31,38 +23,69 @@ function createDatabases(couch, docSets) {
         "ds_products"
     ];
 
-    couch.listDatabases().then(
-        (dbs) => {
-            for (dbName of dbNames) {
-                ((dbName) => {
-                    if (dbs.indexOf(dbName) === -1) {
-                        couch.createDatabase(dbName).then(() => {
-                            console.log("Created '" + dbName + "' database.");
-                            if (docSets !== undefined && docSets != null) {
-                                putAll(couch, dbName, docSets.filter((prop) => {
-                                    return prop.dbName == dbName;
-                                })[0].data);
+    database.nano.db.list((err, dbs) => {
+        for (dbName of dbNames) {
+            ((dbName) => {
+                if (dbs.indexOf(dbName) === -1) {
+                    let createReq = createDatabaseAsync(dbName);
+                    createReq.then(() => {
+                        if (docSets) {
+                            let DSDocSets = docSets.filter((prop) => {
+                                return prop.dbName === dbName;
+                            });
+                            if (DSDocSets.length > 0) {
+                                for (doc of DSDocSets[0].data) {
+                                    database.nano.use(dbName).insert(doc);
+                                }
                             }
-                        }, (err) => {
-                            console.log(err);
-                        });
-                    }
-                })(dbName);
-            }
-        }, (err) => {
-            console.log(err);
-        });
+                        }
+                    });
+                    createReqs.push(createReq);
+                }
+            })(dbName);
+        }
+        Promise.all(createReqs).then(() => {
+            // console.log("all databases were already created");
+            createViews();
+        })
+    });
 }
 
-function putAll(couch, dbName, docSet) {
-    couch.uniqid(docSet.length).then((ids) => {
-        let i = 0;
-        for (doc of docSet) {
-            doc["_id"] = ids[i];
+function createViews() {
+    // Create index for emails of users
+    database.nano.use("ds_users").insert({
+        "views": {
+            "by_email": {
+                "map": function (doc) {
+                    emit(doc.email, doc);
+                }
+            }
+        }
+    }, '_design/docs');
+}
 
-            couch.insert(dbName, doc);
+function removeAllDatabases() {
+    database.nano.db.list((err, body) => {
+        dsDbNames = body.filter(dbName => {
+            return dbName.search("ds_") === 0;
+        });
 
-            i += 1;
+        for (dsDbName of dsDbNames) {
+            database.nano.db.destroy(dsDbName, (err, body) => {
+                if (!err)
+                    console.log("Success while removing all Dog Shelter databases.");
+                else
+                    console.log("err = " + err);
+            });
         }
     });
 }
+
+// exports.login = login;
+exports.createDatabases = createDatabases;
+exports.removeAllDatabases = removeAllDatabases;
+exports.nano = nano;
+
+exports.users = require('./users');
+exports.products = require('./products');
+exports.services = require('./services');
