@@ -1,0 +1,35 @@
+[{
+    "dbName": "ds_users",
+    "createDb": {
+        "isFulfilled": true,
+        "isRejected": false,
+        "fulfillmentValue": {
+            "ok": true
+        }
+    },
+    "createDocs": [{
+        "isFulfilled": true,
+        "isRejected": false,
+        "fulfillmentValue": {
+            "ok": true,
+            "id": "63ac15573a69e748ff91358d8301293f",
+            "rev": "1-6d5cc08a2a1793d5abde9b0971d39fe6"
+        }
+    }, {
+        "isFulfilled": true,
+        "isRejected": false,
+        "fulfillmentValue": {
+            "ok": true,
+            "id": "63ac15573a69e748ff91358d83011246",
+            "rev": "1-8ce0dc36a868fa479b650ae3567b7135"
+        }
+    }, {
+        "isFulfilled": true,
+        "isRejected": false,
+        "fulfillmentValue": {
+            "ok": true,
+            "id": "63ac15573a69e748ff91358d83010ade",
+            "rev": "1-9c46f625a1190f4619e84ffbff013e35"
+        }
+    }]
+}]

@@ -14,6 +14,14 @@ exports.findById = (id, cb) => {
     });
 }
 
+// exports.verifyAdmin = (id, cb) => {
+//     database.nano.use("ds_users").get(id, (err, user) => {
+//         if (err) cb(err);
+//         if (user.role == "admin") cb(null, true);
+//         else cb(null, false);
+//     });
+// }
+
 exports.findByEmail = (email, cb) => {
     database.nano.use("ds_users").view("docs", "by_email", {
         "keys": [email]

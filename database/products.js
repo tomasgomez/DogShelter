@@ -28,3 +28,10 @@ exports.update = (productId, newData, cb) => {
         else cb(null, body);
     });
 }
+
+// exports.delete = (productId, cb) => {
+//     database.nano.use("ds_products").destroy(productId, (err, body) => {
+//         if (err) cb(err, body);
+//         else cb(null, body);
+//     });
+// }

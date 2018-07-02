@@ -232,6 +232,18 @@ function userLogout() {
     });
 }
 
+// function removeProduct(id) {
+//     let userToken = localStorage.getItem("ds_logged_token");
+//     $.ajax({
+//         type: "DELETE",
+//         url: "/products/" + id,
+//         headers: {
+//             "Authorization": 'Bearer ' + userToken
+//         },
+
+//     });
+// }
+
 function initializePhotoPicker(fileSelectID, fileElemID) {
     let photoSelect = document.getElementById(fileSelectID),
         photoElem = document.getElementById(fileElemID);

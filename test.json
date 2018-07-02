@@ -1,0 +1,191 @@
+[{
+    "dbName": "ds_users",
+    "createDb": {
+        "isFulfilled": true,
+        "isRejected": false,
+        "fulfillmentValue": {
+            "ok": true
+        }
+    },
+    "createDocs": [{
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }]
+}, {
+    "dbName": "ds_services",
+    "createDb": {
+        "isFulfilled": true,
+        "isRejected": false,
+        "fulfillmentValue": {
+            "ok": true
+        }
+    },
+    "createDocs": [{
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }]
+}, {
+    "dbName": "ds_products",
+    "createDb": {
+        "isFulfilled": true,
+        "isRejected": false,
+        "fulfillmentValue": {
+            "ok": true
+        }
+    },
+    "createDocs": [{
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }]
+}, {
+    "dbName": "ds_pets",
+    "createDb": {
+        "isFulfilled": true,
+        "isRejected": false,
+        "fulfillmentValue": {
+            "ok": true
+        }
+    },
+    "createDocs": [{
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }]
+}, {
+    "dbName": "ds_orders",
+    "createDb": {
+        "isFulfilled": true,
+        "isRejected": false,
+        "fulfillmentValue": {
+            "ok": true
+        }
+    },
+    "createDocs": [{
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }]
+}, {
+    "dbName": "ds_order_product_lines",
+    "createDb": {
+        "isFulfilled": true,
+        "isRejected": false,
+        "fulfillmentValue": {
+            "ok": true
+        }
+    },
+    "createDocs": [{
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }]
+}, {
+    "dbName": "ds_order_service_lines",
+    "createDb": {
+        "isFulfilled": true,
+        "isRejected": false,
+        "fulfillmentValue": {
+            "ok": true
+        }
+    }
+}, {
+    "dbName": "ds_service_time_slots",
+    "createDb": {
+        "isFulfilled": true,
+        "isRejected": false,
+        "fulfillmentValue": {
+            "ok": true
+        }
+    },
+    "createDocs": [{
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }, {
+        "isFulfilled": false,
+        "isRejected": false
+    }]
+}]
