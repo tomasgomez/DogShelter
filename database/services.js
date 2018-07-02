@@ -20,18 +20,32 @@ exports.getAll = (cb) => {
 }
 
 exports.getTimeSlots = (id, cb) => {
-    database.nano.use("ds_service_time_slots").list({
-        include_docs: true
+    database.nano.use("ds_service_time_slots").view("docs", "by_serviceID", {
+        "keys": [id]
     }, (err, body) => {
         if (err) cb(err);
         else {
-            let services = body.rows.reduce((acc, curr) => {
-                if (curr.doc.serviceID === parseInt(id)) {
-                    acc.push(curr.doc);
-                }
-                return acc;
-            }, []);
-            cb(null, services);
+            let timeSlots = body.rows.map((timeSlot) => {
+                return timeSlot.value;
+            });
+            cb(null, timeSlots);
         }
+    });
+}
+
+exports.getTimeSlotOfId = (id, cb) => {
+    database.nano.use("ds_service_time_slots").get(id, (err, body) => {
+        if (err) cb(err);
+        else cb(null, body);
+    });
+}
+
+exports.updateTimeSlot = (timeSlotId, newData, cb) => {
+    let updatedTimeSlot = newData;
+    updatedTimeSlot["_id"] = timeSlotId;
+
+    database.nano.use("ds_service_time_slots").insert(updatedTimeSlot, (err, body) => {
+        if (err) cb(err);
+        else cb(null, body);
     });
 }

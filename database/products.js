@@ -18,3 +18,13 @@ exports.getAll = (cb) => {
         }
     });
 }
+
+exports.update = (productId, newData, cb) => {
+    let updatedProduct = newData;
+    updatedProduct["_id"] = productId;
+
+    database.nano.use("ds_products").insert(updatedProduct, (err, body) => {
+        if (err) cb(err);
+        else cb(null, body);
+    });
+}

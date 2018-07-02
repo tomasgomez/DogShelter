@@ -62,6 +62,28 @@ function createViews() {
             }
         }
     }, '_design/docs');
+
+    // Create index for serviceID of 'service-time-slots'
+    database.nano.use("ds_service_time_slots").insert({
+        "views": {
+            "by_serviceID": {
+                "map": function (doc) {
+                    emit(doc.serviceID, doc);
+                }
+            }
+        }
+    }, '_design/docs');
+
+    // Create index for userID of 'pets'
+    database.nano.use("ds_pets").insert({
+        "views": {
+            "by_userID": {
+                "map": function (doc) {
+                    emit(doc.userID, doc);
+                }
+            }
+        }
+    }, '_design/docs');
 }
 
 function removeAllDatabases() {
@@ -81,7 +103,6 @@ function removeAllDatabases() {
     });
 }
 
-// exports.login = login;
 exports.createDatabases = createDatabases;
 exports.removeAllDatabases = removeAllDatabases;
 exports.nano = nano;
@@ -89,3 +110,4 @@ exports.nano = nano;
 exports.users = require('./users');
 exports.products = require('./products');
 exports.services = require('./services');
+exports.orders = require('./orders');

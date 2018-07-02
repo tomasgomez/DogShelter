@@ -175,6 +175,8 @@ function renderUserPage() {
                 $("#fullPage").attr("class", "all-bg");
                 $("#cartIcon").attr("class", "ion-ios-cart icon-big");
                 $("#userHomeIcon").attr("class", "ion-person icon-big");
+                initializePhotoPicker("addPetPhotoSelect", "addPetInputPhoto");
+                initializePhotoPicker("editPetPhotoSelect", "editPetInputPhoto");
                 renderClientProfile(userData);
             });
         }
@@ -333,7 +335,7 @@ function showSelectedProd(id) {
                 alert("Error while trying to recover product #" + id + " from server.");
             },
             success: (product) => {
-                $("#buyBtn").attr("onclick", "buyProduct(" + id + ")");
+                $("#buyBtn").attr("onclick", "buyProduct(\"" + id + "\")");
                 $("#productName").html(product.name);
                 $("#productPhoto").attr("src", product.photo);
                 $("#productDescription").html(product.description);
@@ -343,6 +345,34 @@ function showSelectedProd(id) {
             }
         });
     });
+}
+
+function buyProduct(id) {
+    let qty = parseFloat($("#productQuantity").val());
+    if (qty > 0 && Number.isInteger(qty)) {
+        let product = {
+            id: id,
+            qty: qty,
+            rPrice: parseFloat($("#productPrice").html()),
+            store: "product"
+        };
+        let itemsInCart = sessionStorage.getItem("selectedItemsInCart");
+        if (itemsInCart === null) {
+            sessionStorage.setItem("selectedItemsInCart", JSON.stringify([product]));
+        } else {
+            itemsInCart = JSON.parse(itemsInCart);
+            itemsInCart.push(product);
+            sessionStorage.setItem(
+                "selectedItemsInCart",
+                JSON.stringify(itemsInCart)
+            );
+        }
+
+        alert("Your product was added to the cart :)");
+    } else {
+        alert("Invalid quantity :(");
+        $("#productQuantity").val(1);
+    }
 }
 
 function showServicesUser() {
@@ -373,7 +403,6 @@ function showServicesUser() {
 }
 
 function showSelectedServ(serviceID) {
-    console.log("aqui. id = " + serviceID);
     $("#root").load("html/service1.html", () => {
         $("#service-page-id").html(serviceID);
         $.ajax({
@@ -459,5 +488,430 @@ function showSelectedServ(serviceID) {
                 }
             });
         });
+    });
+}
+
+function showItemsInCart() {
+    let cartItems = sessionStorage.getItem("selectedItemsInCart");
+    let totalOrder = 0;
+
+    if (cartItems === null) {
+        $("#cartItemsList").append(
+            "<p style='padding-left:20px;'>Your cart is empty!</p>"
+        );
+        $("#cart-total-order").html("0.00");
+    } else {
+        cartItems = JSON.parse(cartItems);
+
+        for (cartItem of cartItems) {
+            (cartItem => {
+                if (cartItem.store === "product") {
+                    let qty = cartItem.qty;
+                    $.ajax({
+                        type: "GET",
+                        url: "/products/" + cartItem.id,
+                        success: (product) => {
+                            let output = "";
+
+                            output += "<div class='row cart-prod'><div class='col-md-2'>";
+                            output += "<img src='" + product.photo + "' class='img-thumbnail '>";
+                            output += "</div>";
+                            output +=
+                                "<div class='col-md-8'><p class='name-in-cart'>" +
+                                product.name +
+                                "</p></div>";
+                            output += "<div class='col-md-2'>";
+                            // output += "<span class='glyphicon glyphicon-remove cart-glyphicon' onclick='removeCartProduct(" + prod.id + ")'></span>";
+                            output +=
+                                "<p>" +
+                                cartItem.qty +
+                                " x " +
+                                cartItem.rPrice +
+                                " =<br>" +
+                                (cartItem.qty * cartItem.rPrice).toFixed(2) +
+                                "</p>";
+                            output += "</div></div>";
+
+                            totalOrder += product.retailPrice * cartItem.qty;
+                            sessionStorage.setItem("totalOrder", totalOrder.toFixed(2));
+
+                            $("#cartItemsList").append(output);
+                            $("#cart-total-order").html(totalOrder.toFixed(2).toString());
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "GET",
+                        url: "/services/" + cartItem.serviceID,
+                        success: (service) => {
+                            let output = "";
+
+                            output +=
+                                "<div class='row cart-prod'><div class='col-md-2'>" +
+                                "<img src='" +
+                                service.photo +
+                                "' class='img-thumbnail '>" +
+                                "</div>";
+                            output +=
+                                "<div class='col-md-8'><p class='name-in-cart'>" +
+                                service.name +
+                                "<br>Reserved for your pet: " +
+                                cartItem.petName +
+                                "<br>Scheduled time: " +
+                                cartItem.date +
+                                " " +
+                                cartItem.time +
+                                "</p></div>";
+                            output += "<div class='col-md-2'>";
+                            // output += "<span class='glyphicon glyphicon-remove cart-glyphicon' onclick='removeCartProduct(" + prod.id + ")'></span>";
+                            output +=
+                                "<p>" +
+                                "1 x " +
+                                service.retailPrice +
+                                " =<br>" +
+                                service.retailPrice +
+                                "</p>";
+                            output += "</div></div>";
+
+                            totalOrder += service.retailPrice;
+                            sessionStorage.setItem("totalOrder", totalOrder.toFixed(2));
+
+                            $("#cartItemsList").append(output);
+                            $("#cart-total-order").html(totalOrder.toFixed(2).toString());
+                        }
+                    });
+                }
+            })(cartItem);
+        }
+    }
+}
+
+function emptyCart() {
+    let ans = confirm("Are you sure you want to empty your cart?");
+    if (ans == true) {
+        sessionStorage.removeItem("selectedItemsInCart");
+        sessionStorage.removeItem("totalOrder");
+    }
+    changePage("checkout.html");
+}
+
+function initPayment() {
+    let userToken = localStorage.getItem("ds_logged_token");
+    if (userToken) {
+        let userId = JSON.parse(atob(userToken.split(".")[1])).id;
+
+        $("#cartCheckoutForm").modal("show");
+        $.ajax({
+            type: "GET",
+            url: "/users/" + userId,
+            headers: {
+                "Authorization": 'Bearer ' + userToken
+            },
+            success: (user) => {
+                $("#deliveryAddress").val(user.address);
+                $("#totalProducts").val(sessionStorage.getItem("totalOrder").toString());
+            }
+        });
+    } else {
+        changePage("login.html");
+    }
+}
+
+function addOrderProductLine(orderId, cartItem) {
+    // Create new order-product-line
+    $.ajax({
+        type: "POST",
+        url: "/orders/" + orderId + "/products",
+        data: {
+            productID: cartItem.id,
+            salePrice: cartItem.rPrice,
+            quantity: cartItem.qty
+        },
+        success: (productLineData) => {
+            // Update product 'qtySold' and 'inventoryQty'
+            $.ajax({
+                type: "GET",
+                url: "/products/" + cartItem.id,
+                success: (product) => {
+                    let qtySold = cartItem.qty;
+                    product.qtySold += qtySold;
+                    product.inventoryQty -= qtySold;
+                    $.ajax({
+                        type: "PUT",
+                        url: "/products/" + product._id,
+                        data: product,
+                        success: (updatedProduct) => {
+                            console.log(
+                                "Successful saving inventory quantities for product #" +
+                                product._id
+                            );
+                        }
+                    });
+                }
+            });
+        }
+    });
+}
+
+function addOrderServiceLine(orderId, cartItem) {
+    $.ajax({
+        type: "POST",
+        url: "/orders/" + orderId + "/services",
+        data: {
+            serviceID: cartItem.serviceID,
+            salePrice: cartItem.sPrice,
+            date: cartItem.date + " " + cartItem.time,
+            petID: cartItem.petID
+        },
+        success: (serviceLineData) => {
+            $.ajax({
+                type: "GET",
+                url: "/services/time-slots/" + cartItem.timeSlotID,
+                success: (timeSlot) => {
+                    timeSlot.orderServiceLineID = serviceLineData.orderServiceLineID;
+                    $.ajax({
+                        type: "PUT",
+                        url: "/services/time-slots/" + cartItem.timeSlotID,
+                        data: timeSlot,
+                        success: (updatedTimeSlot) => {
+                            console.log(
+                                "Successful adding service line to time slot #" + timeSlot._id
+                            );
+                        }
+                    });
+                }
+            });
+        }
+    });
+}
+
+function savePurchase() {
+    let userToken = localStorage.getItem("ds_logged_token");
+    let userID = JSON.parse(atob(userToken.split(".")[1])).id;
+    let creditCardNo = parseInt($("#creditCard").val());
+
+    $.ajax({
+        type: "POST",
+        url: "orders/",
+        data: {
+            userID: userID,
+            creditCardNo: creditCardNo
+        },
+        success: (orderData) => {
+            let orderId = orderData.orderID;
+            let cartItems = JSON.parse(sessionStorage.getItem("selectedItemsInCart"));
+            for (cartItem of cartItems) {
+                (cartItem => {
+                    if (cartItem.store === "product") {
+                        //Add a product line to the order
+                        addOrderProductLine(orderId, cartItem);
+                    } else {
+                        //Add a service line to the order
+                        addOrderServiceLine(orderId, cartItem);
+                    }
+                })(cartItem);
+            }
+            sessionStorage.removeItem("selectedItemsInCart");
+            alert("Your order was approved! Redirecting to your profile...");
+            $("#cartCheckoutForm").modal("hide");
+            $("#cartCheckoutForm").on("hidden.bs.modal", e => {
+                getUserData().then((userData) => {
+                    let userRole = userData.role;
+                    if (userRole === "client") {
+                        changePage("client_profile.html");
+                    } else {
+                        changePage("admin_profile.html");
+                    }
+                });
+            });
+        }
+    });
+}
+
+function initServiceBooking() {
+    let userToken = localStorage.getItem("ds_logged_token");
+    if (userToken) {
+        let userID = JSON.parse(atob(userToken.split(".")[1])).id;
+
+        $("#serviceBookingForm").modal("show");
+        $.ajax({
+            type: "GET",
+            url: "/users/" + userID + "/pets",
+            headers: {
+                "Authorization": 'Bearer ' + userToken
+            },
+            success: (pets) => {
+                let output = "";
+                for (pet of pets) {
+                    output +=
+                        "<option value='pet-" + pet._id + "'>" + pet.name + "</option>";
+                }
+                $("#service-booking-pet").html(output);
+            }
+        });
+    } else {
+        alert("You need to login to make an appointment.");
+        changePage("login.html");
+    }
+}
+
+function addAppointmentToCart() {
+    let service = {
+        serviceID: $("#service-page-id").html(),
+        serviceName: $("#serviceName").html(),
+        sPrice: parseFloat($("#servicePrice").html()),
+        petID: $("#service-booking-pet")
+            .find(":selected")
+            .attr("value")
+            .split("-")[1],
+        petName: $("#service-booking-pet")
+            .find(":selected")
+            .text(),
+        timeSlotID: $("#service-booking-time-slot")
+            .find(":selected")
+            .attr("value")
+            .split("-")[2],
+        date: $("#service-booking-date-picker")
+            .data("DateTimePicker")
+            .date()
+            .format("DD-MM-YYYY"),
+        time: $("#service-booking-time-slot")
+            .find(":selected")
+            .text(),
+        store: "service"
+    };
+
+    let itemsInCart = JSON.parse(sessionStorage.getItem("selectedItemsInCart"));
+    if (itemsInCart === null) {
+        sessionStorage.setItem("selectedItemsInCart", JSON.stringify([service]));
+    } else {
+        itemsInCart.push(service);
+        sessionStorage.setItem("selectedItemsInCart", JSON.stringify(itemsInCart));
+    }
+    $("#serviceBookingForm").modal("hide");
+    alert("Your appointment was added to the cart :)");
+}
+
+//-------- Manipulate the PET store
+function addPet() {
+    let name = $("#addPetInputName").val();
+    let photo = $("#addPetImgThumb").attr("src");
+    let breed = $("#addPetInputBreed").val();
+    let age = parseInt($("#addPetInputAge").val());
+    let userToken = localStorage.getItem("ds_logged_token");
+    let userID = JSON.parse(atob(userToken.split(".")[1])).id;
+
+    $("#addPetInputName").val("");
+    $("#addPetImgThumb").attr("src", "img/no_image.png");
+    $("#addPetInputBreed").val("");
+    $("#addPetInputAge").val("");
+
+    $.ajax({
+        type: "POST",
+        url: "users/" + userID + "/pets",
+        headers: {
+            "Authorization": 'Bearer ' + userToken
+        },
+        data: {
+            name: name,
+            photo: photo,
+            breed: breed,
+            age: age
+        },
+        success: (petData) => {
+            console.log("Success adding pet for user #" + userID);
+            showPets();
+        }
+    });
+}
+
+function showPets() {
+    let userToken = localStorage.getItem("ds_logged_token");
+    let userID = JSON.parse(atob(userToken.split(".")[1])).id;
+    let output = "";
+
+    $.ajax({
+        type: "GET",
+        url: "users/" + userID + "/pets",
+        headers: {
+            "Authorization": 'Bearer ' + userToken
+        },
+        success: (pets) => {
+            for (pet of pets) {
+                output += "<li class='list-group-item' id='pet-" + pet._id + "'>";
+                output += pet.name;
+                output +=
+                    "<a onclick='removePet(\"" +
+                    pet._id +
+                    "\")' href='#'><span class='mini glyphicon red glyphicon-remove'></span></a>";
+                output +=
+                    "<a onclick='editPet(\"" +
+                    pet._id +
+                    "\")' href='#'><span class='mini glyphicon glyphicon-wrench'></span></a>";
+                output += "</li>";
+            }
+            $("#petList").html(output);
+        }
+    });
+}
+
+function removePet(id) {
+    let userToken = localStorage.getItem("ds_logged_token");
+    $.ajax({
+        type: "DELETE",
+        url: "/users/pets/" + id,
+        headers: {
+            "Authorization": 'Bearer ' + userToken
+        },
+        success: (petData) => {
+            console.log("Pet #" + id + " was deleted.");
+            showPets();
+        }
+    });
+}
+
+function editPet(id) {
+    let userToken = localStorage.getItem("ds_logged_token");
+
+    $("#editPetForm").modal();
+    $.ajax({
+        type: "GET",
+        url: "users/pets/" + id,
+        headers: {
+            "Authorization": 'Bearer ' + userToken
+        },
+        success: (pet) => {
+            $("#editPetInputID").html(pet._id);
+            $("#editPetInputName").val(pet.name);
+            $("#editPetImgThumb").attr("src", pet.photo);
+            $("#editPetInputBreed").val(pet.breed);
+            $("#editPetInputAge").val(pet.age);
+        }
+    });
+}
+
+function savePetChanges() {
+    let userToken = localStorage.getItem("ds_logged_token");
+    let userID = JSON.parse(atob(userToken.split(".")[1])).id;
+    let petId = $("#editPetInputID").html();
+
+    $.ajax({
+        type: "PUT",
+        url: "users/pets/" + petId,
+        headers: {
+            "Authorization": 'Bearer ' + userToken
+        },
+        data: {
+            userID: userID,
+            name: $("#editPetInputName").val(),
+            photo: $("#editPetImgThumb").attr("src"),
+            breed: $("#editPetInputBreed").val(),
+            age: $("#editPetInputAge").val()
+        },
+        success: (petData) => {
+            console.log("Success editting pet of id #" + petId);
+            $("#editPetForm").modal("toggle");
+            showPets();
+        }
     });
 }

@@ -29,11 +29,13 @@ const auth = require("./routes/auth");
 const users = require("./routes/users");
 const products = require("./routes/products");
 const services = require("./routes/services");
+const orders = require("./routes/orders");
 
 app.use("/", index);
 app.use("/auth", auth);
 app.use("/users", users);
 app.use("/products", products);
 app.use("/services", services);
+app.use("/orders", orders);
 
 module.exports = app;

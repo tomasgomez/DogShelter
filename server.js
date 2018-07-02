@@ -3,7 +3,7 @@ global.database = require("./database");
 const app = require("./app");
 
 database.createDatabases(true);
-// database.removeAllDatabases();
+//database.removeAllDatabases();
 
 // Listen for requests on port 3000
 app.listen(3000, () => {
