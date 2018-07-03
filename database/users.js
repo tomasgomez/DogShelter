@@ -100,3 +100,19 @@ exports.deletePet = (petId, cb) => {
         }
     });
 }
+
+exports.getUserPetAppointments = (userId, cb) => {
+    database.nano.use("ds_orders").view("docs", "by_userID", {
+        "keys": [userId]
+    }, (err, body) => {
+        if (err) cb(err);
+        else {
+            let orders = body.rows.map(order => {
+                return order.value;
+            });
+
+
+            cb(null, pets);
+        }
+    });
+}

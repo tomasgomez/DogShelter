@@ -50,6 +50,15 @@ router.get('/:id', passport.authenticate('jwt', {
 });
 
 // USER PETs
+router.get('/:id/pet-appointments', passport.authenticate('jwt', {
+    session: false
+}), (req, res) => {
+    database.users.getUserPetAppointments(req.params.id, (err, petAppointments) => {
+        if (err) res.send(err);
+        else res.status(200).json(petAppointments);
+    });
+});
+
 router.get('/pets/:id', passport.authenticate('jwt', {
     session: false
 }), (req, res) => {

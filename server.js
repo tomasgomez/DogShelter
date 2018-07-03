@@ -2,8 +2,12 @@
 global.database = require("./database");
 const app = require("./app");
 
-//database.removeAllDatabases();
-database.createDatabases(true);
+database.removeAllDatabases(destroyDbReqs => {
+    Promise.all(destroyDbReqs).then(values => {
+        console.log("all databases were removed.");
+        database.createDatabases(true);
+    });
+});
 
 // Listen for requests on port 3000
 app.listen(3000, () => {

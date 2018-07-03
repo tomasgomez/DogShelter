@@ -805,6 +805,36 @@ function addAppointmentToCart() {
 }
 
 //-------- Manipulate the PET store
+function showPetAppointments() {
+    // let userToken = localStorage.getItem("ds_logged_token");
+    // let userID = JSON.parse(atob(userToken.split(".")[1])).id;
+    // let output = "";
+
+    // $.ajax({
+    //     type: "GET",
+    //     url: "users/" + userID + "/pets",
+    //     headers: {
+    //         "Authorization": 'Bearer ' + userToken
+    //     },
+    //     success: (pets) => {
+    //         for (pet of pets) {
+    //             output += "<li class='list-group-item' id='pet-" + pet._id + "'>";
+    //             output += pet.name;
+    //             output +=
+    //                 "<a onclick='removePet(\"" +
+    //                 pet._id +
+    //                 "\")' href='#'><span class='mini glyphicon red glyphicon-remove'></span></a>";
+    //             output +=
+    //                 "<a onclick='editPet(\"" +
+    //                 pet._id +
+    //                 "\")' href='#'><span class='mini glyphicon glyphicon-wrench'></span></a>";
+    //             output += "</li>";
+    //         }
+    //         $("#petList").html(output);
+    //     }
+    // });
+}
+
 function addPet() {
     let name = $("#addPetInputName").val();
     let photo = $("#addPetImgThumb").attr("src");
