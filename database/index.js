@@ -103,6 +103,19 @@ function createViews() {
         },
         "_design/docs"
     );
+
+    // Create index for orderID of 'order-service-lines'
+    database.nano.use("ds_order_service_lines").insert({
+            views: {
+                by_orderID: {
+                    map: function (doc) {
+                        emit(doc.orderID, doc);
+                    }
+                }
+            }
+        },
+        "_design/docs"
+    );
 }
 
 function removeAllDatabases(cb) {

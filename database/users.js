@@ -107,12 +107,28 @@ exports.getUserPetAppointments = (userId, cb) => {
     }, (err, body) => {
         if (err) cb(err);
         else {
-            let orders = body.rows.map(order => {
-                return order.value;
+            let orderIDs = body.rows.map(order => {
+                return order.value._id;
             });
 
-
-            cb(null, pets);
+            database.nano.use("ds_order_service_lines").view("docs", "by_orderID", {
+                "keys": orderIDs
+            }, (err, body) => {
+                if (err) cb(err);
+                else {
+                    let orderSLs = body.rows.map(orderSL => {
+                        return orderSL.value;
+                    });
+                    cb(null, orderSLs);
+                }
+            });
         }
+    });
+}
+
+exports.getPetAppointmentById = (orderSLId, cb) => {
+    database.nano.use("ds_order_service_lines").get(orderSLId, (err, body) => {
+        if (err) cb(err);
+        else cb(null, body);
     });
 }

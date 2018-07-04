@@ -805,34 +805,87 @@ function addAppointmentToCart() {
 }
 
 //-------- Manipulate the PET store
-function showPetAppointments() {
-    // let userToken = localStorage.getItem("ds_logged_token");
-    // let userID = JSON.parse(atob(userToken.split(".")[1])).id;
-    // let output = "";
+function getPetAppointments() {
+    let userToken = localStorage.getItem("ds_logged_token");
+    let userID = JSON.parse(atob(userToken.split(".")[1])).id;
 
-    // $.ajax({
-    //     type: "GET",
-    //     url: "users/" + userID + "/pets",
-    //     headers: {
-    //         "Authorization": 'Bearer ' + userToken
-    //     },
-    //     success: (pets) => {
-    //         for (pet of pets) {
-    //             output += "<li class='list-group-item' id='pet-" + pet._id + "'>";
-    //             output += pet.name;
-    //             output +=
-    //                 "<a onclick='removePet(\"" +
-    //                 pet._id +
-    //                 "\")' href='#'><span class='mini glyphicon red glyphicon-remove'></span></a>";
-    //             output +=
-    //                 "<a onclick='editPet(\"" +
-    //                 pet._id +
-    //                 "\")' href='#'><span class='mini glyphicon glyphicon-wrench'></span></a>";
-    //             output += "</li>";
-    //         }
-    //         $("#petList").html(output);
-    //     }
-    // });
+    return $.ajax({
+        type: "GET",
+        url: "users/" + userID + "/pet-appointments",
+        headers: {
+            "Authorization": 'Bearer ' + userToken
+        }
+    });
+}
+
+function getPetAppointmentById(id) {
+    let userToken = localStorage.getItem("ds_logged_token");
+
+    return $.ajax({
+        type: "GET",
+        url: "users/pet-appointments/" + id,
+        headers: {
+            "Authorization": 'Bearer ' + userToken
+        }
+    });
+}
+
+function getPetData(petId) {
+    let userToken = localStorage.getItem("ds_logged_token");
+    let userID = JSON.parse(atob(userToken.split(".")[1])).id;
+    return $.ajax({
+        type: "GET",
+        url: "users/pets/" + petId,
+        headers: {
+            "Authorization": 'Bearer ' + userToken
+        }
+    });
+}
+
+function getServiceData(serviceId) {
+    return $.ajax({
+        type: "GET",
+        url: "services/" + serviceId
+    });
+}
+
+function showPetAppointments() {
+    let output = "";
+
+    getPetAppointments().done(petAppointments => {
+        for (petAppointment of petAppointments) {
+            ((petAppointment) => {
+                getPetData(petAppointment.petID).done(pet => {
+                    getServiceData(petAppointment.serviceID).done(service => {
+                        output += "<li class='list-group-item' id='pet-" + petAppointment._id + "'>";
+                        output += "'" + service.name + "' for your pet '" + pet.name + "' at '" + petAppointment.date + "'";
+                        output +=
+                            "<a onclick='expandPetAppointmentInfo(\"" +
+                            petAppointment._id +
+                            "\")' href='#'><span class='mini glyphicon glyphicon-eye-open'></span></a>";
+                        output += "</li>";
+                        $("#petAppointmentsList").html(output);
+                    });
+                });
+            })(petAppointment);
+        }
+    });
+}
+
+function expandPetAppointmentInfo(petAppointmentId) {
+    getPetAppointmentById(petAppointmentId).done(petAppointment => {
+        getPetData(petAppointment.petID).done(pet => {
+            getServiceData(petAppointment.serviceID).done(service => {
+                $("#petName").html(pet.name);
+                $("#petPhoto").attr("src", pet.photo);
+                $("#serviceName").html(service.name);
+                $("#serviceDate").html(petAppointment.date);
+                $("#servicePrice").html(petAppointment.salePrice);
+                $("#servicePhoto").attr("src", service.photo);
+                $("#petAppointmentInfo").modal();
+            });
+        });
+    });
 }
 
 function addPet() {
