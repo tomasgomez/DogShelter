@@ -4,6 +4,15 @@ const router = express.Router();
 const passport = require("passport");
 const jwt_decode = require("jwt-decode");
 
+router.get('/', (req, res) => {
+    database.users.getAll((err, body) => {
+        if (err) res.send(err);
+        else {
+          res.status(200).send(body);
+        }
+    });
+});
+
 router.post('/', (req, res) => {
     database.users.add(req.body, err => {
         if (err) res.send(err);
@@ -46,6 +55,20 @@ router.get('/:id', passport.authenticate('jwt', {
             email: user.email,
             role: user.role
         });
+    });
+});
+
+router.put('/:id', (req, res) => {
+    database.users.update(req.params.id, req.body, (err, info) => {
+        if (err) res.send(err);
+        else res.status(200).json(info);
+    });
+});
+
+router.delete('/:id', (req, res) => {
+    database.users.delete(req.params.id, (err, info) => {
+        if (err) res.send(err);
+        else res.status(200).json(info);
     });
 });
 

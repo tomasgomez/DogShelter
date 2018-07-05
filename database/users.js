@@ -14,6 +14,35 @@ exports.findById = (id, cb) => {
     });
 }
 
+exports.update = (userID, newData, cb) => {
+    database.nano.use("ds_users").get(userID, (err, body) => {
+      if (err) cb(err);
+      else {
+          let updatedUser = body;
+          updatedUser["role"] = newData.role;
+          updatedUser["_id"] = userID;
+          updatedUser["_rev"] = body._rev;
+
+          database.nano.use("ds_users").insert(updatedUser, (err, body) => {
+              if (err) cb(err);
+              else cb(null, body);
+          });
+      };
+    });
+}
+
+exports.delete = (userID, cb) => {
+  database.nano.use("ds_users").get(userID, (err, body) => {
+    if (err) cb(err);
+    else {
+        database.nano.use("ds_users").destroy(userID, body._rev, (err, body) => {
+            if (err) cb(err);
+            else cb(null, body);
+        });
+    };
+  });
+}
+
 // exports.verifyAdmin = (id, cb) => {
 //     database.nano.use("ds_users").get(id, (err, user) => {
 //         if (err) cb(err);

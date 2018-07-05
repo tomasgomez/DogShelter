@@ -19,19 +19,37 @@ exports.getAll = (cb) => {
     });
 }
 
-exports.update = (productId, newData, cb) => {
-    let updatedProduct = newData;
-    updatedProduct["_id"] = productId;
-
-    database.nano.use("ds_products").insert(updatedProduct, (err, body) => {
+exports.add = (newData, cb) => {
+    database.nano.use("ds_products").insert(newData, (err, body) => {
         if (err) cb(err);
         else cb(null, body);
     });
 }
 
-// exports.delete = (productId, cb) => {
-//     database.nano.use("ds_products").destroy(productId, (err, body) => {
-//         if (err) cb(err, body);
-//         else cb(null, body);
-//     });
-// }
+exports.update = (productId, newData, cb) => {
+    database.nano.use("ds_products").get(productId, (err, body) => {
+      if (err) cb(err);
+      else {
+          let updatedProduct = newData;
+          updatedProduct["_id"] = productId;
+          updatedProduct["_rev"] = body._rev;
+
+          database.nano.use("ds_products").insert(updatedProduct, (err, body) => {
+              if (err) cb(err);
+              else cb(null, body);
+          });
+      };
+    });
+}
+
+exports.delete = (productId, cb) => {
+  database.nano.use("ds_products").get(productId, (err, body) => {
+    if (err) cb(err);
+    else {
+        database.nano.use("ds_products").destroy(productId, body._rev, (err, body) => {
+            if (err) cb(err);
+            else cb(null, body);
+        });
+    };
+  });
+}

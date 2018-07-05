@@ -232,17 +232,383 @@ function userLogout() {
     });
 }
 
-// function removeProduct(id) {
-//     let userToken = localStorage.getItem("ds_logged_token");
-//     $.ajax({
-//         type: "DELETE",
-//         url: "/products/" + id,
-//         headers: {
-//             "Authorization": 'Bearer ' + userToken
-//         },
+//------- ADMIN product functions
 
-//     });
-// }
+function showProducts() {
+    $.ajax({
+        type: "GET",
+        url: "/products",
+        error: () => {
+            alert("Error while trying to recover products from server.");
+        },
+        success: (products) => {
+            let output = "";
+            for (product of products) {
+              output += "<li class='list-group-item' id='product-" + product._id + "'>";
+              output += product.name;
+              output +=
+                "<a onclick=\'removeProduct(\"" +
+                product._id +
+                "\")\' href='#'><span class='mini glyphicon red glyphicon-remove'></span></a>";
+              output +=
+                "<a onclick=\'editProduct(\"" +
+                product._id +
+                "\")\' href='#'><span class='mini glyphicon glyphicon-pencil'></span></a>";
+              output += "</li>";
+            }
+            $("#productsList").html(output);
+        }
+    });
+}
+
+function addProduct() {
+    let product = new Object();
+    product.name = $("#addProductInputName").val();
+    product.photo = $("#addProductImgThumb").attr("src");
+    product.description = $("#addProductInputDescription").val();
+    product.retailPrice = $("#addProductInputRetailPrice").val();
+    product.inventoryQty = $("#addProductInputInventoryQuantity").val();
+    product.qtySold = 0;
+
+    $("#addProductInputName").val("");
+    $("#addProductImgThumb").attr("src", "img/no_image.png");
+    $("#addProductInputDescription").val("");
+    $("#addProductInputRetailPrice").val("");
+    $("#addProductInputInventoryQuantity").val("");
+
+    $.ajax({
+        type: "POST",
+        url: "/products",
+        data: product,
+        error: () => {
+            alert("Error while trying to add product into the server.");
+        },
+        success: (productData) => {
+            console.log("Success adding product of id #" + productData._id);
+            $("#addProductForm").modal("toggle");
+            showProducts();
+        }
+    });
+};
+
+function editProduct(prod_id) {
+    $("#editProductForm").modal();
+    $.ajax({
+        type: "GET",
+        url: "/products/" + prod_id,
+        error: () => {
+            alert("Error while trying to get product from server.");
+        },
+        success: (productData) => {
+            console.log("Success on getting from the server the product id: #" + productData._id);
+            console.log("The product name is : " + JSON.stringify(productData.name));
+            $("#editProductInputID").attr("placeholder", productData._id);
+            $("#editProductInputName").val(productData.name);
+            $("#editProductImgThumb").attr("src", productData.photo);
+            $("#editProductInputDescription").val(productData.description);
+            $("#editProductInputRetailPrice").val(productData.retailPrice);
+            $("#editProductInputInventoryQuantity").val(productData.inventoryQty);
+            $("#editProductInputQuantitySold").val(productData.qtySold);
+        }
+    });
+}
+
+function saveProductChanges() {
+    let prod_id = $("#editProductInputID").attr("placeholder");
+    let product = new Object();
+
+    product.name = $("#editProductInputName").val(),
+    product.photo = $("#editProductImgThumb").attr("src"),
+    product.description = $("#editProductInputDescription").val(),
+    product.retailPrice = $("#editProductInputRetailPrice").val(),
+    product.inventoryQty = $("#editProductInputInventoryQuantity").val(),
+    product.qtySold = $("#editProductInputQuantitySold").val()
+
+    $.ajax({
+        type: "PUT",
+        url: "/products/" + prod_id,
+        data: product,
+        success: (updatedProduct) => {
+            console.log(
+                "Successful saving changes for product #" +
+                prod_id
+            );
+            $("#editProductForm").modal("toggle");
+            showProducts();
+        }
+    });
+}
+
+function removeProduct(prod_id) {
+  $.ajax({
+      type: "DELETE",
+      url: "/products/" + prod_id,
+      success: (removedProduct) => {
+          console.log("Product deleted with given id #" + prod_id);
+          showProducts();
+      }
+  });
+}
+
+//------- ADMIN user-role functions
+
+function showUsers() {
+    let output = "";
+
+    $.ajax({
+        type: "GET",
+        url: "users/",
+        success: (users) => {
+          console.log("Success getting list of users from server.");
+          users.forEach((user) => {
+              output += "<li class='list-group-item' id='user-" + user._id + "'>";
+              output += user.name;
+              output +=
+                "<a onclick='removeUser(\"" +
+                user._id +
+                "\")' href='#'><span class='mini glyphicon red glyphicon-remove'></span></a>";
+              output +=
+                "<a onclick='editUserRole(\"" +
+                user._id +
+                "\")' href='#'><span class='mini glyphicon glyphicon-pencil'></span></a>";
+              output += "</li>";
+
+              $("#userList").html(output);
+          });
+        }
+    });
+}
+
+function editUserRole(user_id) {
+    let userToken = localStorage.getItem("ds_logged_token");
+
+    if (userToken) {
+        $("#editUserRoleModal").modal();
+        let userId = JSON.parse(atob(userToken.split(".")[1])).id;
+
+        $.ajax({
+            type: "GET",
+            url: "/users/" + user_id,
+            headers: {
+                "Authorization": 'Bearer ' + userToken
+            },
+            error: () => {
+                alert("Error while trying to get user from server.");
+            },
+            success: (userData) => {
+                console.log("Success on getting from the server the user id: #" + user_id);
+                console.log("The user object is : " + JSON.stringify(userData));
+                $("#editUserRoleInputID").attr("placeholder", user_id);
+                $("#editUserRoleInputName").val(userData.name);
+                $("#editUserRoleInputEmail").val(userData.email);
+                $("#editUserRoleCurRole").html(userData.role);
+            }
+        });
+    } else {
+        changePage("login.html");
+    }
+  }
+
+function saveUserRoleChanges() {
+    let user_id = $("#editUserRoleInputID").attr("placeholder");
+    let role = $("input[name=user-role]:checked", "#editUserRoleForm").val();
+    role = role === "administrator" ? "admin" : "client";
+
+    $.ajax({
+        type: "PUT",
+        url: "/users/" + user_id,
+        data: {role: role},
+        success: (updatedUser) => {
+            console.log(
+                "Successful saving changes for product #" +
+                user_id
+            );
+            $("#editUserRoleModal").modal("toggle");
+            showUsers();
+        }
+    });
+}
+
+function removeUser(user_id) {
+  $.ajax({
+      type: "DELETE",
+      url: "/users/" + user_id,
+      success: (removedUser) => {
+          console.log("User deleted with given id #" + user_id);
+          showUsers();
+      }
+  });
+}
+
+//------- ADMIN service functions
+
+function showServices() {
+    $.ajax({
+        type: "GET",
+        url: "/services",
+        error: () => {
+            alert("Error while trying to recover services from server.");
+        },
+        success: (services) => {
+            let output = "";
+            for (service of services) {
+              output += "<li class='list-group-item' id='service-" + service.id + "'>";
+              output += service.name;
+              output +=
+                "<a onclick='removeService(\"" +
+                service._id +
+                "\")' href='#'><span class='mini glyphicon red glyphicon-remove'></span></a>";
+              output +=
+                "<a onclick='initAddTimeSlotsServiceForm(\"" +
+                service._id +
+                "\")' href='#'><span class='mini glyphicon glyphicon-time'></span></a>";
+              output +=
+                "<a onclick='editService(\"" +
+                service._id +
+                "\")' href='#'><span class='mini glyphicon glyphicon-pencil'></span></a>";
+              output += "</li>";
+            }
+            $("#servicesList").html(output);
+        }
+    });
+}
+
+function addService() {
+    let service = new Object();
+    service.name = $("#addServiceInputName").val();
+    service.photo = $("#addServiceImgThumb").attr("src");
+    service.description = $("#addServiceInputDescription").val();
+    service.retailPrice = $("#addServiceInputRetailPrice").val();
+
+    $("#addServiceInputName").val("");
+    $("#addServiceImgThumb").attr("src", "img/no_image.png");
+    $("#addServiceInputDescription").val("");
+    $("#addServiceInputRetailPrice").val("");
+
+    $.ajax({
+        type: "POST",
+        url: "/services",
+        data: service,
+        error: () => {
+            alert("Error while trying to add product into the server.");
+        },
+        success: (serviceData) => {
+            console.log("Success adding product of id #" + serviceData._id);
+            $("#addServiceForm").modal("toggle");
+            showServices();
+        }
+    });
+};
+
+function editService(serviceId) {
+    $("#editServiceForm").modal();
+    $.ajax({
+        type: "GET",
+        url: "/services/" + serviceId,
+        error: () => {
+            alert("Error while trying to get service from server.");
+        },
+        success: (serviceData) => {
+            console.log("Success on getting from the server the service id: #" + serviceData._id);
+            $("#editServiceInputID").attr("placeholder", serviceData._id);
+            $("#editServiceInputName").val(serviceData.name);
+            $("#editServiceImgThumb").attr("src", serviceData.photo);
+            $("#editServiceInputDescription").val(serviceData.description);
+            $("#editServiceInputRetailPrice").val(serviceData.retailPrice);
+        }
+    });
+}
+
+function saveServiceChanges() {
+    let serviceId = $("#editServiceInputID").attr("placeholder");
+
+    $.ajax({
+        type: "PUT",
+        url: "/services/" + serviceId,
+        data: {
+            name: $("#editServiceInputName").val(),
+            photo: $("#editServiceImgThumb").attr("src"),
+            description: $("#editServiceInputDescription").val(),
+            retailPrice: $("#editServiceInputRetailPrice").val()
+        },
+        success: (updatedService) => {
+            console.log(
+                "Successful saving changes for service #" +
+                serviceId
+            );
+            $("#editServiceForm").modal("toggle");
+            showServices();
+        }
+    });
+}
+
+function removeService(serviceId) {
+  $.ajax({
+      type: "DELETE",
+      url: "/services/" + serviceId,
+      success: (removedService) => {
+          console.log("Service deleted with given id #" + serviceId);
+          showServices();
+      }
+  });
+}
+
+function showTimeSlots(serviceId) {
+  let output = "";
+
+  $.ajax({
+      type: "GET",
+      url: "services/" + serviceId + "/time-slots",
+      success: (timeSlotsData) => {
+          for (timeSlot of timeSlotsData) {
+            output += "<li class='list-group-item'>";
+            output += timeSlot.date;
+            output +=
+              "<span onclick='removeTimeSlotFromService(\"" +
+              timeSlot._id +
+              "\")' class='mini glyphicon red glyphicon-remove' style='cursor: pointer;'></span>";
+            output += "</li>";
+          }
+          $("#time-slots-service").html(output);
+      }
+  });
+}
+
+function initAddTimeSlotsServiceForm(serviceId) {
+  $("#addTimeSlotsServiceForm").modal("show");
+  $("#addTimeSlotsServiceInputID").attr("placeholder", serviceId.toString());
+
+  $.ajax({
+      type: "GET",
+      url: "/services/" + serviceId,
+      error: () => {
+          alert("Error while trying to get service from server.");
+      },
+      success: (serviceData) => {
+          console.log("Success on getting time slot from service id: #" + serviceData._id);
+          $("#addTimeSlotsServiceInputName").val(serviceData.name);
+          showTimeSlots(serviceId);
+      }
+  });
+}
+
+//Not working yet
+function addTimeSlotToService() {
+  let serviceId = $("#addTimeSlotsServiceInputID").attr("placeholder");
+  let timeSlot = $("#addTimeSlotsServiceInputDate").val();
+
+  $.ajax({
+      type: "PUT",
+      url: "/services/time-slots/" + serviceId,
+      data: {
+          date: timeSlot,
+      },
+      success: (timeSlotData) => {
+          console.log("Time slot updated " + JSON.stringify(timeSlotData));
+          showTimeSlots(serviceId);
+      }
+  });
+}
 
 function initializePhotoPicker(fileSelectID, fileElemID) {
     let photoSelect = document.getElementById(fileSelectID),

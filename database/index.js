@@ -26,6 +26,7 @@ function createDatabases(insertTestData) {
     let createReqs = [];
     let createDatabaseAsync = Promise.promisify(nano.db.create);
     database.nano.db.list((err, dbs) => {
+      console.log(err);
         for (dbName of dbNames) {
             ((dbName) => {
                 if (dbs.indexOf(dbName) === -1) {
@@ -121,6 +122,7 @@ function createViews() {
 function removeAllDatabases(cb) {
     let destroyDbReqs = [];
     database.nano.db.list((err, body) => {
+
         dsDbNames = body.filter(dbName => {
             return dbName.search("ds_") === 0;
         });

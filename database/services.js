@@ -19,6 +19,41 @@ exports.getAll = (cb) => {
     });
 }
 
+exports.add = (newData, cb) => {
+    database.nano.use("ds_services").insert(newData, (err, body) => {
+        if (err) cb(err);
+        else cb(null, body);
+    });
+}
+
+exports.update = (serviceId, newData, cb) => {
+    database.nano.use("ds_services").get(serviceId, (err, body) => {
+      if (err) cb(err);
+      else {
+          let updatedService = newData;
+          updatedService["_id"] = serviceId;
+          updatedService["_rev"] = body._rev;
+
+          database.nano.use("ds_services").insert(updatedService, (err, body) => {
+              if (err) cb(err);
+              else cb(null, body);
+          });
+      };
+    });
+}
+
+exports.delete = (serviceId, cb) => {
+  database.nano.use("ds_services").get(serviceId, (err, body) => {
+    if (err) cb(err);
+    else {
+        database.nano.use("ds_services").destroy(serviceId, body._rev, (err, body) => {
+            if (err) cb(err);
+            else cb(null, body);
+        });
+    };
+  });
+}
+
 exports.getTimeSlots = (id, cb) => {
     database.nano.use("ds_service_time_slots").view("docs", "by_serviceID", {
         "keys": [id]

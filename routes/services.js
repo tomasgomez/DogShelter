@@ -8,10 +8,31 @@ router.get('/', function (req, res) {
     });
 });
 
+router.post('/', (req, res) => {
+    database.services.add(req.body, (err, info) => {
+      if (err) res.send(err);
+      else res.status(200).json(info);
+    });
+});
+
 router.get('/:id', (req, res) => {
     database.services.findById(req.params.id, (err, service) => {
         if (err) res.send(err);
         else res.status(200).json(service);
+    });
+});
+
+router.put('/:id', (req, res) => {
+    database.services.update(req.params.id, req.body, (err, info) => {
+        if (err) res.send(err);
+        else res.status(200).json(info);
+    });
+});
+
+router.delete('/:id', (req, res) => {
+    database.services.delete(req.params.id, (err, info) => {
+        if (err) res.send(err);
+        else res.status(200).json(info);
     });
 });
 
