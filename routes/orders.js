@@ -24,6 +24,20 @@ router.get('/:id', (req, res) => {
     });
 });
 
+router.get('/:id/products', (req, res) => {
+    database.orders.getOrderProductLine(req.params.id, (err, products) => {
+        if (err) res.send(err);
+        else res.status(200).json(products);
+    });
+});
+
+router.get('/:id/services', (req, res) => {
+    database.orders.getOrderServiceLine(req.params.id, (err, services) => {
+        if (err) res.send(err);
+        else res.status(200).json(services);
+    });
+});
+
 router.post('/:id/products', (req, res) => {
     database.orders.insertProductLine(req.params.id, req.body, (err, productLineId) => {
         if (err) res.send(err);
