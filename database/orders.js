@@ -14,6 +14,7 @@ exports.getAll = (cb) => {
             let orders = body.rows.map(order => {
                 return order.doc;
             });
+            orders = orders.filter(order => order._id !== "_design/docs");
             cb(null, orders);
         }
     });
@@ -48,7 +49,11 @@ exports.getOrderProductLine = (id, cb) => {
     }, (err, body) => {
         if (err) cb(err);
         else {
-            cb(null, body);
+            let orderPLs = body.rows.map(orderPL => {
+                return orderPL.value;
+            });
+            orderPLs = orderPLs.filter(orderPL => orderPL._id !== "_design/docs");
+            cb(null, orderPLs);
         }
     });
 }
@@ -59,7 +64,11 @@ exports.getOrderServiceLine = (id, cb) => {
     }, (err, body) => {
         if (err) cb(err);
         else {
-            cb(null, body);
+            let orderSLs = body.rows.map(orderSL => {
+                return orderSL.value;
+            });
+            orderSLs = orderSLs.filter(orderSL => orderSL._id !== "_design/docs");
+            cb(null, orderSLs);
         }
     });
 }

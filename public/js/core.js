@@ -244,17 +244,17 @@ function showProducts() {
         success: (products) => {
             let output = "";
             for (product of products) {
-              output += "<li class='list-group-item' id='product-" + product._id + "'>";
-              output += product.name;
-              output +=
-                "<a onclick=\'removeProduct(\"" +
-                product._id +
-                "\")\' href='#'><span class='mini glyphicon red glyphicon-remove'></span></a>";
-              output +=
-                "<a onclick=\'editProduct(\"" +
-                product._id +
-                "\")\' href='#'><span class='mini glyphicon glyphicon-pencil'></span></a>";
-              output += "</li>";
+                output += "<li class='list-group-item' id='product-" + product._id + "'>";
+                output += product.name;
+                output +=
+                    "<a onclick=\'removeProduct(\"" +
+                    product._id +
+                    "\")\' href='#'><span class='mini glyphicon red glyphicon-remove'></span></a>";
+                output +=
+                    "<a onclick=\'editProduct(\"" +
+                    product._id +
+                    "\")\' href='#'><span class='mini glyphicon glyphicon-pencil'></span></a>";
+                output += "</li>";
             }
             $("#productsList").html(output);
         }
@@ -318,11 +318,11 @@ function saveProductChanges() {
     let product = new Object();
 
     product.name = $("#editProductInputName").val(),
-    product.photo = $("#editProductImgThumb").attr("src"),
-    product.description = $("#editProductInputDescription").val(),
-    product.retailPrice = $("#editProductInputRetailPrice").val(),
-    product.inventoryQty = $("#editProductInputInventoryQuantity").val(),
-    product.qtySold = $("#editProductInputQuantitySold").val()
+        product.photo = $("#editProductImgThumb").attr("src"),
+        product.description = $("#editProductInputDescription").val(),
+        product.retailPrice = $("#editProductInputRetailPrice").val(),
+        product.inventoryQty = $("#editProductInputInventoryQuantity").val(),
+        product.qtySold = $("#editProductInputQuantitySold").val()
 
     $.ajax({
         type: "PUT",
@@ -340,14 +340,14 @@ function saveProductChanges() {
 }
 
 function removeProduct(prod_id) {
-  $.ajax({
-      type: "DELETE",
-      url: "/products/" + prod_id,
-      success: (removedProduct) => {
-          console.log("Product deleted with given id #" + prod_id);
-          showProducts();
-      }
-  });
+    $.ajax({
+        type: "DELETE",
+        url: "/products/" + prod_id,
+        success: (removedProduct) =>  {
+            console.log("Product deleted with given id #" + prod_id);
+            showProducts();
+        }
+    });
 }
 
 //------- ADMIN user-role functions
@@ -359,22 +359,22 @@ function showUsers() {
         type: "GET",
         url: "users/",
         success: (users) => {
-          console.log("Success getting list of users from server.");
-          users.forEach((user) => {
-              output += "<li class='list-group-item' id='user-" + user._id + "'>";
-              output += user.name;
-              output +=
-                "<a onclick='removeUser(\"" +
-                user._id +
-                "\")' href='#'><span class='mini glyphicon red glyphicon-remove'></span></a>";
-              output +=
-                "<a onclick='editUserRole(\"" +
-                user._id +
-                "\")' href='#'><span class='mini glyphicon glyphicon-pencil'></span></a>";
-              output += "</li>";
+            console.log("Success getting list of users from server.");
+            users.forEach((user) => {
+                output += "<li class='list-group-item' id='user-" + user._id + "'>";
+                output += user.name;
+                output +=
+                    "<a onclick='removeUser(\"" +
+                    user._id +
+                    "\")' href='#'><span class='mini glyphicon red glyphicon-remove'></span></a>";
+                output +=
+                    "<a onclick='editUserRole(\"" +
+                    user._id +
+                    "\")' href='#'><span class='mini glyphicon glyphicon-pencil'></span></a>";
+                output += "</li>";
 
-              $("#userList").html(output);
-          });
+                $("#userList").html(output);
+            });
         }
     });
 }
@@ -407,7 +407,7 @@ function editUserRole(user_id) {
     } else {
         changePage("login.html");
     }
-  }
+}
 
 function saveUserRoleChanges() {
     let user_id = $("#editUserRoleInputID").attr("placeholder");
@@ -417,7 +417,9 @@ function saveUserRoleChanges() {
     $.ajax({
         type: "PUT",
         url: "/users/" + user_id,
-        data: {role: role},
+        data: {
+            role: role
+        },
         success: (updatedUser) => {
             console.log(
                 "Successful saving changes for product #" +
@@ -430,14 +432,14 @@ function saveUserRoleChanges() {
 }
 
 function removeUser(user_id) {
-  $.ajax({
-      type: "DELETE",
-      url: "/users/" + user_id,
-      success: (removedUser) => {
-          console.log("User deleted with given id #" + user_id);
-          showUsers();
-      }
-  });
+    $.ajax({
+        type: "DELETE",
+        url: "/users/" + user_id,
+        success: (removedUser) =>  {
+            console.log("User deleted with given id #" + user_id);
+            showUsers();
+        }
+    });
 }
 
 //------- ADMIN service functions
@@ -452,21 +454,21 @@ function showServices() {
         success: (services) => {
             let output = "";
             for (service of services) {
-              output += "<li class='list-group-item' id='service-" + service.id + "'>";
-              output += service.name;
-              output +=
-                "<a onclick='removeService(\"" +
-                service._id +
-                "\")' href='#'><span class='mini glyphicon red glyphicon-remove'></span></a>";
-              output +=
-                "<a onclick='initAddTimeSlotsServiceForm(\"" +
-                service._id +
-                "\")' href='#'><span class='mini glyphicon glyphicon-time'></span></a>";
-              output +=
-                "<a onclick='editService(\"" +
-                service._id +
-                "\")' href='#'><span class='mini glyphicon glyphicon-pencil'></span></a>";
-              output += "</li>";
+                output += "<li class='list-group-item' id='service-" + service.id + "'>";
+                output += service.name;
+                output +=
+                    "<a onclick='removeService(\"" +
+                    service._id +
+                    "\")' href='#'><span class='mini glyphicon red glyphicon-remove'></span></a>";
+                output +=
+                    "<a onclick='initAddTimeSlotsServiceForm(\"" +
+                    service._id +
+                    "\")' href='#'><span class='mini glyphicon glyphicon-time'></span></a>";
+                output +=
+                    "<a onclick='editService(\"" +
+                    service._id +
+                    "\")' href='#'><span class='mini glyphicon glyphicon-pencil'></span></a>";
+                output += "</li>";
             }
             $("#servicesList").html(output);
         }
@@ -543,198 +545,202 @@ function saveServiceChanges() {
 }
 
 function removeService(serviceId) {
-  $.ajax({
-      type: "DELETE",
-      url: "/services/" + serviceId,
-      success: (removedService) => {
-          console.log("Service deleted with given id #" + serviceId);
-          showServices();
-      }
-  });
+    $.ajax({
+        type: "DELETE",
+        url: "/services/" + serviceId,
+        success: (removedService) =>  {
+            console.log("Service deleted with given id #" + serviceId);
+            showServices();
+        }
+    });
 }
 
 function showTimeSlots(serviceId) {
-  let output = "";
+    let output = "";
 
-  $.ajax({
-      type: "GET",
-      url: "services/" + serviceId + "/time-slots",
-      success: (timeSlotsData) => {
-          for (timeSlot of timeSlotsData) {
-            output += "<li class='list-group-item'>";
-            output += timeSlot.date;
-            output +=
-              "<span onclick='removeTimeSlotFromService(\"" +
-              timeSlot._id +
-              "\")' class='mini glyphicon red glyphicon-remove' style='cursor: pointer;'></span>";
-            output += "</li>";
-          }
-          $("#time-slots-service").html(output);
-      }
-  });
+    $.ajax({
+        type: "GET",
+        url: "services/" + serviceId + "/time-slots",
+        success: (timeSlotsData) => {
+            for (timeSlot of timeSlotsData) {
+                output += "<li class='list-group-item'>";
+                output += timeSlot.date;
+                output +=
+                    "<span onclick='removeTimeSlotFromService(\"" +
+                    timeSlot._id +
+                    "\")' class='mini glyphicon red glyphicon-remove' style='cursor: pointer;'></span>";
+                output += "</li>";
+            }
+            $("#time-slots-service").html(output);
+        }
+    });
 }
 
 function initAddTimeSlotsServiceForm(serviceId) {
-  $("#addTimeSlotsServiceForm").modal("show");
-  $("#addTimeSlotsServiceInputID").attr("placeholder", serviceId.toString());
+    $("#addTimeSlotsServiceForm").modal("show");
+    $("#addTimeSlotsServiceInputID").attr("placeholder", serviceId.toString());
 
-  $.ajax({
-      type: "GET",
-      url: "/services/" + serviceId,
-      error: () => {
-          alert("Error while trying to get service from server.");
-      },
-      success: (serviceData) => {
-          console.log("Success on getting time slots from service id: #" + serviceData._id);
-          $("#addTimeSlotsServiceInputName").val(serviceData.name);
-          showTimeSlots(serviceId);
-      }
-  });
+    $.ajax({
+        type: "GET",
+        url: "/services/" + serviceId,
+        error: () => {
+            alert("Error while trying to get service from server.");
+        },
+        success: (serviceData) => {
+            console.log("Success on getting time slots from service id: #" + serviceData._id);
+            $("#addTimeSlotsServiceInputName").val(serviceData.name);
+            showTimeSlots(serviceId);
+        }
+    });
 }
 
 function addTimeSlotToService() {
-  let serviceId = $("#addTimeSlotsServiceInputID").attr("placeholder");
-  let timeSlot = $("#addTimeSlotsServiceInputDate").val();
+    let serviceId = $("#addTimeSlotsServiceInputID").attr("placeholder");
+    let timeSlot = $("#addTimeSlotsServiceInputDate").val();
 
-  $.ajax({
-      type: "PUT",
-      url: "/services/time-slots/" + serviceId,
-      data: {
-          date: timeSlot,
-          orderServiceLineID: null
-      },
-      success: (timeSlotData) => {
-          console.log("Time slot updated.");
-          showTimeSlots(serviceId);
-      }
-  });
+    $.ajax({
+        type: "PUT",
+        url: "/services/time-slots/" + serviceId,
+        data: {
+            date: timeSlot,
+            orderServiceLineID: null
+        },
+        success: (timeSlotData) => {
+            console.log("Time slot updated.");
+            showTimeSlots(serviceId);
+        }
+    });
 }
 
 function removeTimeSlotFromService(timeSlotID) {
-  let serviceId = $("#addTimeSlotsServiceInputID").attr("placeholder");
-  $.ajax({
-      type: "DELETE",
-      url: "services/time-slots/" + timeSlotID,
-      success: (timeSlotRemoved) => {
-          console.log("Time-Slot " + timeSlotID + " deleted.");
-          showTimeSlots(serviceId);
-      }
-  });
+    let serviceId = $("#addTimeSlotsServiceInputID").attr("placeholder");
+    $.ajax({
+        type: "DELETE",
+        url: "services/time-slots/" + timeSlotID,
+        success: (timeSlotRemoved) => {
+            console.log("Time-Slot " + timeSlotID + " deleted.");
+            showTimeSlots(serviceId);
+        }
+    });
 }
 
 //Working but not refreshing when removing.
 function deleteAllTimeSlotsFromService() {
-  let serviceId = $("#addTimeSlotsServiceInputID").attr("placeholder");
+    let serviceId = $("#addTimeSlotsServiceInputID").attr("placeholder");
 
-  $.ajax({
-      type: "GET",
-      url: "services/" + serviceId + "/time-slots",
-      success: (timeSlotsToRemove) => {
-          $.ajax({
-              type: "DELETE",
-              url: "services/" + serviceId + "/time-slots",
-              data: {
-                timeSlots: JSON.stringify(timeSlotsToRemove)
-              },
-              success: (info) => {
-                  console.log("TimeSlots were removed.");
-                  showTimeSlots(serviceId);
+    $.ajax({
+        type: "GET",
+        url: "services/" + serviceId + "/time-slots",
+        success: (timeSlotsToRemove) => {
+            $.ajax({
+                type: "DELETE",
+                url: "services/" + serviceId + "/time-slots",
+                data: {
+                    timeSlots: JSON.stringify(timeSlotsToRemove)
+                },
+                success: (info) => {
+                    console.log("TimeSlots were removed.");
+                    showTimeSlots(serviceId);
                 }
-          });
-      }
-  });
+            });
+        }
+    });
 }
 
 //-------- Admin reports
+function getAllOrders() {
+    return $.ajax({
+        type: "GET",
+        url: "orders/"
+    });
+}
 
-function showOrders(){
-  let totalSum = 0;
-  let totalSumProduct = 0;
-  let totalSumService = 0;
-  let totalQtyProduct = 0;
-  let totalQtyService = 0;
-
-  $.ajax({
-      type: "GET",
-      url: "orders/",
-      success: (orders) => {
-        for (order of orders){
-          console.log(JSON.stringify(order));
-          let userToken = localStorage.getItem("ds_logged_token");
-          if (userToken) {
-              let userId = JSON.parse(atob(userToken.split(".")[1])).id;
-              //getting user name from the order
-              $.ajax({
-                  type: "GET",
-                  url: "users/" + order.userID,
-                  headers: {
-                      "Authorization": 'Bearer ' + userToken
-                  },
-                  success: (user) => {
-
-                      if(user.name != "Error"){
-                      let userName = user.name;
-                      let sum = 0;
-                      let qty = 0;
-                      let qtyService = 0;
-                      //getting products from the order
-                      //if(order._id != "_design/docs"){
-                        console.log("Order ID" + order._id);
-                      $.ajax({
-                          type: "GET",
-                          url: "orders/" + order._id+ "/products/",
-                          success: (products) => {
-                              console.log("The PRODUCT LINE : " + JSON.stringify(products));
-                              for (productLine of products) {
-                                  sum += productLine.salePrice * productLine.quantity;
-                                  totalSumProduct += productLine.salePrice * productLine.quantity;
-                                  qty += productLine.quantity;
-                              }
-                              //getting services from the order
-                              $.ajax({
-                                  type: "GET",
-                                  url: "orders/" + order._id+ "/services/",
-                                  success: (services) => {
-                                      for (serviceLine of services) {
-                                        sum += serviceLine.salePrice;
-                                        totalSumService += serviceLine.salePrice;
-                                        qtyService += 1;
-                                      }
-
-                                      let output = "";
-                                      output += "<li class='list-group-item' id='order-" + order._id + "'>";
-                                      output +=
-                                        userName +
-                                        " (" +
-                                        qty +
-                                        " products | " +
-                                        qtyService +
-                                        " services | total = $" +
-                                        sum.toFixed(2) +
-                                        ")";
-                                      output += "</li>";
-                                      $("#ordersList").append(output);
-                                      totalSum += sum;
-                                      totalQtyProduct += qty;
-                                      totalQtyService += qtyService
-
-                                      $("#reports-no-prod-sold").html(totalQtyProduct.toString());
-                                      $("#reports-sum-prod-sold").html(totalSumProduct.toFixed(2).toString());
-                                      $("#reports-no-serv-sold").html(totalQtyService.toString());
-                                      $("#reports-sum-serv-sold").html(totalSumService.toFixed(2).toString());
-                                      $("#reports-sum-orders-values").html(totalSum.toFixed(2));
-                                  }
-                              });
-                          }
-                      });
-                    //}
-                  }
-                  }
-              });
-          }
+function getUserById(userId) {
+    let userToken = localStorage.getItem("ds_logged_token");
+    return $.ajax({
+        type: "GET",
+        url: "users/" + userId,
+        headers: {
+            "Authorization": 'Bearer ' + userToken
         }
-      }
-  });
+    });
+}
+
+function getOrderProducts(orderId) {
+    return $.ajax({
+        type: "GET",
+        url: "orders/" + orderId + "/products",
+    });
+}
+
+function getOrderServices(orderId) {
+    return $.ajax({
+        type: "GET",
+        url: "orders/" + orderId + "/services"
+    });
+}
+
+function showOrders() {
+    let totalSum = 0;
+    let totalSumProduct = 0;
+    let totalSumService = 0;
+    let totalQtyProduct = 0;
+    let totalQtyService = 0;
+
+    getAllOrders().done(orders => {
+        for (order of orders) {
+            // Congelamento (freezing) da variável 'order' pois ela será usada dentro de callbacks
+            (order => {
+                getUserById(order.userID).done(user => {
+                    let userName = user.name;
+                    let sum = 0;
+                    let qty = 0;
+                    let qtyService = 0;
+
+                    //getting products from the order
+                    getOrderProducts(order._id).done(products => {
+                        for (productLine of products) {
+                            sum += productLine.salePrice * productLine.quantity;
+                            totalSumProduct += productLine.salePrice * productLine.quantity;
+                            qty += productLine.quantity;
+                        }
+
+                        //getting services from the order
+                        getOrderServices(order._id).done(services => {
+                            for (serviceLine of services) {
+                                sum += serviceLine.salePrice;
+                                totalSumService += serviceLine.salePrice;
+                                qtyService += 1;
+                            }
+
+                            let output = "";
+                            output += "<li class='list-group-item' id='order-" + order._id + "'>";
+                            output +=
+                                userName +
+                                " (" +
+                                qty +
+                                " products | " +
+                                qtyService +
+                                " services | total = $" +
+                                sum.toFixed(2) +
+                                ")";
+                            output += "</li>";
+                            $("#ordersList").append(output);
+                            totalSum += sum;
+                            totalQtyProduct += qty;
+                            totalQtyService += qtyService
+
+                            $("#reports-no-prod-sold").html(totalQtyProduct.toString());
+                            $("#reports-sum-prod-sold").html(totalSumProduct.toFixed(2).toString());
+                            $("#reports-no-serv-sold").html(totalQtyService.toString());
+                            $("#reports-sum-serv-sold").html(totalSumService.toFixed(2).toString());
+                            $("#reports-sum-orders-values").html(totalSum.toFixed(2));
+                        });
+                    });
+                });
+            })(order);
+        }
+    });
 }
 
 function initializePhotoPicker(fileSelectID, fileElemID) {
