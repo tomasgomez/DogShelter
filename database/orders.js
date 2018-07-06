@@ -41,3 +41,25 @@ exports.insertServiceLine = (orderId, serviceLine, cb) => {
         else cb(null, body.id);
     });
 }
+
+exports.getOrderProductLine = (id, cb) => {
+    database.nano.use("ds_order_product_lines").view("docs", "by_orderID", {
+        "keys": [id]
+    }, (err, body) => {
+        if (err) cb(err);
+        else {
+            cb(null, body);
+        }
+    });
+}
+
+exports.getOrderServiceLine = (id, cb) => {
+    database.nano.use("ds_order_service_lines").view("docs", "by_orderID", {
+        "keys": [id]
+    }, (err, body) => {
+        if (err) cb(err);
+        else {
+            cb(null, body);
+        }
+    });
+}

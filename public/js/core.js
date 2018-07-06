@@ -585,14 +585,13 @@ function initAddTimeSlotsServiceForm(serviceId) {
           alert("Error while trying to get service from server.");
       },
       success: (serviceData) => {
-          console.log("Success on getting time slot from service id: #" + serviceData._id);
+          console.log("Success on getting time slots from service id: #" + serviceData._id);
           $("#addTimeSlotsServiceInputName").val(serviceData.name);
           showTimeSlots(serviceId);
       }
   });
 }
 
-//Not working yet
 function addTimeSlotToService() {
   let serviceId = $("#addTimeSlotsServiceInputID").attr("placeholder");
   let timeSlot = $("#addTimeSlotsServiceInputDate").val();
@@ -602,10 +601,138 @@ function addTimeSlotToService() {
       url: "/services/time-slots/" + serviceId,
       data: {
           date: timeSlot,
+          orderServiceLineID: null
       },
       success: (timeSlotData) => {
-          console.log("Time slot updated " + JSON.stringify(timeSlotData));
+          console.log("Time slot updated.");
           showTimeSlots(serviceId);
+      }
+  });
+}
+
+function removeTimeSlotFromService(timeSlotID) {
+  let serviceId = $("#addTimeSlotsServiceInputID").attr("placeholder");
+  $.ajax({
+      type: "DELETE",
+      url: "services/time-slots/" + timeSlotID,
+      success: (timeSlotRemoved) => {
+          console.log("Time-Slot " + timeSlotID + " deleted.");
+          showTimeSlots(serviceId);
+      }
+  });
+}
+
+//Working but not refreshing when removing.
+function deleteAllTimeSlotsFromService() {
+  let serviceId = $("#addTimeSlotsServiceInputID").attr("placeholder");
+
+  $.ajax({
+      type: "GET",
+      url: "services/" + serviceId + "/time-slots",
+      success: (timeSlotsToRemove) => {
+          $.ajax({
+              type: "DELETE",
+              url: "services/" + serviceId + "/time-slots",
+              data: {
+                timeSlots: JSON.stringify(timeSlotsToRemove)
+              },
+              success: (info) => {
+                  console.log("TimeSlots were removed.");
+                  showTimeSlots(serviceId);
+                }
+          });
+      }
+  });
+}
+
+//-------- Admin reports
+
+function showOrders(){
+  let totalSum = 0;
+  let totalSumProduct = 0;
+  let totalSumService = 0;
+  let totalQtyProduct = 0;
+  let totalQtyService = 0;
+
+  $.ajax({
+      type: "GET",
+      url: "orders/",
+      success: (orders) => {
+        for (order of orders){
+          console.log(JSON.stringify(order));
+          let userToken = localStorage.getItem("ds_logged_token");
+          if (userToken) {
+              let userId = JSON.parse(atob(userToken.split(".")[1])).id;
+              //getting user name from the order
+              $.ajax({
+                  type: "GET",
+                  url: "users/" + order.userID,
+                  headers: {
+                      "Authorization": 'Bearer ' + userToken
+                  },
+                  success: (user) => {
+
+                      if(user.name != "Error"){
+                      let userName = user.name;
+                      let sum = 0;
+                      let qty = 0;
+                      let qtyService = 0;
+                      //getting products from the order
+                      //if(order._id != "_design/docs"){
+                        console.log("Order ID" + order._id);
+                      $.ajax({
+                          type: "GET",
+                          url: "orders/" + order._id+ "/products/",
+                          success: (products) => {
+                              console.log("The PRODUCT LINE : " + JSON.stringify(products));
+                              for (productLine of products) {
+                                  sum += productLine.salePrice * productLine.quantity;
+                                  totalSumProduct += productLine.salePrice * productLine.quantity;
+                                  qty += productLine.quantity;
+                              }
+                              //getting services from the order
+                              $.ajax({
+                                  type: "GET",
+                                  url: "orders/" + order._id+ "/services/",
+                                  success: (services) => {
+                                      for (serviceLine of services) {
+                                        sum += serviceLine.salePrice;
+                                        totalSumService += serviceLine.salePrice;
+                                        qtyService += 1;
+                                      }
+
+                                      let output = "";
+                                      output += "<li class='list-group-item' id='order-" + order._id + "'>";
+                                      output +=
+                                        userName +
+                                        " (" +
+                                        qty +
+                                        " products | " +
+                                        qtyService +
+                                        " services | total = $" +
+                                        sum.toFixed(2) +
+                                        ")";
+                                      output += "</li>";
+                                      $("#ordersList").append(output);
+                                      totalSum += sum;
+                                      totalQtyProduct += qty;
+                                      totalQtyService += qtyService
+
+                                      $("#reports-no-prod-sold").html(totalQtyProduct.toString());
+                                      $("#reports-sum-prod-sold").html(totalSumProduct.toFixed(2).toString());
+                                      $("#reports-no-serv-sold").html(totalQtyService.toString());
+                                      $("#reports-sum-serv-sold").html(totalSumService.toFixed(2).toString());
+                                      $("#reports-sum-orders-values").html(totalSum.toFixed(2));
+                                  }
+                              });
+                          }
+                      });
+                    //}
+                  }
+                  }
+              });
+          }
+        }
       }
   });
 }

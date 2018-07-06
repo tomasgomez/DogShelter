@@ -68,6 +68,16 @@ exports.getTimeSlots = (id, cb) => {
     });
 }
 
+exports.deleteTimeSlots = (id, timeSlotsData, cb) => {
+    let timeSlots = JSON.parse(timeSlotsData.timeSlots);
+    for (timeSlot of timeSlots){
+      database.nano.use("ds_service_time_slots").destroy(timeSlot._id, timeSlot._rev, (err, body) => {
+          if(err) cb(err);
+          else cb(null, body);
+      });
+    }
+}
+
 exports.getTimeSlotOfId = (id, cb) => {
     database.nano.use("ds_service_time_slots").get(id, (err, body) => {
         if (err) cb(err);
@@ -75,12 +85,24 @@ exports.getTimeSlotOfId = (id, cb) => {
     });
 }
 
-exports.updateTimeSlot = (timeSlotId, newData, cb) => {
+exports.updateTimeSlot = (serviceId, newData, cb) => {
     let updatedTimeSlot = newData;
-    updatedTimeSlot["_id"] = timeSlotId;
+    updatedTimeSlot["serviceID"] = serviceId;
 
     database.nano.use("ds_service_time_slots").insert(updatedTimeSlot, (err, body) => {
         if (err) cb(err);
         else cb(null, body);
+    });
+}
+
+exports.deleteTimeSlot = (timeSlotId, cb) => {
+    database.nano.use("ds_service_time_slots").get(timeSlotId, (err, body) => {
+      if (err) cb(err);
+      else {
+        database.nano.use("ds_service_time_slots").destroy(timeSlotId, body._rev, (err, body) => {
+            if (err) cb(err);
+            else cb(null, body);
+        });
+      };
     });
 }
