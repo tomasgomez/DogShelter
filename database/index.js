@@ -52,11 +52,10 @@ function createDatabases(insertTestData) {
 
 function createViews() {
   // Create index for emails of users
-  database.nano.use("ds_users").insert(
-    {
+  database.nano.use("ds_users").insert({
       views: {
         by_email: {
-          map: function(doc) {
+          map: function (doc) {
             emit(doc.email, doc);
           }
         }
@@ -66,11 +65,10 @@ function createViews() {
   );
 
   // Create index for serviceID of 'service-time-slots'
-  database.nano.use("ds_service_time_slots").insert(
-    {
+  database.nano.use("ds_service_time_slots").insert({
       views: {
         by_serviceID: {
-          map: function(doc) {
+          map: function (doc) {
             emit(doc.serviceID, doc);
           }
         }
@@ -80,11 +78,10 @@ function createViews() {
   );
 
   // Create index for userID of 'pets'
-  database.nano.use("ds_pets").insert(
-    {
+  database.nano.use("ds_pets").insert({
       views: {
         by_userID: {
-          map: function(doc) {
+          map: function (doc) {
             emit(doc.userID, doc);
           }
         }
@@ -94,11 +91,10 @@ function createViews() {
   );
 
   // Create index for userID of 'orders'
-  database.nano.use("ds_orders").insert(
-    {
+  database.nano.use("ds_orders").insert({
       views: {
         by_userID: {
-          map: function(doc) {
+          map: function (doc) {
             emit(doc.userID, doc);
           }
         }
@@ -108,11 +104,10 @@ function createViews() {
   );
 
   // Create index for orderID of 'order-service-lines'
-  database.nano.use("ds_order_service_lines").insert(
-    {
+  database.nano.use("ds_order_service_lines").insert({
       views: {
         by_orderID: {
-          map: function(doc) {
+          map: function (doc) {
             emit(doc.orderID, doc);
           }
         }
@@ -122,11 +117,10 @@ function createViews() {
   );
 
   // Create index for orderID of 'order-product-lines'
-  database.nano.use("ds_order_product_lines").insert(
-    {
+  database.nano.use("ds_order_product_lines").insert({
       views: {
         by_orderID: {
-          map: function(doc) {
+          map: function (doc) {
             emit(doc.orderID, doc);
           }
         }

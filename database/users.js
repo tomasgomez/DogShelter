@@ -16,40 +16,32 @@ exports.findById = (id, cb) => {
 
 exports.update = (userID, newData, cb) => {
     database.nano.use("ds_users").get(userID, (err, body) => {
-      if (err) cb(err);
-      else {
-          let updatedUser = body;
-          updatedUser["role"] = newData.role;
-          updatedUser["_id"] = userID;
-          updatedUser["_rev"] = body._rev;
+        if (err) cb(err);
+        else {
+            let updatedUser = body;
+            updatedUser["role"] = newData.role;
+            updatedUser["_id"] = userID;
+            updatedUser["_rev"] = body._rev;
 
-          database.nano.use("ds_users").insert(updatedUser, (err, body) => {
-              if (err) cb(err);
-              else cb(null, body);
-          });
-      };
+            database.nano.use("ds_users").insert(updatedUser, (err, body) => {
+                if (err) cb(err);
+                else cb(null, body);
+            });
+        };
     });
 }
 
 exports.delete = (userID, cb) => {
-  database.nano.use("ds_users").get(userID, (err, body) => {
-    if (err) cb(err);
-    else {
-        database.nano.use("ds_users").destroy(userID, body._rev, (err, body) => {
-            if (err) cb(err);
-            else cb(null, body);
-        });
-    };
-  });
+    database.nano.use("ds_users").get(userID, (err, body) => {
+        if (err) cb(err);
+        else {
+            database.nano.use("ds_users").destroy(userID, body._rev, (err, body) => {
+                if (err) cb(err);
+                else cb(null, body);
+            });
+        };
+    });
 }
-
-// exports.verifyAdmin = (id, cb) => {
-//     database.nano.use("ds_users").get(id, (err, user) => {
-//         if (err) cb(err);
-//         if (user.role == "admin") cb(null, true);
-//         else cb(null, false);
-//     });
-// }
 
 exports.findByEmail = (email, cb) => {
     database.nano.use("ds_users").view("docs", "by_email", {
@@ -69,6 +61,7 @@ exports.getAll = (cb) => {
             let users = body.rows.map(user => {
                 return user.doc;
             });
+            users = users.filter(user => user._id !== "_design/docs");
             cb(null, users);
         }
     });

@@ -29,6 +29,9 @@ exports.add = (orderData, cb) => {
 
 exports.insertProductLine = (orderId, productLine, cb) => {
     productLine["orderID"] = orderId;
+    productLine["salePrice"] = parseFloat(productLine["salePrice"]);
+    productLine["quantity"] = parseInt(productLine["quantity"]);
+
     database.nano.use("ds_order_product_lines").insert(productLine, (err, body) => {
         if (err) cb(err);
         else cb(null, body.id);
@@ -37,6 +40,7 @@ exports.insertProductLine = (orderId, productLine, cb) => {
 
 exports.insertServiceLine = (orderId, serviceLine, cb) => {
     serviceLine["orderID"] = orderId;
+    serviceLine["salePrice"] = parseFloat(serviceLine["salePrice"]);
     database.nano.use("ds_order_service_lines").insert(serviceLine, (err, body) => {
         if (err) cb(err);
         else cb(null, body.id);
