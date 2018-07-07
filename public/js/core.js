@@ -10,7 +10,11 @@ function changePage(dest) {
     // Change page aspect
     if (dest.search("admin_") === 0) {
         $("#bodyContent").load(srcFile, () => {
-            if (dest === "admin_products.html") {
+            if (dest === "admin_profile.html") {
+                getUserData().then(userData => {
+                    renderAdminProfile(userData);
+                });
+            } else if (dest === "admin_products.html") {
                 showProducts();
                 initializePhotoPicker("addProductPhotoSelect", "addProductInputPhoto");
                 initializePhotoPicker(
@@ -562,6 +566,7 @@ function showTimeSlots(serviceId) {
         type: "GET",
         url: "services/" + serviceId + "/time-slots",
         success: (timeSlotsData) => {
+            console.log("(#" + serviceId + ") timeSlotsData = " + JSON.stringify(timeSlotsData));
             for (timeSlot of timeSlotsData) {
                 output += "<li class='list-group-item'>";
                 output += timeSlot.date;
@@ -624,25 +629,19 @@ function removeTimeSlotFromService(timeSlotID) {
     });
 }
 
-//Working but not refreshing when removing.
 function deleteAllTimeSlotsFromService() {
     let serviceId = $("#addTimeSlotsServiceInputID").attr("placeholder");
+    console.log("serviceID = " + serviceId);
 
     $.ajax({
-        type: "GET",
+        type: "DELETE",
         url: "services/" + serviceId + "/time-slots",
-        success: (timeSlotsToRemove) => {
-            $.ajax({
-                type: "DELETE",
-                url: "services/" + serviceId + "/time-slots",
-                data: {
-                    timeSlots: JSON.stringify(timeSlotsToRemove)
-                },
-                success: (info) => {
-                    console.log("TimeSlots were removed.");
-                    showTimeSlots(serviceId);
-                }
-            });
+        error: err => {
+            console.log("erro = " + err);
+        },
+        success: () => {
+            console.log("All time slots from service #" + serviceId + " were removed.");
+            $("#time-slots-service").html("");
         }
     });
 }
@@ -821,7 +820,7 @@ function showProductsUser() {
             let output = "";
             for (product of products) {
                 output +=
-                    "<div class='col-md-4'><div class='product'>" +
+                    "<div class='col-md-3'><div class='product'>" +
                     "<div class='link-to-prod' onclick='showSelectedProd(\"" +
                     product._id +
                     "\");'>";
@@ -897,7 +896,7 @@ function showServicesUser() {
             let output = "";
             for (service of services) {
                 output +=
-                    "<div class='col-md-4'><div class='service'>" +
+                    "<div class='col-md-3'><div class='service'>" +
                     "<div class='link-to-prod' onclick='showSelectedServ(\"" +
                     service._id +
                     "\");'>";

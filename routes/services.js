@@ -10,8 +10,8 @@ router.get('/', function (req, res) {
 
 router.post('/', (req, res) => {
     database.services.add(req.body, (err, info) => {
-      if (err) res.send(err);
-      else res.status(200).json(info);
+        if (err) res.send(err);
+        else res.status(200).json(info);
     });
 });
 
@@ -44,9 +44,9 @@ router.get('/:id/time-slots', (req, res) => {
 });
 
 router.delete('/:id/time-slots', (req, res) => {
-    database.services.deleteTimeSlots(req.params.id, req.body, (err, info) => {
+    database.services.deleteTimeSlots(req.params.id, (err, info) => {
         if (err) res.send(err);
-        else res.status(200);
+        else res.status(200).json(info);
     });
 });
 

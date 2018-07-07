@@ -68,14 +68,28 @@ exports.getTimeSlots = (id, cb) => {
     });
 }
 
-exports.deleteTimeSlots = (id, timeSlotsData, cb) => {
-    let timeSlots = JSON.parse(timeSlotsData.timeSlots);
-    for (timeSlot of timeSlots) {
-        database.nano.use("ds_service_time_slots").destroy(timeSlot._id, timeSlot._rev, (err, body) => {
-            if (err) cb(err);
-            else cb(null, body);
-        });
-    }
+exports.deleteTimeSlots = (serviceId, cb) => {
+    database.nano.use("ds_service_time_slots").view("docs", "by_serviceID", {
+        "keys": [serviceId]
+    }, (err, body) => {
+        if (err) cb(err);
+        else {
+            let timeSlots = body.rows.map((timeSlot) => {
+                return timeSlot.value;
+            });
+            for (timeSlot of timeSlots) {
+                database.nano.use("ds_service_time_slots").destroy(timeSlot._id, timeSlot._rev, (err, body) => {
+                    if (err) {
+                        cb(err);
+                        return;
+                    }
+                });
+            }
+            cb(null, {
+                message: "ok"
+            });
+        }
+    });
 }
 
 exports.getTimeSlotOfId = (id, cb) => {
