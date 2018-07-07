@@ -566,7 +566,6 @@ function showTimeSlots(serviceId) {
         type: "GET",
         url: "services/" + serviceId + "/time-slots",
         success: (timeSlotsData) => {
-            console.log("(#" + serviceId + ") timeSlotsData = " + JSON.stringify(timeSlotsData));
             for (timeSlot of timeSlotsData) {
                 output += "<li class='list-group-item'>";
                 output += timeSlot.date;

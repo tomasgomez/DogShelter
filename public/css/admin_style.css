@@ -269,3 +269,8 @@ ul ul a {
   max-height: 400px;
   overflow-y: scroll;
 }
+
+#time-slots-service {
+  max-height: 200px;
+  overflow-y: scroll;
+}

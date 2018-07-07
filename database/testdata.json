@@ -1,311 +1,559 @@
 {
-    "docSets": [{
-            "dbName": "ds_users",
-            "data": [{
-                    "_id": "0",
-                    "name": "John Doe",
-                    "phone": "202-555-0164",
-                    "address": "60 Lees Creek Lane North Andover, MA 01845",
-                    "photo": "img/unknown_person.jpg",
-                    "email": "john.doe@gmail.com",
-                    "password": "john123",
-                    "role": "client"
-                },
-                {
-                    "_id": "1",
-                    "name": "Jose E. West",
-                    "phone": "202-555-0188",
-                    "address": "591 Homewood Drive Portsmouth, VA 23703",
-                    "photo": "img/unknown_person.jpg",
-                    "email": "jose.west@yahoo.com",
-                    "password": "westjose",
-                    "role": "client"
-                },
-                {
-                    "_id": "2",
-                    "name": "Ann W. Schmitz",
-                    "phone": "+1-202-555-0171",
-                    "address": "9952 Arcadia Dr. Salt Lake City, UT 84119",
-                    "photo": "img/unknown_person.jpg",
-                    "email": "schmitz.ann@gmail.com",
-                    "password": "ann123",
-                    "role": "admin"
-                }
-            ]
+  "docSets": [
+    {
+      "dbName": "ds_users",
+      "data": [
+        {
+          "_id": "0",
+          "name": "John Doe",
+          "phone": "202-555-0164",
+          "address": "60 Lees Creek Lane North Andover, MA 01845",
+          "photo": "img/unknown_person.jpg",
+          "email": "john.doe@gmail.com",
+          "password": "john123",
+          "role": "client"
         },
         {
-            "dbName": "ds_pets",
-            "data": [{
-                    "_id": "0",
-                    "userID": "0",
-                    "name": "Bailey",
-                    "breed": "Alaskan Malamute",
-                    "photo": "img/no_image.png",
-                    "age": 5
-                },
-                {
-                    "_id": "1",
-                    "userID": "0",
-                    "name": "Celeste",
-                    "breed": "American Eskimo Dog",
-                    "photo": "img/no_image.png",
-                    "age": 3
-                },
-                {
-                    "_id": "2",
-                    "userID": "1",
-                    "name": "Diva",
-                    "breed": "Australian Kelpie",
-                    "photo": "img/no_image.png",
-                    "age": 8
-                }
-            ]
+          "_id": "1",
+          "name": "Jose E. West",
+          "phone": "202-555-0188",
+          "address": "591 Homewood Drive Portsmouth, VA 23703",
+          "photo": "img/unknown_person.jpg",
+          "email": "jose.west@yahoo.com",
+          "password": "westjose",
+          "role": "client"
         },
         {
-            "dbName": "ds_orders",
-            "data": [{
-                    "_id": "0",
-                    "userID": "0",
-                    "creditCardNo": 341768679371831
-                },
-                {
-                    "_id": "1",
-                    "userID": "0",
-                    "creditCardNo": 341768679371831
-                },
-                {
-                    "_id": "2",
-                    "userID": "1",
-                    "creditCardNo": 341768679371831
-                },
-                {
-                    "_id": "3",
-                    "userID": "1",
-                    "creditCardNo": 341768679371831
-                },
-                {
-                    "_id": "4",
-                    "userID": "1",
-                    "creditCardNo": 6011948489198451
-                },
-                {
-                    "_id": "5",
-                    "userID": "2",
-                    "creditCardNo": 4716275103937400
-                },
-                {
-                    "_id": "6",
-                    "userID": "2",
-                    "creditCardNo": 4716275103937400
-                },
-                {
-                    "_id": "7",
-                    "userID": "0",
-                    "creditCardNo": 4716275103937400
-                }
-            ]
-        },
-        {
-            "dbName": "ds_order_product_lines",
-            "data": [{
-                    "_id": "0",
-                    "orderID": "0",
-                    "productID": "0",
-                    "salePrice": 9,
-                    "quantity": 1
-                },
-                {
-                    "_id": "1",
-                    "orderID": "0",
-                    "productID": "1",
-                    "salePrice": 12.34,
-                    "quantity": 2
-                },
-                {
-                    "_id": "2",
-                    "orderID": "1",
-                    "productID": "3",
-                    "salePrice": 34.99,
-                    "quantity": 1
-                },
-                {
-                    "_id": "3",
-                    "orderID": "2",
-                    "productID": "0",
-                    "salePrice": 10.63,
-                    "quantity": 2
-                },
-                {
-                    "_id": "4",
-                    "orderID": "2",
-                    "productID": "2",
-                    "salePrice": 15.39,
-                    "quantity": 2
-                },
-                {
-                    "_id": "5",
-                    "orderID": "3",
-                    "productID": "0",
-                    "salePrice": 10.63,
-                    "quantity": 1
-                },
-                {
-                    "_id": "6",
-                    "orderID": "3",
-                    "productID": "1",
-                    "salePrice": 12.34,
-                    "quantity": 1
-                },
-                {
-                    "_id": "7",
-                    "orderID": "4",
-                    "productID": "2",
-                    "salePrice": 14.5,
-                    "quantity": 1
-                },
-                {
-                    "_id": "8",
-                    "orderID": "5",
-                    "productID": "0",
-                    "salePrice": 10.63,
-                    "quantity": 2
-                },
-                {
-                    "_id": "9",
-                    "orderID": "6",
-                    "productID": "1",
-                    "salePrice": 12.34,
-                    "quantity": 1
-                },
-                {
-                    "_id": "10",
-                    "orderID": "6",
-                    "productID": "2",
-                    "salePrice": 15.39,
-                    "quantity": 1
-                },
-                {
-                    "_id": "11",
-                    "orderID": "7",
-                    "productID": "3",
-                    "salePrice": 34.99,
-                    "quantity": 1
-                }
-            ]
-        },
-        {
-            "dbName": "ds_order_service_lines",
-            "data": [{
-                    "_id": "0",
-                    "orderID": "7",
-                    "serviceID": "0",
-                    "salePrice": 30,
-                    "date": "20-07-2018 10:00 am",
-                    "petID": "0"
-                },
-                {
-                    "_id": "1",
-                    "orderID": "7",
-                    "serviceID": "0",
-                    "salePrice": 30,
-                    "date": "21-07-2018 11:00 am",
-                    "petID": "1"
-                }
-            ]
-        },
-        {
-            "dbName": "ds_services",
-            "data": [{
-                    "_id": "0",
-                    "name": "Full-Service Bath",
-                    "photo": "img/full-service-bath.jpeg",
-                    "description": "Includes bath with natural shampoo, blow dry, 15-minute brush-out, ear cleaning, nail trim, gland expression & scented spritz.",
-                    "retailPrice": 30
-                },
-                {
-                    "_id": "1",
-                    "name": "Full-Service Bath with Haircut",
-                    "photo": "img/full-service-bath-haircut.jpeg",
-                    "description": "Includes bath with natural shampoo, blow dry, 15-minute brush-out, ear cleaning, nail trim, gland expression & scented spritz. PLUS a cut and style to breed-specific standard or shave down.",
-                    "retailPrice": 50
-                },
-                {
-                    "_id": "2",
-                    "name": "De-shedding Treatment",
-                    "photo": "img/deshedding-treatment.jpeg",
-                    "description": "Includes FURminator loose undercoat removal, natural shed-reducing shampoo and treatment, followed by another thorough FURminator brush-out and aloe hydrating treatment.",
-                    "retailPrice": 25
-                },
-                {
-                    "_id": "3",
-                    "name": "Flea Relief",
-                    "photo": "img/flea-relief.jpeg",
-                    "description": "Protect your dog with your choice of a naturally medicated or flea shampoo, moisturizing coat conditioner and spritz.",
-                    "retailPrice": 30
-                }
-            ]
-        },
-        {
-            "dbName": "ds_service_time_slots",
-            "data": [{
-                    "_id": "0",
-                    "serviceID": "0",
-                    "date": "07-07-2018 8:30 am",
-                    "orderServiceLineID": null
-                },
-                {
-                    "_id": "1",
-                    "serviceID": "0",
-                    "date": "07-07-2018 9:00 am",
-                    "orderServiceLineID": null
-                },
-                {
-                    "_id": "2",
-                    "serviceID": "0",
-                    "date": "10-07-2018 10:00 am",
-                    "orderServiceLineID": null
-                }
-            ]
-        },
-        {
-            "dbName": "ds_products",
-            "data": [{
-                    "_id": "0",
-                    "name": "Sentry Natural Defense Natural Flea & Tick Shampoo for Dogs & Puppies, 12 fl. oz.",
-                    "photo": "img/sentry-dog-shampoo.jpeg",
-                    "description": "Sentry Natural Defense Natural Flea & Tick Shampoo for Dogs. Kills adult fleas using natural ingredients. Wonderful spice scent. Naturally cleans and conditions. Safe for use around children & pets.",
-                    "retailPrice": 10.63,
-                    "inventoryQty": 100,
-                    "qtySold": 22
-                },
-                {
-                    "_id": "1",
-                    "name": "Fly Free Zone Natural Fly Repellent Dog Collar",
-                    "photo": "img/fly-free-collar.jpeg",
-                    "description": "Fly Free Zone Natural Fly Repellent Dog Collar. Naturally creates a no pest zone around your dog. Repels flies, fleas, ticks and mosquitoes. Easy to use and comfortable for your dog",
-                    "retailPrice": 12.34,
-                    "inventoryQty": 50,
-                    "qtySold": 40
-                },
-                {
-                    "_id": "2",
-                    "name": "Adams Plus Flea & Tick Carpet Spray, 16 oz.",
-                    "photo": "img/carpet-spray-adams.jpeg",
-                    "description": "16 oz., Kills fleas, ticks, cockroaches & ants on contact while killing all four stages of the flea-adults, eggs, larvae and pupae. Breaks the flea life cycle and controls reinfestation for up to 7 months. Treats up to 1,000 sq. ft. Breaks the flea life cycle and controls reinfestation for up to 210 days. Use on carpets, rugs, upholstery, drapes & other places where fleas may hide. Treats up to 2,000 sq. ft. Adams Plus Flea & Tick Carpet Spray.",
-                    "retailPrice": 15.39,
-                    "inventoryQty": 20,
-                    "qtySold": 10
-                },
-                {
-                    "_id": "3",
-                    "name": "Cabana Bay Tan Geometric-Print Staycationer Dog Bed, Small",
-                    "photo": "img/small-cabana-bay.jpeg",
-                    "description": "The Cabana Bay Collection hops into summer with vibrant essentials fit for a day of lounging in the sunshine. Breathable materials pair with resort-ready patterns to complement your fun-filled days together, whether you're spending a lazy afternoon by the pool or taking off on a spontaneous day trip. Tan Geometric-Print Staycationer Dog Bed from Cabana Bay. Suitable for indoor and outdoor spaces. Styled with the Cabana Bay Lounge Life Dog Bed Riser, available and sold separately. Mix and match with the rest of the Cabana Bay Collection. Lounger silhouette is perfect for dogs that love to stretch out in their sleep. Machine washable cover is made of water-resistant beige and white canvas. Features an eye-catching geometric print the along sides and mint piping at top",
-                    "retailPrice": 34.99,
-                    "inventoryQty": 10,
-                    "qtySold": 1
-                }
-            ]
+          "_id": "2",
+          "name": "Ann W. Schmitz",
+          "phone": "+1-202-555-0171",
+          "address": "9952 Arcadia Dr. Salt Lake City, UT 84119",
+          "photo": "img/unknown_person.jpg",
+          "email": "schmitz.ann@gmail.com",
+          "password": "ann123",
+          "role": "admin"
         }
-    ]
+      ]
+    },
+    {
+      "dbName": "ds_pets",
+      "data": [
+        {
+          "_id": "0",
+          "userID": "0",
+          "name": "Bailey",
+          "breed": "Alaskan Malamute",
+          "photo": "img/no_image.png",
+          "age": 5
+        },
+        {
+          "_id": "1",
+          "userID": "0",
+          "name": "Celeste",
+          "breed": "American Eskimo Dog",
+          "photo": "img/no_image.png",
+          "age": 3
+        },
+        {
+          "_id": "2",
+          "userID": "1",
+          "name": "Diva",
+          "breed": "Australian Kelpie",
+          "photo": "img/no_image.png",
+          "age": 8
+        },
+        {
+          "_id": "3",
+          "userID": "2",
+          "name": "Voltron",
+          "breed": "Chihuahua",
+          "photo": "img/no_image.png",
+          "age": 2
+        }
+      ]
+    },
+    {
+      "dbName": "ds_orders",
+      "data": [
+        {
+          "_id": "0",
+          "userID": "0",
+          "creditCardNo": 341768679371831
+        },
+        {
+          "_id": "1",
+          "userID": "0",
+          "creditCardNo": 341768679371831
+        },
+        {
+          "_id": "2",
+          "userID": "1",
+          "creditCardNo": 341768679371831
+        },
+        {
+          "_id": "3",
+          "userID": "1",
+          "creditCardNo": 341768679371831
+        },
+        {
+          "_id": "4",
+          "userID": "1",
+          "creditCardNo": 6011948489198451
+        },
+        {
+          "_id": "5",
+          "userID": "2",
+          "creditCardNo": 4716275103937400
+        },
+        {
+          "_id": "6",
+          "userID": "2",
+          "creditCardNo": 4716275103937400
+        },
+        {
+          "_id": "7",
+          "userID": "0",
+          "creditCardNo": 4716275103937400
+        }
+      ]
+    },
+    {
+      "dbName": "ds_order_product_lines",
+      "data": [
+        {
+          "_id": "0",
+          "orderID": "0",
+          "productID": "0",
+          "salePrice": 9,
+          "quantity": 1
+        },
+        {
+          "_id": "1",
+          "orderID": "0",
+          "productID": "1",
+          "salePrice": 12.34,
+          "quantity": 2
+        },
+        {
+          "_id": "2",
+          "orderID": "1",
+          "productID": "3",
+          "salePrice": 34.99,
+          "quantity": 1
+        },
+        {
+          "_id": "3",
+          "orderID": "2",
+          "productID": "0",
+          "salePrice": 10.63,
+          "quantity": 2
+        },
+        {
+          "_id": "4",
+          "orderID": "2",
+          "productID": "2",
+          "salePrice": 15.39,
+          "quantity": 2
+        },
+        {
+          "_id": "5",
+          "orderID": "3",
+          "productID": "0",
+          "salePrice": 10.63,
+          "quantity": 1
+        },
+        {
+          "_id": "6",
+          "orderID": "3",
+          "productID": "1",
+          "salePrice": 12.34,
+          "quantity": 1
+        },
+        {
+          "_id": "7",
+          "orderID": "4",
+          "productID": "2",
+          "salePrice": 14.5,
+          "quantity": 1
+        },
+        {
+          "_id": "8",
+          "orderID": "5",
+          "productID": "0",
+          "salePrice": 10.63,
+          "quantity": 2
+        },
+        {
+          "_id": "9",
+          "orderID": "6",
+          "productID": "1",
+          "salePrice": 12.34,
+          "quantity": 1
+        },
+        {
+          "_id": "10",
+          "orderID": "6",
+          "productID": "2",
+          "salePrice": 15.39,
+          "quantity": 1
+        },
+        {
+          "_id": "11",
+          "orderID": "7",
+          "productID": "3",
+          "salePrice": 34.99,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "dbName": "ds_order_service_lines",
+      "data": [
+        {
+          "_id": "0",
+          "orderID": "7",
+          "serviceID": "0",
+          "salePrice": 30,
+          "date": "20-07-2018 10:00 am",
+          "petID": "0"
+        },
+        {
+          "_id": "1",
+          "orderID": "7",
+          "serviceID": "0",
+          "salePrice": 30,
+          "date": "21-07-2018 11:00 am",
+          "petID": "1"
+        }
+      ]
+    },
+    {
+      "dbName": "ds_services",
+      "data": [
+        {
+          "_id": "0",
+          "name": "Full-Service Bath",
+          "photo": "img/full-service-bath.jpeg",
+          "description":
+            "Includes bath with natural shampoo, blow dry, 15-minute brush-out, ear cleaning, nail trim, gland expression & scented spritz.",
+          "retailPrice": 30
+        },
+        {
+          "_id": "1",
+          "name": "Full-Service Bath with Haircut",
+          "photo": "img/full-service-bath-haircut.jpeg",
+          "description":
+            "Includes bath with natural shampoo, blow dry, 15-minute brush-out, ear cleaning, nail trim, gland expression & scented spritz. PLUS a cut and style to breed-specific standard or shave down.",
+          "retailPrice": 50
+        },
+        {
+          "_id": "2",
+          "name": "De-shedding Treatment",
+          "photo": "img/deshedding-treatment.jpeg",
+          "description":
+            "Includes FURminator loose undercoat removal, natural shed-reducing shampoo and treatment, followed by another thorough FURminator brush-out and aloe hydrating treatment.",
+          "retailPrice": 25
+        },
+        {
+          "_id": "3",
+          "name": "Flea Relief",
+          "photo": "img/flea-relief.jpeg",
+          "description":
+            "Protect your dog with your choice of a naturally medicated or flea shampoo, moisturizing coat conditioner and spritz.",
+          "retailPrice": 30
+        }
+      ]
+    },
+    {
+      "dbName": "ds_products",
+      "data": [
+        {
+          "_id": "0",
+          "name":
+            "Sentry Natural Defense Natural Flea & Tick Shampoo for Dogs & Puppies, 12 fl. oz.",
+          "photo": "img/sentry-dog-shampoo.jpeg",
+          "description":
+            "Sentry Natural Defense Natural Flea & Tick Shampoo for Dogs. Kills adult fleas using natural ingredients. Wonderful spice scent. Naturally cleans and conditions. Safe for use around children & pets.",
+          "retailPrice": 10.63,
+          "inventoryQty": 100,
+          "qtySold": 22
+        },
+        {
+          "_id": "1",
+          "name": "Fly Free Zone Natural Fly Repellent Dog Collar",
+          "photo": "img/fly-free-collar.jpeg",
+          "description":
+            "Fly Free Zone Natural Fly Repellent Dog Collar. Naturally creates a no pest zone around your dog. Repels flies, fleas, ticks and mosquitoes. Easy to use and comfortable for your dog",
+          "retailPrice": 12.34,
+          "inventoryQty": 50,
+          "qtySold": 40
+        },
+        {
+          "_id": "2",
+          "name": "Adams Plus Flea & Tick Carpet Spray, 16 oz.",
+          "photo": "img/carpet-spray-adams.jpeg",
+          "description":
+            "16 oz., Kills fleas, ticks, cockroaches & ants on contact while killing all four stages of the flea-adults, eggs, larvae and pupae. Breaks the flea life cycle and controls reinfestation for up to 7 months. Treats up to 1,000 sq. ft. Breaks the flea life cycle and controls reinfestation for up to 210 days. Use on carpets, rugs, upholstery, drapes & other places where fleas may hide. Treats up to 2,000 sq. ft. Adams Plus Flea & Tick Carpet Spray.",
+          "retailPrice": 15.39,
+          "inventoryQty": 20,
+          "qtySold": 10
+        },
+        {
+          "_id": "3",
+          "name": "Cabana Bay Tan Geometric-Print Staycationer Dog Bed, Small",
+          "photo": "img/small-cabana-bay.jpeg",
+          "description":
+            "The Cabana Bay Collection hops into summer with vibrant essentials fit for a day of lounging in the sunshine. Breathable materials pair with resort-ready patterns to complement your fun-filled days together, whether you're spending a lazy afternoon by the pool or taking off on a spontaneous day trip. Tan Geometric-Print Staycationer Dog Bed from Cabana Bay. Suitable for indoor and outdoor spaces. Styled with the Cabana Bay Lounge Life Dog Bed Riser, available and sold separately. Mix and match with the rest of the Cabana Bay Collection. Lounger silhouette is perfect for dogs that love to stretch out in their sleep. Machine washable cover is made of water-resistant beige and white canvas. Features an eye-catching geometric print the along sides and mint piping at top",
+          "retailPrice": 34.99,
+          "inventoryQty": 10,
+          "qtySold": 1
+        }
+      ]
+    },
+    {
+      "dbName": "ds_service_time_slots",
+      "data": [
+        {
+          "_id": "0",
+          "serviceID": "0",
+          "date": "30-07-2018 8:30 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "1",
+          "serviceID": "0",
+          "date": "30-07-2018 9:00 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "2",
+          "serviceID": "0",
+          "date": "30-07-2018 9:30 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "3",
+          "serviceID": "0",
+          "date": "30-07-2018 10:00 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "4",
+          "serviceID": "0",
+          "date": "30-07-2018 10:30 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "5",
+          "serviceID": "0",
+          "date": "30-07-2018 11:00 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "6",
+          "serviceID": "0",
+          "date": "30-07-2018 11:30 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "7",
+          "serviceID": "0",
+          "date": "30-07-2018 12:00 pm",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "8",
+          "serviceID": "0",
+          "date": "30-07-2018 12:30 pm",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "9",
+          "serviceID": "0",
+          "date": "30-07-2018 1:00 pm",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "10",
+          "serviceID": "1",
+          "date": "30-07-2018 8:30 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "11",
+          "serviceID": "1",
+          "date": "30-07-2018 9:00 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "12",
+          "serviceID": "1",
+          "date": "31-07-2018 9:30 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "13",
+          "serviceID": "1",
+          "date": "31-07-2018 10:00 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "14",
+          "serviceID": "1",
+          "date": "31-07-2018 10:30 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "15",
+          "serviceID": "1",
+          "date": "31-07-2018 11:00 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "16",
+          "serviceID": "1",
+          "date": "31-07-2018 11:30 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "17",
+          "serviceID": "1",
+          "date": "31-07-2018 12:00 pm",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "18",
+          "serviceID": "1",
+          "date": "31-07-2018 12:30 pm",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "19",
+          "serviceID": "1",
+          "date": "31-07-2018 1:00 pm",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "20",
+          "serviceID": "2",
+          "date": "01-08-2018 8:30 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "21",
+          "serviceID": "2",
+          "date": "01-08-2018 9:00 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "22",
+          "serviceID": "2",
+          "date": "01-08-2018 9:30 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "23",
+          "serviceID": "2",
+          "date": "01-08-2018 10:00 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "24",
+          "serviceID": "2",
+          "date": "01-08-2018 10:30 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "25",
+          "serviceID": "2",
+          "date": "01-08-2018 11:00 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "26",
+          "serviceID": "2",
+          "date": "01-08-2018 11:30 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "27",
+          "serviceID": "2",
+          "date": "01-08-2018 12:00 pm",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "28",
+          "serviceID": "2",
+          "date": "01-08-2018 12:30 pm",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "29",
+          "serviceID": "2",
+          "date": "01-08-2018 1:00 pm",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "30",
+          "serviceID": "3",
+          "date": "02-08-2018 8:30 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "31",
+          "serviceID": "3",
+          "date": "02-08-2018 9:00 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "32",
+          "serviceID": "3",
+          "date": "02-08-2018 9:30 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "33",
+          "serviceID": "3",
+          "date": "02-08-2018 10:00 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "34",
+          "serviceID": "3",
+          "date": "02-08-2018 10:30 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "35",
+          "serviceID": "3",
+          "date": "02-08-2018 11:00 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "36",
+          "serviceID": "3",
+          "date": "02-08-2018 11:30 am",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "37",
+          "serviceID": "3",
+          "date": "02-08-2018 12:00 pm",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "38",
+          "serviceID": "3",
+          "date": "02-08-2018 12:30 pm",
+          "orderServiceLineID": null
+        },
+        {
+          "_id": "39",
+          "serviceID": "3",
+          "date": "02-08-2018 1:00 pm",
+          "orderServiceLineID": null
+        }
+      ]
+    }
+  ]
 }

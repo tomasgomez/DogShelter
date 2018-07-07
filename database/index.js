@@ -3,9 +3,11 @@ const config = require("./dbconfig.json");
 const Promise = require("bluebird");
 const auth = config.auth.user + ":" + config.auth.pass;
 let nano;
-if (auth && auth.user !== "" && auth.pass !== "")
+if (auth && auth.user !== "" && auth.pass !== "") {
   nano = require("nano")("http://" + auth + "@localhost:5984");
-else nano = require("nano")("http://localhost:5984");
+} else {
+  nano = require("nano")("http://localhost:5984");
+}
 
 function createDatabases(insertTestData) {
   if (insertTestData) docSets = require("./testdata.json").docSets;
