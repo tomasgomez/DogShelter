@@ -3,7 +3,7 @@ const config = require("./dbconfig.json");
 const Promise = require("bluebird");
 const auth = config.auth.user + ":" + config.auth.pass;
 let nano;
-if (auth && auth.user !== "" && auth.pass !== "") {
+if (config && config.auth.user !== "" && config.auth.pass !== "") {
   nano = require("nano")("http://" + auth + "@localhost:5984");
 } else {
   nano = require("nano")("http://localhost:5984");
@@ -26,29 +26,33 @@ function createDatabases(insertTestData) {
   let createReqs = [];
   let createDatabaseAsync = Promise.promisify(nano.db.create);
   database.nano.db.list((err, dbs) => {
-    console.log(err);
-    for (dbName of dbNames) {
-      (dbName => {
-        if (dbs.indexOf(dbName) === -1) {
-          let createReq = createDatabaseAsync(dbName);
-          createReq.then(() => {
-            if (docSets) {
-              let dbNameDocSets = docSets.find(x => x.dbName === dbName);
-              if (dbNameDocSets) {
-                for (doc of dbNameDocSets.data) {
-                  database.nano.use(dbName).insert(doc);
+    if (dbs) {
+      for (dbName of dbNames) {
+        (dbName => {
+          if (dbs.indexOf(dbName) === -1) {
+            let createReq = createDatabaseAsync(dbName);
+            createReq.then(() => {
+              if (docSets) {
+                let dbNameDocSets = docSets.find(x => x.dbName === dbName);
+                if (dbNameDocSets) {
+                  for (doc of dbNameDocSets.data) {
+                    database.nano.use(dbName).insert(doc);
+                  }
                 }
               }
-            }
-          });
-          createReqs.push(createReq);
-        }
-      })(dbName);
+            });
+            createReqs.push(createReq);
+          }
+        })(dbName);
+      }
+      Promise.all(createReqs).then(() => {
+        console.log("all databases were created");
+        createViews();
+      });
+    } else {
+      console.log("");
+      console.log("(ERROR) Looks like CouchDB isn't configured correctly. Have you started CouchDB? Have you configured authentication in the 'database/dbconfig.json' file?");
     }
-    Promise.all(createReqs).then(() => {
-      console.log("all databases were created");
-      createViews();
-    });
   });
 }
 
@@ -135,16 +139,21 @@ function createViews() {
 function removeAllDatabases(cb) {
   let destroyDbReqs = [];
   database.nano.db.list((err, body) => {
-    dsDbNames = body.filter(dbName => {
-      return dbName.search("ds_") === 0;
-    });
+    if (body) {
+      dsDbNames = body.filter(dbName => {
+        return dbName.search("ds_") === 0;
+      });
 
-    for (dsDbName of dsDbNames) {
-      let dbDestroyAsync = Promise.promisify(nano.db.destroy);
-      destroyDbReqs.push(dbDestroyAsync(dsDbName));
+      for (dsDbName of dsDbNames) {
+        let dbDestroyAsync = Promise.promisify(nano.db.destroy);
+        destroyDbReqs.push(dbDestroyAsync(dsDbName));
+      }
+
+      cb(destroyDbReqs);
+    } else {
+      console.log("");
+      console.log("(ERROR) Looks like CouchDB isn't configured correctly. Have you started CouchDB? Have you configured authentication in the 'database/dbconfig.json' file?");
     }
-
-    cb(destroyDbReqs);
   });
 }
 
